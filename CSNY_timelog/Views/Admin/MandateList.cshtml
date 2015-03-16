@@ -1,0 +1,71 @@
+﻿@model CSNY_timelog.ViewModel.AddStudentViewModel
+@using Telerik.Web;
+@using Telerik.Web.Mvc;
+@using Telerik.Web.Mvc.UI;
+@using GridMvc.Html;
+
+@{
+    ViewBag.Title = "MandateList";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+<link href="@Url.Content("~/Content/themes/base/jquery.ui.core.css")" 
+        rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/themes/base/jquery.ui.datepicker.css")" 
+        rel="stylesheet"  type="text/css" />
+<link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" />
+   
+    <script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
+
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" />
+    
+   <div class="main_content">
+             <div id="Input">
+           <div class="page_heading">
+             <p>Mandate List</p>
+            </div>
+                 <br />
+                 <a>Childs' Name: @Model.FirstName</a>
+     <br />
+                  <div style="clear :both;"></div>
+
+       @Html.Grid(Model.MandateList).Columns(columns =>
+  {
+      //columns.Add(c => c.Child).Titled("Student ID").RenderValueAs(c => @<span class = "@((!String.IsNullOrEmpty(c.Child)) ? "ColorRed" : "Normal")">@c.Child</span>);
+      columns.Add(c => c.MandateID).SetWidth(25).Titled("Mandate ID")
+            .Sanitized(false)
+          .Encoded(false)
+          .RenderValueAs(o => Html.ActionLink(o.MandateID, "EditMandate", "Admin", new { Id = o.MandateID }, null).ToHtmlString());
+      columns.Add(c => c.StartDate).Titled("Start Date").SetWidth(50);
+      columns.Add(c => c.EndDate).Titled("End Date").SetWidth(50);
+      columns.Add(c => c.TID).Titled("Thereapist <br/> name").SetWidth(30);
+      columns.Add(c => c.FundingCode).Titled("Funding <br/> Code").SetWidth(30);
+      
+  }).WithPaging(100).Sortable(true)
+
+                 
+</div>
+         <div style="clear :both;"></div>
+       <br />
+        <span style="float:left;padding-left:200px">
+                      <input type="button" value="Add Mandate" class="input_button" style="width:250px" onclick="GoToAddMandate()" /> 
+                </span>
+       <br />
+       <br />
+        <span style="float:left;padding-left:200px">
+                      <input type="button" value="Back" class="input_button" style="width:250px" onclick="GoToHome()" /> 
+                </span>
+</div>
+<script type="text/javascript">
+
+    function GoToHome() {
+        window.history.back();
+    }
+       </script>
+
+
+<script type="text/javascript">
+    function GoToAddMandate() {
+        window.location = '@Url.Action("EditMandate", "admin",new { Id = "0" })';
+    }
+       </script>

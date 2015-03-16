@@ -1,0 +1,76 @@
+﻿@{
+    ViewBag.Title = "Index";
+   
+   Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+ 
+}
+
+
+<div class="main_content">
+           <div class=""> 
+               <div class="page_heading">
+                <p>User Homepage</p>
+              </div>
+               
+<p align="right" style="font-size:13px; margin-bottom: 5px;">  If you're not @ViewData["FullName"], please @Html.ActionLink("Click Here","log_off","account")</p> 
+<div style="left:100px;padding-left:10px;">
+@*@if (@ViewData["LastLogin"] != "First Time ")
+{
+   <p style="margin:5px;"> Welcome Back! You last logged in on  @ViewData["LastLogin"].<br /><br /></p>
+}
+else
+{
+ <p style="margin:5px;"> Welcome @ViewData["LastLogin"], this is your first login!<br /><br /></p>
+}*@
+<p style="margin:5px;">  @ViewData["LastLogin"]<br /><br /></p>
+    <h3 style="color:red">Status of Notices</h3>
+<fieldset>
+Click on number next to status to view notices with that status. <br/><br />
+
+<ul style="text-align: right; padding-right: 270px;"><font style="color:red;"> 
+    Notices in Progress: <a href="@Url.Content("~/managenotice/manage_notice#divApprove")"> @ViewData["BidInProccess"]</a> 
+                    </font><br/>
+    
+    Active Notices: 
+    <a href="@Url.Content("~/managenotice/manage_notice#divActive")">@ViewData["BIdisActice"]</a>  <br/>
+    Inactive Notices: 
+     <a href="@Url.Content("~/managenotice/manage_notice#divInActive")">@ViewData["BIdInActive"] </a><br/>
+  
+    Incomplete Notices:
+     <a href="@Url.Content("~/managenotice/manage_notice#divInComplete")"> @ViewData["BIdInComplete"] </a><br/>
+</ul>
+    </fieldset>
+    </div>
+     <div style="padding:10px;">             
+         <dl>
+
+     <dt><h3>Manage your Notices</h3></dt> 
+      <dd><strong style="font-size:12px;font-weight:900;"> >> &nbsp;</strong> @Html.ActionLink("Add New Notice", "create_order", "orderbid")</dd>
+      <br />
+      <dd><strong style="font-size:12px;font-weight:900;"> >> &nbsp;</strong>@Html.ActionLink("Manage Notices: Edit / Submit", "manage_notice", "managenotice")</dd>
+      <br />
+      @*Html.ActionLink("View Detailed Statistics Postings Notices", "", "")*@
+     <br />
+     
+       <dt> <h3>View your Orders</h3> </dt>
+      <dd><strong style="font-size:12px;font-weight:900;"> >> &nbsp;</strong>@Html.ActionLink("Review Order SnapShot ", "manage_order", "manageorder")</dd>         
+      <br />
+      <br /> 
+           
+    @* <dt><h3>Manage your Clients</h3></dt>
+      
+    <dd><strong style="font-size:12px;font-weight:900;"> >> &nbsp;</strong> @Html.ActionLink("Add A New Client", "","")</dd>
+     <br />
+     <dd><strong style="font-size:12px;font-weight:900;"> >> &nbsp;</strong>@Html.ActionLink("Manage Clients:Edit/Delete", "","")</dd>
+     <br />
+     
+     </br> *@
+     @*<h3>Internal Messaging Center</h3>
+        <strong style="font-size:12px;font-weight:900;"> >> &nbsp;</strong>
+      @Html.ActionLink("You have no new messages: Click here to view your message(s) in Inbox", "","")
+      <br />*@
+</div>
+               </div>
+    </div>
+
+

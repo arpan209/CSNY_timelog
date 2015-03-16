@@ -1,0 +1,46 @@
+﻿@model CSNY_timelog.ViewModel.RegistrationViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+<div class="main_content">
+             <div id="Input">
+           <div class="page_heading">
+             <p>Home</p>
+            </div>
+
+                 <div><b>Welcome Back @Model.FirstName !   </b></div>
+                 <span><br /></span>
+           <div style="color:red" >  <h4>New Feature: "Billing Sheets" </h4></div>
+<div>This new feature enables you to create and print your monthly CSE and CPSE billing sheets (Private Pay Individual and Group billing sheets will be active soon).  The billing sheets will populate with the information recorded in “Add Session." 
+</div>
+                 <br/>
+ <div>
+     To create the printable pdf billing sheet(s), click on "Billing Sheets."   Then select the parameters -- funding code, year, month and student(s) -- and click "Generate Billing Sheet(s)."  A pdf file will become available for download.  The pdf file will contain the billing sheets for the therapists selected.
+                 </div>
+                                    <span><br /></span>
+       <h4><u>CSNY Portal Features:</u></h4>
+
+<ol>
+  <li>* <a href="@Url.Action("Add-Session", "session", new { Id = "0" })">Add Session</a></li>
+  <li>* <a href="@Url.Action("EditSession", "session")">Session List</a></li>
+  <li>* <a href="@Url.Action("StudentList", "Therapist")">Caseload</a></li>
+   <li>* <a href="@Url.Action("index", "generatepdfreport")">Billing Sheets</a></li>
+</ol> 
+                    <span><br /></span>
+                 <div>
+For caseload questions (e.g. mandates), please email <a href="mailto:eloraw@citysoundsny.com?" target="_top">
+eloraw@citysoundsny.com</a>,<a href="mailto:npagnotta@citysoundsny.com" target="_top">
+npagnotta@citysoundsny.com</a>  and <a href="mailto:joannh@citysoundsny.com" target="_top">
+joannh@citysoundsny.com</a>.   
+                     </div>
+                  <span><br /></span>
+        <div style="font-size:10px">         Note: We'll be adding more features to the CSNY portal as the school year progresses.  If you have any suggestions, encounter a technical issue or have accolades please send an email to the development team at <a href="mailto:csny.csg@gmail.com" target="_top">
+csny.csg@gmail.com</a>.</div>
+ 
+                 </div>
+
+
+    </div>

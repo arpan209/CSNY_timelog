@@ -1,0 +1,151 @@
+﻿@model CSNY_timelog.ViewModel.ReportViewModel    
+
+@using Telerik.Web;
+@using Telerik.Web.Mvc;
+@using Telerik.Web.Mvc.UI;
+@using GridMvc.Html;
+
+@{
+    ViewBag.Title = "Summary List";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+@*@helper RLink(CSNY_timelog.ViewModel.SummaryListViewModel item)
+{
+    var value = @Model.AgeGroup + " " + @Model.Fiscal + " " + @Model.Month + " " + item.TID;
+        <span >
+         @Html.ActionLink(item.RCount.ToString(), "SessionListRecorded", "Report", new { Id = 2 })              
+                </span>
+    
+}
+@helper PLink(CSNY_timelog.ViewModel.SummaryListViewModel item)
+{
+    var value = @Model.AgeGroup + " " + @Model.Fiscal + " " + @Model.Month + " " + item.TID;
+        <span >
+         @Html.ActionLink(item.PCount.ToString(), "SessionListNotRecorded", "Report", new { Id = 2 })              
+                </span>
+    
+}*@
+
+<script>
+    function Confirm(SrNo) {
+        // var error = "";
+        var SessID = SrNo;
+        var DataValue = '@Model.DataValue';
+        var a = confirm("Are You sure want to Merge this session?");
+        if (a == true) {
+            var OrderViewModel =
+                         {
+                             DataValue: DataValue, SrNo: SrNo
+
+                         };
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Content("~/Report/MergeSession")',
+               
+                data: JSON.stringify(OrderViewModel),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    var value = data.split(',');
+                    var DataVal = value[1];
+
+                        window.location.href = '@Url.Content("~/Report/SessionListNotRecorded/")'+ DataVal;
+
+
+                        
+                    },
+                error: function () {
+
+                }
+            });
+        }
+    }
+    </script>
+<link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" />
+   
+    <script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
+
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" />
+
+
+ <div class="main_content">
+    
+             <div id="Input">
+           <div class="page_heading">
+             <p>Summary List</p>
+            </div>
+
+    <a> <b>Age Group :</b> @Model.AgeGroup</a> <br />  <a><b> Session Year:</b> @Model.Fiscal </a> <br /> <a> <b> Month:</b> @Model.Month   </a> 
+      <div style="clear :both;"></div>
+                 
+                    <div style="clear:both;">
+            <br />
+        </div>
+
+ <span style="padding-left:210px">R Count: @Model.RTotal   &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp P Count: @Model.PTotal</span>
+       @Html.Grid(Model.SummaryList).Columns(columns =>
+  {
+      //columns.Add(c => c.Child).Titled("Student ID").RenderValueAs(c => @<span class = "@((!String.IsNullOrEmpty(c.Child)) ? "ColorRed" : "Normal")">@c.Child</span>);
+      columns.Add(c => c.LastName).SetWidth(50).Titled("Last<br/> Name");
+        
+      columns.Add(c => c.FirstName).Titled("First<br/> Name").SetWidth(50);
+      columns.Add(c => c.RCount).Titled("Merged W/DOE<br/>(R Count)").SetWidth(50)
+           .Sanitized(false)
+          .Encoded(false)
+          .RenderValueAs(o => Html.ActionLink(o.RCount.ToString(), "SessionListRecorded", "Report", new { Id = @Model.AgeGroup + " " + @Model.Fiscal + " " + @Model.Month + " " + o.TID }, null).ToHtmlString());
+      columns.Add(c => c.PCount).Titled("Not Merged W/DOE<br/>(P Count)").SetWidth(50)
+          .Sanitized(false)
+          .Encoded(false)
+          .RenderValueAs(o => Html.ActionLink(o.PCount.ToString(), "SessionListNotRecorded", "Report", new { Id = @Model.AgeGroup + " " + @Model.Fiscal + " " + @Model.Month + " " + o.TID }, null).ToHtmlString());
+      columns.Add(c => c.Invoice).Titled("Invoice").SetWidth(50);
+      columns.Add(c => c.TID).Titled("Action")
+          .Encoded(false)
+          .Sanitized(false)
+          .RenderValueAs(o => Html.ActionLink("Edit ","EditInvoice", "Report", new { Id = o.ID +","+ @Model.AgeGroup + "," + @Model.Fiscal + ","+ @Model.Month +","+ o.TID },null).ToHtmlString());
+      
+   //   columns.Add(c => c.TID).Titled("Action")
+    //    .Encoded(false)
+    ///    .Sanitized(false)
+    ///    .SetWidth(30)
+   //     .RenderValueAs(o => @<button type="submit">Submit</button>);
+      //columns.Add(c => c.SrNo).Titled("Action").SetWidth(30).Encoded(false).Sanitized(false)
+      //    .RenderValueAs(c => Delete(c));
+      
+  }).WithPaging(100).Sortable(true)
+
+               
+   
+     </div> 
+        
+      
+
+          <span style="float:left;padding-left:200px">
+                      <input type="button" value="Back" class="input_button" style="width:250px" onclick="GoToHome()" /> 
+                </span>
+          <div style="clear:both;">
+            <br />
+        </div>
+      <span style="float:left;padding-left:200px">
+                      <input type="button" onclick="printDiv('Input')" value="Print!" />
+                </span>
+       </div>
+  <script type="text/javascript">
+
+      function GoToHome() {
+          window.history.back();
+      }
+       </script>
+      <script type="text/javascript">
+
+          function printDiv(divName) {
+              var printContents = document.getElementById(divName).innerHTML;
+              var originalContents = document.body.innerHTML;
+
+              document.body.innerHTML = printContents;
+
+              window.print();
+
+              document.body.innerHTML = originalContents;
+          }
+       </script>

@@ -1,0 +1,697 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="csnyModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'csny.dbo.AgencyMaster' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="AgencyMaster">
+    <Key>
+      <PropertyRef Name="AID" />
+    </Key>
+    <Property Name="AID" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="NameOfAgency" Type="nchar" MaxLength="100" />
+    <Property Name="Address1" Type="nchar" MaxLength="100" />
+    <Property Name="Address2" Type="nchar" MaxLength="100" />
+    <Property Name="Phone" Type="nchar" MaxLength="50" />
+    <Property Name="RepFirstName" Type="nchar" MaxLength="50" />
+    <Property Name="RepLastName" Type="nchar" MaxLength="50" />
+    <Property Name="TIN" Type="nchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="FundingCodeMaster">
+    <Key>
+      <PropertyRef Name="FundingCodeId" />
+    </Key>
+    <Property Name="FundingCodeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FundingCodeType" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="MandateMaster">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SID" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="NPI" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="FiscalYear" Type="nchar" MaxLength="10" />
+    <Property Name="ServiceStart" Type="datetime" />
+    <Property Name="ServiceEnd" Type="datetime" />
+    <Property Name="Frequency" Type="nchar" MaxLength="10" />
+    <Property Name="GroupSize" Type="nchar" MaxLength="10" />
+    <Property Name="Duration" Type="nchar" MaxLength="10" />
+    <Property Name="Language" Type="nvarchar" MaxLength="50" />
+    <Property Name="FundingCode" Type="nchar" MaxLength="10" />
+    <Property Name="BoroughCode" Type="nchar" MaxLength="10" />
+    <Property Name="SchoolLocationCode" Type="nchar" MaxLength="10" />
+    <Property Name="HomeDistrict" Type="nchar" MaxLength="10" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'csny.dbo.SessionDetail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="SessionDetail">
+    <Key>
+      <PropertyRef Name="SrNo" />
+      <PropertyRef Name="SessionID" />
+    </Key>
+    <Property Name="SrNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SessionID" Type="int" Nullable="false" />
+    <Property Name="SID" Type="nchar" MaxLength="15" />
+    <Property Name="Date" Type="date" />
+    <Property Name="AttnCode" Type="nchar" MaxLength="10" />
+    <Property Name="GroupSize" Type="nchar" MaxLength="10" />
+    <Property Name="StartTime" Type="time" Precision="7" />
+    <Property Name="EndTime" Type="time" Precision="7" />
+    <Property Name="Location" Type="nchar" MaxLength="25" />
+    <Property Name="TID" Type="nchar" MaxLength="15" />
+    <Property Name="ServiceType" Type="nvarchar(max)" />
+    <Property Name="GroupType" Type="nchar" MaxLength="10" />
+    <Property Name="LastModified" Type="datetime" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'csny.dbo.SessionNotPDetail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="SessionNotPDetail">
+    <Key>
+      <PropertyRef Name="SrNo" />
+      <PropertyRef Name="SessionID" />
+    </Key>
+    <Property Name="SrNo" Type="int" Nullable="false" />
+    <Property Name="SessionID" Type="int" Nullable="false" />
+    <Property Name="SID" Type="nchar" MaxLength="15" />
+    <Property Name="Date" Type="date" />
+    <Property Name="AttnCode" Type="nchar" MaxLength="10" />
+    <Property Name="GroupSize" Type="nchar" MaxLength="10" />
+    <Property Name="StartTime" Type="time" Precision="7" />
+    <Property Name="EndTime" Type="time" Precision="7" />
+    <Property Name="Location" Type="nchar" MaxLength="25" />
+    <Property Name="TID" Type="nchar" MaxLength="15" />
+    <Property Name="ServiceType" Type="nvarchar(max)" />
+    <Property Name="GroupType" Type="nchar" MaxLength="10" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'csny.dbo.StagingTable' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="StagingTable">
+    <Key>
+      <PropertyRef Name="SID" />
+      <PropertyRef Name="NYCI" />
+    </Key>
+    <Property Name="SID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FiscalYear" Type="nvarchar" MaxLength="10" />
+    <Property Name="NPI" Type="nchar" MaxLength="50" />
+    <Property Name="NYCI" Type="nchar" MaxLength="50" Nullable="false" />
+    <Property Name="StudentLastName" Type="nchar" MaxLength="50" />
+    <Property Name="StudentFirstName" Type="nchar" MaxLength="50" />
+    <Property Name="Frequency" Type="nchar" MaxLength="10" />
+    <Property Name="GroupSize" Type="nchar" MaxLength="10" />
+    <Property Name="Duration" Type="nchar" MaxLength="10" />
+    <Property Name="Language" Type="nvarchar" MaxLength="50" />
+    <Property Name="ServiceStartDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="ServiceEndDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="FundingCode" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="StudentMaster">
+    <Key>
+      <PropertyRef Name="SID" />
+    </Key>
+    <Property Name="SID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StudentFirstName" Type="nvarchar(max)" />
+    <Property Name="StudentLastName" Type="nvarchar(max)" />
+    <Property Name="Address1" Type="nvarchar(max)" />
+    <Property Name="ParentFirstName" Type="nvarchar" MaxLength="50" />
+    <Property Name="ParentLastName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Parent_Email" Type="nchar" MaxLength="100" />
+    <Property Name="Parent_HomePhone" Type="nchar" MaxLength="10" />
+    <Property Name="Parent_WorkPhone" Type="nchar" MaxLength="10" />
+    <Property Name="Parent_MobilePhone" Type="nchar" MaxLength="10" />
+    <Property Name="GuardianName" Type="nvarchar" MaxLength="50" />
+    <Property Name="GuardianMobile" Type="nvarchar" MaxLength="50" />
+    <Property Name="GuardianEmail" Type="nvarchar" MaxLength="50" />
+    <Property Name="DOB" Type="nvarchar" MaxLength="50" />
+    <Property Name="NYCI" Type="nchar" MaxLength="50" Nullable="false" />
+    <Property Name="TypeOfService" Type="nchar" MaxLength="50" />
+    <Property Name="Location" Type="nchar" MaxLength="100" />
+    <Property Name="PayType" Type="nvarchar" MaxLength="50" />
+    <Property Name="Referral" Type="nvarchar(max)" />
+    <Property Name="Diagnosis" Type="nvarchar(max)" />
+    <Property Name="ParentReport" Type="nvarchar(max)" />
+    <Property Name="Comments" Type="nvarchar(max)" />
+    <Property Name="LastModifiedDate" Type="datetime" />
+    <Property Name="IsActive" Type="bit" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="TherapistMaster">
+    <Key>
+      <PropertyRef Name="TID" />
+    </Key>
+    <Property Name="TID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="nchar" MaxLength="50" />
+    <Property Name="LastName" Type="nchar" MaxLength="50" />
+    <Property Name="Address1" Type="nvarchar(max)" />
+    <Property Name="address2" Type="nvarchar(max)" />
+    <Property Name="State" Type="nchar" MaxLength="50" />
+    <Property Name="City" Type="nchar" MaxLength="50" />
+    <Property Name="Email" Type="nchar" MaxLength="100" Nullable="false" />
+    <Property Name="Phone" Type="nchar" MaxLength="50" />
+    <Property Name="NPI" Type="nchar" MaxLength="15" />
+    <Property Name="UserName" Type="nchar" MaxLength="50" />
+    <Property Name="Password" Type="nvarchar(max)" />
+    <Property Name="ServiceType" Type="nchar" MaxLength="50" />
+    <Property Name="PayScale" Type="nchar" MaxLength="10" />
+    <Property Name="DateOfRegistratio" Type="date" />
+    <Property Name="LastLogin" Type="datetime" />
+    <Property Name="IsActive" Type="bit" />
+    <Property Name="UserType" Type="nvarchar" MaxLength="50" />
+    <Property Name="Lock" Type="nchar" MaxLength="50" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'csny.dbo.ZipCodes' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="ZipCodes">
+    <Key>
+      <PropertyRef Name="ZIPCode" />
+      <PropertyRef Name="ZIPType" />
+      <PropertyRef Name="CityName" />
+      <PropertyRef Name="CityType" />
+      <PropertyRef Name="CountyName" />
+      <PropertyRef Name="CountyFIPS" />
+      <PropertyRef Name="StateName" />
+      <PropertyRef Name="StateAbbr" />
+      <PropertyRef Name="StateFIPS" />
+      <PropertyRef Name="MSACode" />
+      <PropertyRef Name="AreaCode" />
+      <PropertyRef Name="TimeZone" />
+      <PropertyRef Name="UTC" />
+      <PropertyRef Name="DST" />
+      <PropertyRef Name="Latitude" />
+      <PropertyRef Name="Longitude" />
+    </Key>
+    <Property Name="ZIPCode" Type="char" MaxLength="5" Nullable="false" />
+    <Property Name="ZIPType" Type="char" MaxLength="1" Nullable="false" />
+    <Property Name="CityName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="CityType" Type="char" MaxLength="1" Nullable="false" />
+    <Property Name="CountyName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="CountyFIPS" Type="char" MaxLength="5" Nullable="false" />
+    <Property Name="StateName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="StateAbbr" Type="char" MaxLength="2" Nullable="false" />
+    <Property Name="StateFIPS" Type="char" MaxLength="2" Nullable="false" />
+    <Property Name="MSACode" Type="char" MaxLength="4" Nullable="false" />
+    <Property Name="AreaCode" Type="varchar" MaxLength="7" Nullable="false" />
+    <Property Name="TimeZone" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="UTC" Type="int" Nullable="false" />
+    <Property Name="DST" Type="char" MaxLength="1" Nullable="false" />
+    <Property Name="Latitude" Type="float" Nullable="false" />
+    <Property Name="Longitude" Type="float" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'csny.dbo.vw_CurrentTherapists' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="vw_CurrentTherapists">
+    <Key>
+      <PropertyRef Name="SID" />
+      <PropertyRef Name="NPI" />
+    </Key>
+    <Property Name="SID" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="FundingCode" Type="nchar" MaxLength="10" />
+    <Property Name="BoroughCode" Type="nchar" MaxLength="10" />
+    <Property Name="SchoolLocationCode" Type="nchar" MaxLength="10" />
+    <Property Name="HomeDistrict" Type="nchar" MaxLength="10" />
+    <Property Name="ServiceStart" Type="datetime" />
+    <Property Name="ServiceEnd" Type="datetime" />
+    <Property Name="Frequency" Type="nchar" MaxLength="10" />
+    <Property Name="GroupSize" Type="nchar" MaxLength="10" />
+    <Property Name="Duration" Type="nchar" MaxLength="10" />
+    <Property Name="Language" Type="nvarchar" MaxLength="50" />
+    <Property Name="RowNum" Type="bigint" />
+    <Property Name="NPI" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="FiscalYear" Type="nchar" MaxLength="10" />
+  </EntityType>
+  <Function Name="AddStaging" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Fiscal" Type="varchar" Mode="In" />
+    <Parameter Name="NPI" Type="varchar" Mode="In" />
+    <Parameter Name="NYCID" Type="varchar" Mode="In" />
+    <Parameter Name="LastName" Type="varchar" Mode="In" />
+    <Parameter Name="FirstName" Type="varchar" Mode="In" />
+    <Parameter Name="Frequency" Type="varchar" Mode="In" />
+    <Parameter Name="GroupSize" Type="varchar" Mode="In" />
+    <Parameter Name="Duration" Type="varchar" Mode="In" />
+    <Parameter Name="language" Type="varchar" Mode="In" />
+    <Parameter Name="FundingCode" Type="varchar" Mode="In" />
+    <Parameter Name="StartDate" Type="varchar" Mode="In" />
+    <Parameter Name="EndDate" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="AddStudent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="PayType" Type="varchar" Mode="In" />
+    <Parameter Name="Referral" Type="varchar(max)" Mode="In" />
+    <Parameter Name="PFirstName" Type="varchar" Mode="In" />
+    <Parameter Name="PLastName" Type="varchar" Mode="In" />
+    <Parameter Name="Address1" Type="varchar(max)" Mode="In" />
+    <Parameter Name="PHomePh" Type="varchar" Mode="In" />
+    <Parameter Name="POfficePh" Type="varchar" Mode="In" />
+    <Parameter Name="PMobilPh" Type="varchar" Mode="In" />
+    <Parameter Name="PEmail" Type="varchar" Mode="In" />
+    <Parameter Name="GName" Type="varchar" Mode="In" />
+    <Parameter Name="GEmail" Type="varchar" Mode="In" />
+    <Parameter Name="GMobilPh" Type="varchar" Mode="In" />
+    <Parameter Name="NYCID" Type="varchar" Mode="In" />
+    <Parameter Name="Location" Type="varchar" Mode="In" />
+    <Parameter Name="FirstName" Type="varchar" Mode="In" />
+    <Parameter Name="LastName" Type="varchar" Mode="In" />
+    <Parameter Name="DOB" Type="varchar" Mode="In" />
+    <Parameter Name="ServiceType" Type="varchar" Mode="In" />
+    <Parameter Name="Diagnosis" Type="varchar(max)" Mode="In" />
+    <Parameter Name="ParentReport" Type="varchar(max)" Mode="In" />
+    <Parameter Name="Comments" Type="varchar(max)" Mode="In" />
+  </Function>
+  <Function Name="AddTherapist" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FirstName" Type="varchar" Mode="In" />
+    <Parameter Name="LastName" Type="varchar" Mode="In" />
+    <Parameter Name="Address1" Type="varchar(max)" Mode="In" />
+    <Parameter Name="Address2" Type="varchar(max)" Mode="In" />
+    <Parameter Name="City" Type="varchar" Mode="In" />
+    <Parameter Name="State" Type="varchar" Mode="In" />
+    <Parameter Name="Email" Type="varchar" Mode="In" />
+    <Parameter Name="Phone" Type="varchar" Mode="In" />
+    <Parameter Name="DateofRegistration" Type="varchar" Mode="In" />
+    <Parameter Name="LastLoginDate" Type="varchar" Mode="In" />
+    <Parameter Name="UserName" Type="varchar" Mode="In" />
+    <Parameter Name="Password" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+  <Function Name="GetStudentInformation_Pdf" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="sid" Type="int" Mode="In" />
+    <Parameter Name="FundingCode" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="ResetTherapistLock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="Sp_AddMandate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SID" Type="nvarchar" Mode="In" />
+    <Parameter Name="NPI" Type="nvarchar" Mode="In" />
+    <Parameter Name="Fiscal" Type="nvarchar" Mode="In" />
+    <Parameter Name="StartDate" Type="datetime" Mode="In" />
+    <Parameter Name="EndDate" Type="datetime" Mode="In" />
+    <Parameter Name="Frequency" Type="nvarchar" Mode="In" />
+    <Parameter Name="GroupSize" Type="nvarchar" Mode="In" />
+    <Parameter Name="Duration" Type="nvarchar" Mode="In" />
+    <Parameter Name="Language" Type="nvarchar" Mode="In" />
+    <Parameter Name="FundingCode" Type="nvarchar" Mode="In" />
+    <Parameter Name="BoroCode" Type="nvarchar" Mode="In" />
+    <Parameter Name="SchoolCode" Type="nvarchar" Mode="In" />
+    <Parameter Name="HomeDistrict" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SP_AddUserRole" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="TID" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="SP_DeleteSessionByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SessionID" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="SP_FindStudent_ByNPI" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="NPI" Type="nvarchar" Mode="In" />
+    <Parameter Name="Fisacl" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SP_FindTherapist_ByEmail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Email" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SP_FindTherapist_ByFirstName" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FirstName" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SP_FindTherapist_ByLastName" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="LastName" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SP_FindTherapist_BySSN" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SSN" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SP_FindTherapist_ByTID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="TID" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SP_FindTherapist_ByUserName" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UserNme" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SP_FindUser_ByFirstName" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FirstName" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SP_FindUser_ByLastName" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="LastName" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SP_FindUser_ByOsis" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="OSIS" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SP_FindUser_ByUserID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SID" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_Generate_Report" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FundingCode" Type="nvarchar" Mode="In" />
+    <Parameter Name="FiscalYear" Type="nvarchar" Mode="In" />
+    <Parameter Name="Month" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SP_GenerateReportAsR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FundingCode" Type="nvarchar" Mode="In" />
+    <Parameter Name="FiscalYear" Type="nvarchar" Mode="In" />
+    <Parameter Name="Month" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_get_MandateInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SID" Type="nvarchar" Mode="In" />
+    <Parameter Name="NPI" Type="nvarchar" Mode="In" />
+    <Parameter Name="Sdate" Type="datetime" Mode="In" />
+  </Function>
+  <Function Name="sp_get_SessionInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SID" Type="nvarchar" Mode="In" />
+    <Parameter Name="SessionDate" Type="datetime" Mode="In" />
+    <Parameter Name="GroupSize" Type="nvarchar" Mode="In" />
+    <Parameter Name="GroupType" Type="nvarchar" Mode="In" />
+    <Parameter Name="TID" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_get_StudentInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="NYCI" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="Sp_get_Therpist_Info" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="TID" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SP_get_user_password" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UserName" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SP_get_user_role" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UserName" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SP_GetMandateByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ID" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SP_GetMandatListByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SID" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SP_GetNotMergedList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="FundingCode" Type="nvarchar" Mode="In" />
+    <Parameter Name="FiscalYear" Type="nvarchar" Mode="In" />
+    <Parameter Name="Month" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="Sp_GetSessionByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SessionID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="Sp_GetSessionBySID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SID" Type="nvarchar" Mode="In" />
+    <Parameter Name="Sdate" Type="datetime" Mode="In" />
+  </Function>
+  <Function Name="SP_getSessionList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="StartDay" Type="nvarchar" Mode="In" />
+    <Parameter Name="EndDay" Type="nvarchar" Mode="In" />
+    <Parameter Name="TID" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SP_GetSessionListBySID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SID" Type="nvarchar" Mode="In" />
+    <Parameter Name="TID" Type="nvarchar" Mode="In" />
+    <Parameter Name="Month" Type="nvarchar" Mode="In" />
+    <Parameter Name="StartDay" Type="nvarchar" Mode="In" />
+    <Parameter Name="EndDay" Type="nvarchar" Mode="In" />
+    <Parameter Name="Year" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SP_GetStudent_AllInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SID" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="Sp_GetStudentDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SID" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="Sp_GetStudentList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="NPI" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="Sp_GetStudentListBasedOnFundingCode_Pdf" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="NPI" Type="nvarchar" Mode="In" />
+    <Parameter Name="FundingCode" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="Sp_GetStudentSessionDetail_Pdf" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="NPI" Type="nvarchar" Mode="In" />
+    <Parameter Name="FundingCode" Type="nvarchar" Mode="In" />
+    <Parameter Name="SID" Type="int" Mode="In" />
+    <Parameter Name="year" Type="int" Mode="In" />
+    <Parameter Name="month" Type="int" Mode="In" />
+  </Function>
+  <Function Name="SP_GetTherapistInfoByNPI" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="NPI" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="Sp_getTherpist_NPI" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="TID" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="Sp_getTherpist_SessionInDay" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SDate" Type="date" Mode="In" />
+    <Parameter Name="TID" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="Sp_getUserId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UserName" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="Sp_Insert_sessionDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SessionID" Type="int" Mode="In" />
+    <Parameter Name="SID" Type="nvarchar" Mode="In" />
+    <Parameter Name="GroupSize" Type="nvarchar" Mode="In" />
+    <Parameter Name="SDate" Type="datetime" Mode="In" />
+    <Parameter Name="StartTime" Type="datetime" Mode="In" />
+    <Parameter Name="EndTime" Type="datetime" Mode="In" />
+    <Parameter Name="location" Type="nvarchar" Mode="In" />
+    <Parameter Name="TID" Type="nvarchar" Mode="In" />
+    <Parameter Name="ServiceType" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="GroupType" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SP_NotPSessionAdd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SrNo" Type="int" Mode="In" />
+    <Parameter Name="SessionID" Type="int" Mode="In" />
+    <Parameter Name="SID" Type="nvarchar" Mode="In" />
+    <Parameter Name="GroupSize" Type="nvarchar" Mode="In" />
+    <Parameter Name="SDate" Type="datetime" Mode="In" />
+    <Parameter Name="StartTime" Type="datetime" Mode="In" />
+    <Parameter Name="EndTime" Type="datetime" Mode="In" />
+    <Parameter Name="location" Type="nvarchar" Mode="In" />
+    <Parameter Name="TID" Type="nvarchar" Mode="In" />
+    <Parameter Name="ServiceType" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="GroupType" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SP_SessCountByFuningCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="StartDay" Type="nvarchar" Mode="In" />
+    <Parameter Name="EndDay" Type="nvarchar" Mode="In" />
+    <Parameter Name="TID" Type="nvarchar" Mode="In" />
+    <Parameter Name="FundingCode" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SP_SessCountByServiceType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="StartDay" Type="nvarchar" Mode="In" />
+    <Parameter Name="EndDay" Type="nvarchar" Mode="In" />
+    <Parameter Name="TID" Type="nvarchar" Mode="In" />
+    <Parameter Name="ServiceType" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SP_TherapistList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_Update_LastLogin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="Username" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SP_Update_MandateByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SID" Type="nvarchar" Mode="In" />
+    <Parameter Name="MID" Type="nvarchar" Mode="In" />
+    <Parameter Name="NPI" Type="nvarchar" Mode="In" />
+    <Parameter Name="Fiscal" Type="nvarchar" Mode="In" />
+    <Parameter Name="StartDate" Type="datetime" Mode="In" />
+    <Parameter Name="EndDate" Type="datetime" Mode="In" />
+    <Parameter Name="Frequency" Type="nvarchar" Mode="In" />
+    <Parameter Name="GroupSize" Type="nvarchar" Mode="In" />
+    <Parameter Name="Duration" Type="nvarchar" Mode="In" />
+    <Parameter Name="Language" Type="nvarchar" Mode="In" />
+    <Parameter Name="FundingCode" Type="nvarchar" Mode="In" />
+    <Parameter Name="BoroCode" Type="nvarchar" Mode="In" />
+    <Parameter Name="SchoolCode" Type="nvarchar" Mode="In" />
+    <Parameter Name="HomeDistrict" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="Sp_Update_sessionDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SessionID" Type="nvarchar" Mode="In" />
+    <Parameter Name="SID" Type="nvarchar" Mode="In" />
+    <Parameter Name="GroupSize" Type="nvarchar" Mode="In" />
+    <Parameter Name="SDate" Type="datetime" Mode="In" />
+    <Parameter Name="StartTime" Type="datetime" Mode="In" />
+    <Parameter Name="EndTime" Type="datetime" Mode="In" />
+    <Parameter Name="location" Type="nvarchar" Mode="In" />
+    <Parameter Name="TID" Type="nvarchar" Mode="In" />
+    <Parameter Name="ServiceType" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="GroupType" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SP_UpdateStudentInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SID" Type="varchar" Mode="In" />
+    <Parameter Name="PFirstName" Type="varchar" Mode="In" />
+    <Parameter Name="PLastName" Type="varchar" Mode="In" />
+    <Parameter Name="PHomePh" Type="varchar" Mode="In" />
+    <Parameter Name="POfficePh" Type="varchar" Mode="In" />
+    <Parameter Name="PMobilPh" Type="varchar" Mode="In" />
+    <Parameter Name="PEmail" Type="varchar" Mode="In" />
+    <Parameter Name="GName" Type="varchar" Mode="In" />
+    <Parameter Name="GEmail" Type="varchar" Mode="In" />
+    <Parameter Name="GMobilPh" Type="varchar" Mode="In" />
+    <Parameter Name="NYCID" Type="varchar" Mode="In" />
+    <Parameter Name="Location" Type="varchar" Mode="In" />
+    <Parameter Name="FirstName" Type="varchar" Mode="In" />
+    <Parameter Name="LastName" Type="varchar" Mode="In" />
+    <Parameter Name="Address1" Type="varchar(max)" Mode="In" />
+    <Parameter Name="DOB" Type="varchar" Mode="In" />
+    <Parameter Name="PayType" Type="varchar" Mode="In" />
+    <Parameter Name="Referral" Type="varchar(max)" Mode="In" />
+    <Parameter Name="ServiceType" Type="varchar" Mode="In" />
+    <Parameter Name="Diagnosis" Type="varchar(max)" Mode="In" />
+    <Parameter Name="ParentReport" Type="varchar(max)" Mode="In" />
+    <Parameter Name="Comments" Type="varchar(max)" Mode="In" />
+  </Function>
+  <Function Name="SP_UpdateTherapistInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="TID" Type="nvarchar" Mode="In" />
+    <Parameter Name="FirstName" Type="varchar" Mode="In" />
+    <Parameter Name="LastName" Type="varchar" Mode="In" />
+    <Parameter Name="Address1" Type="varchar(max)" Mode="In" />
+    <Parameter Name="Address2" Type="varchar(max)" Mode="In" />
+    <Parameter Name="City" Type="varchar" Mode="In" />
+    <Parameter Name="State" Type="varchar" Mode="In" />
+    <Parameter Name="Email" Type="varchar" Mode="In" />
+    <Parameter Name="Phone" Type="varchar" Mode="In" />
+    <Parameter Name="SSN" Type="varchar" Mode="In" />
+    <Parameter Name="ServiceType" Type="varchar" Mode="In" />
+    <Parameter Name="UserType" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="SP_UpdateTherapistPassword" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="TID" Type="nvarchar" Mode="In" />
+    <Parameter Name="Password" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="TruncateStaging" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="UpadteSessionAsNotRecorded" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SrNo" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="UpadteSessionAsRecorded" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="SrNo" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="UpdateTherapistLock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="TID" Type="nvarchar" Mode="In" />
+  </Function>
+  <EntityContainer Name="csnyModelStoreContainer">
+    <EntitySet Name="FundingCodeMaster" EntityType="Self.FundingCodeMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MandateMaster" EntityType="Self.MandateMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="StudentMaster" EntityType="Self.StudentMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TherapistMaster" EntityType="Self.TherapistMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AgencyMaster" EntityType="Self.AgencyMaster" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+[AgencyMaster].[AID] AS [AID], 
+[AgencyMaster].[NameOfAgency] AS [NameOfAgency], 
+[AgencyMaster].[Address1] AS [Address1], 
+[AgencyMaster].[Address2] AS [Address2], 
+[AgencyMaster].[Phone] AS [Phone], 
+[AgencyMaster].[RepFirstName] AS [RepFirstName], 
+[AgencyMaster].[RepLastName] AS [RepLastName], 
+[AgencyMaster].[TIN] AS [TIN]
+FROM [dbo].[AgencyMaster] AS [AgencyMaster]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="SessionDetail" EntityType="Self.SessionDetail" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+[SessionDetail].[SrNo] AS [SrNo], 
+[SessionDetail].[SessionID] AS [SessionID], 
+[SessionDetail].[SID] AS [SID], 
+[SessionDetail].[Date] AS [Date], 
+[SessionDetail].[AttnCode] AS [AttnCode], 
+[SessionDetail].[GroupSize] AS [GroupSize], 
+[SessionDetail].[StartTime] AS [StartTime], 
+[SessionDetail].[EndTime] AS [EndTime], 
+[SessionDetail].[Location] AS [Location], 
+[SessionDetail].[TID] AS [TID], 
+[SessionDetail].[ServiceType] AS [ServiceType], 
+[SessionDetail].[GroupType] AS [GroupType], 
+[SessionDetail].[LastModified] AS [LastModified]
+FROM [dbo].[SessionDetail] AS [SessionDetail]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="SessionNotPDetail" EntityType="Self.SessionNotPDetail" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+[SessionNotPDetail].[SrNo] AS [SrNo], 
+[SessionNotPDetail].[SessionID] AS [SessionID], 
+[SessionNotPDetail].[SID] AS [SID], 
+[SessionNotPDetail].[Date] AS [Date], 
+[SessionNotPDetail].[AttnCode] AS [AttnCode], 
+[SessionNotPDetail].[GroupSize] AS [GroupSize], 
+[SessionNotPDetail].[StartTime] AS [StartTime], 
+[SessionNotPDetail].[EndTime] AS [EndTime], 
+[SessionNotPDetail].[Location] AS [Location], 
+[SessionNotPDetail].[TID] AS [TID], 
+[SessionNotPDetail].[ServiceType] AS [ServiceType], 
+[SessionNotPDetail].[GroupType] AS [GroupType]
+FROM [dbo].[SessionNotPDetail] AS [SessionNotPDetail]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="StagingTable" EntityType="Self.StagingTable" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+[StagingTable].[SID] AS [SID], 
+[StagingTable].[FiscalYear] AS [FiscalYear], 
+[StagingTable].[NPI] AS [NPI], 
+[StagingTable].[NYCI] AS [NYCI], 
+[StagingTable].[StudentLastName] AS [StudentLastName], 
+[StagingTable].[StudentFirstName] AS [StudentFirstName], 
+[StagingTable].[Frequency] AS [Frequency], 
+[StagingTable].[GroupSize] AS [GroupSize], 
+[StagingTable].[Duration] AS [Duration], 
+[StagingTable].[Language] AS [Language], 
+[StagingTable].[ServiceStartDate] AS [ServiceStartDate], 
+[StagingTable].[ServiceEndDate] AS [ServiceEndDate], 
+[StagingTable].[FundingCode] AS [FundingCode]
+FROM [dbo].[StagingTable] AS [StagingTable]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="ZipCodes" EntityType="Self.ZipCodes" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+[ZipCodes].[ZIPCode] AS [ZIPCode], 
+[ZipCodes].[ZIPType] AS [ZIPType], 
+[ZipCodes].[CityName] AS [CityName], 
+[ZipCodes].[CityType] AS [CityType], 
+[ZipCodes].[CountyName] AS [CountyName], 
+[ZipCodes].[CountyFIPS] AS [CountyFIPS], 
+[ZipCodes].[StateName] AS [StateName], 
+[ZipCodes].[StateAbbr] AS [StateAbbr], 
+[ZipCodes].[StateFIPS] AS [StateFIPS], 
+[ZipCodes].[MSACode] AS [MSACode], 
+[ZipCodes].[AreaCode] AS [AreaCode], 
+[ZipCodes].[TimeZone] AS [TimeZone], 
+[ZipCodes].[UTC] AS [UTC], 
+[ZipCodes].[DST] AS [DST], 
+[ZipCodes].[Latitude] AS [Latitude], 
+[ZipCodes].[Longitude] AS [Longitude]
+FROM [dbo].[ZipCodes] AS [ZipCodes]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="vw_CurrentTherapists" EntityType="Self.vw_CurrentTherapists" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+[vw_CurrentTherapists].[SID] AS [SID], 
+[vw_CurrentTherapists].[FundingCode] AS [FundingCode], 
+[vw_CurrentTherapists].[BoroughCode] AS [BoroughCode], 
+[vw_CurrentTherapists].[SchoolLocationCode] AS [SchoolLocationCode], 
+[vw_CurrentTherapists].[HomeDistrict] AS [HomeDistrict], 
+[vw_CurrentTherapists].[ServiceStart] AS [ServiceStart], 
+[vw_CurrentTherapists].[ServiceEnd] AS [ServiceEnd], 
+[vw_CurrentTherapists].[Frequency] AS [Frequency], 
+[vw_CurrentTherapists].[GroupSize] AS [GroupSize], 
+[vw_CurrentTherapists].[Duration] AS [Duration], 
+[vw_CurrentTherapists].[Language] AS [Language], 
+[vw_CurrentTherapists].[RowNum] AS [RowNum], 
+[vw_CurrentTherapists].[NPI] AS [NPI], 
+[vw_CurrentTherapists].[FiscalYear] AS [FiscalYear]
+FROM [dbo].[vw_CurrentTherapists] AS [vw_CurrentTherapists]</DefiningQuery>
+    </EntitySet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,59 @@
+﻿@model CSNY_timelog.ViewModel.FindUserViewModel    
+
+@using Telerik.Web;
+@using Telerik.Web.Mvc;
+@using Telerik.Web.Mvc.UI;
+@using GridMvc.Html;
+
+
+@{
+    ViewBag.Title = "StudentList";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+<link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" />
+   
+    <script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
+
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" />
+
+
+ <div class="main_content">
+             <div id="Input">
+           <div class="page_heading">
+             <p>Student List</p>
+            </div>
+
+      <div style="clear :both;"></div>
+
+       @Html.Grid(Model.StudentList).Columns(columns =>
+  {
+      //columns.Add(c => c.Child).Titled("Student ID").RenderValueAs(c => @<span class = "@((!String.IsNullOrEmpty(c.Child)) ? "ColorRed" : "Normal")">@c.Child</span>);
+      columns.Add(c => c.SID).SetWidth(25).Titled("Student ID")
+           .Sanitized(false)
+          .Encoded(false)
+          .RenderValueAs(o => Html.ActionLink(o.SID, "AddStudent", "Admin", new { Id = o.SID }, null).ToHtmlString());
+
+      columns.Add(c => c.FirstName).Titled("First Name").SetWidth(250);
+      columns.Add(c => c.LastName).Titled("Last Name").SetWidth(50);
+      columns.Add(c => c.OSIS).Titled("OSIS").SetWidth(30);
+      columns.Add(c => c.FundingCode).Titled("Funding Code").SetWidth(30);
+      
+  }).WithPaging(100).Sortable(true)
+
+</div>
+
+        
+        <div class="editor-field">                        
+                     
+                    </div>
+
+          <span style="float:left;padding-left:200px">
+                      <input type="button" value="Back" class="input_button" style="width:250px" onclick="GoToHome()" /> 
+                </span>
+       </div>
+  <script type="text/javascript">
+
+      function GoToHome() {
+          window.history.back();
+      }
+       </script>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="3054aba316064594b9935a98fee20a31" Name="Diagram1">
+        <EntityTypeShape EntityType="CSNYModel.AgencyMaster" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CSNYModel.FundingCodeMaster" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CSNYModel.ZipCode" Width="1.5" PointX="0.75" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CSNYModel.MandateMaster" Width="1.5" PointX="4.5" PointY="5.375" />
+        <EntityTypeShape EntityType="CSNYModel.StagingTable" Width="1.5" PointX="0.75" PointY="7.875" />
+        <EntityTypeShape EntityType="CSNYModel.StudentMaster" Width="1.5" PointX="2.75" PointY="2.375" />
+        <EntityTypeShape EntityType="CSNYModel.vw_CurrentTherapists" Width="1.5" PointX="5.0172624909399373" PointY="25.682199102678428" />
+        <EntityTypeShape EntityType="CSNYModel.SessionNotPDetail" Width="1.5" PointX="3.6305302212156967" PointY="27.075981137843794" />
+        <EntityTypeShape EntityType="CSNYModel.SessionDetail" Width="1.5" PointX="2.75" PointY="8.125" />
+        <EntityTypeShape EntityType="CSNYModel.sysdiagram" Width="1.5" PointX="5.8252055206453459" PointY="29.427423103445872" />
+        <EntityTypeShape EntityType="CSNYModel.TherapistMaster" Width="1.5" PointX="6.625" PointY="0.75" />
+        <EntityTypeShape EntityType="CSNYModel.InvoiceDetail" Width="1.5" PointX="6.24078913696147" PointY="10.399660145118675" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

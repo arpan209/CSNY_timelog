@@ -1,0 +1,633 @@
+﻿@model CSNY_timelog.ViewModel.RegistrationViewModel    
+
+@{
+    ViewBag.Title = "Registration";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.password-strength.js")" type="text/javascript"></script>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+
+<script type="text/javascript">
+    function validation() {
+        var error = "";
+        var error1 = "";
+     
+
+        //Client side validation
+
+        var go = "";
+        var checkterms = "";
+        var Name = document.getElementById('Checkterms').checked;
+
+        if (document.getElementById('FirstName').value == "") {
+            error += "Please enter first name.\r\n<br/> ";
+        }
+        if (document.getElementById('LastName').value == "") {
+            error += "Please enter last name.\r\n<br/> ";
+        }
+        if (document.getElementById('Address1').value == "") {
+            error += "Please enter address 1.\r\n<br/> ";
+        }
+
+        if (document.getElementById('ConfirmEmail').value == "") {
+            error += "Please enter confirm email.\r\n<br/> ";
+        }
+        if (document.getElementById('Phone').value == "") {
+            error += "Please enter phone number.\r\n<br/> ";
+        }
+
+
+        if (document.getElementById('ConfirmPassword').value == "") {
+            error += "Please enter confirm password.\r\n<br/> ";
+        }
+        //        if (document.getElementById('EnterValidationCode').value == "") {
+        //            go = "1";
+        //        }
+
+        if (document.getElementById('StateName').value == "" || document.getElementById('StateName').value == "--Select State--") {
+            error += "Please select a state.\r\n<br/>";
+        }
+
+        var EMail = document.getElementById('Email').value.trim();
+        var EMail1 = document.getElementById('ConfirmEmail').value.trim();
+        if (EMail == "") {
+            error += "Please Enter Email Address.\n <br>";
+        }
+        else {
+            var atpos = EMail.indexOf("@@");
+            var dotpos = EMail.lastIndexOf(".");
+
+            if (atpos < 1 || dotpos < atpos + 2 || dotpos + 2 >= EMail.length) {
+                error += "Invalid email address.\n <br>";
+            }
+            else {
+                var namevalidtext = document.getElementById('msg').innerHTML;
+                if (namevalidtext == "*Already Used") {
+                    error += "Please Enter Another Email Address.\n<br>";
+                }
+            }
+        }
+
+        if (EMail != EMail1) {
+
+            error += "Email and confirm email do not match. \n<bt>";
+        }
+        var Name = document.getElementById('UserName').value.trim();
+        if (Name == "") {
+            //error += "Please Enter User Name.\n <br>";
+        }
+        else {
+            var namevalidtext = document.getElementById('msg1').innerHTML;
+            if (namevalidtext == "*Already Used") {
+                error += "Please Enter Another UserName.\n<br/>";
+            }
+        }
+
+
+        // Comment Ashish123 - from captcha
+//        var str1 = document.getElementById('EnterValidationCode1').value;
+//        var str2 = document.getElementById('EnterValidationCode').value;
+//        if (str2 != '') {
+//            if (str1 != str2) {
+//                document.getElementById("invalidcap").innerHTML = 'Invalid Validation Code';
+//                error += "Invalid Validation Code.\r\n<br/> ";
+
+//            }
+//            else {
+//                // error += "Invalid captcha code.\r\n ";
+//                document.getElementById("invalidcap").innerHTML = '';
+//            }
+//        }
+
+        var password = document.getElementById('Password').value.trim();
+        var password1 = document.getElementById('ConfirmPassword').value.trim();;
+        if (password == "") {
+            //error += "Please Enter Zipcode\n ";
+        }
+        else {
+            var letters1 = /(^(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])(?=.*[\W]).*$)/;
+            if (password.match(letters1)) {
+
+            }
+            else {
+                error += "Invalid password.\r\n<br/>";
+            }
+        }
+
+        if (password != password1) {
+
+            error += "Password and confirm password do not match. \n<bt>";
+        }
+
+        
+        if (Name == false) {
+          
+            error += "Please Accept Terms & Conditions.\r\n<br/>";
+           
+        }
+        if (error != "") {
+            alert(error);
+            return false;
+        }
+        else {
+
+
+            var OrderViewModel =
+                {
+                    FirstName: $('#FirstName').val(), LastName: $('#LastName').val(),
+                    Address1: $('#Address1').val(), Address2: $('#Address2').val(),
+                    StateName: $('#Statename').val(), City: $('#City').val(), Phone: $('#Phone').val(),
+                    UserName: $('#UserName').val(), Password: $('#Password').val(), Email: $('#Email').val(),
+                    Checkterms: document.getElementById('#Checkterms').checked
+                };
+
+            $.ajax({
+                type: "POST",
+
+                url: '@Url.Content("~/Account/registration")',
+                    // url: "/admin/show_find_user_detail",
+                    async: false,
+                    data: JSON.stringify(OrderViewModel),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+
+                        if (data == "Updated Sucessfully.") {
+                            alert("Updated Sucessfully.");
+                            window.location = '@Url.Content("~/admin/index")';
+                        } else {
+                            alert(data);
+                        }
+                        // window.location = "http://localhost:2522/admin/index";
+                    },
+                    error: function (data) {
+                        //  alert(data);
+                    }
+
+                });
+        }
+    }
+
+    function OnChange(txt) {
+        $("#errormsg")[0].innerHTML = "";
+    }
+
+    function CheckUserNameAvailability() {
+        var Name = document.getElementById('UserName').value.toLowerCase();
+        $.ajax({
+            type: "POST",            
+            url: '@Url.Content("~/Account/CheckUserNameAvailable")',           
+            data: '{userName: "' + Name + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+
+            success: function (response) {
+                var mesg = $("#msg1")[0];
+                if (response == 0) {
+                    if (Name == "") {
+                        mesg.style.color = "red";
+                        mesg.innerHTML = "*Please Enter User Name";
+                    }
+                    else {
+                        mesg.style.color = "green";
+                        mesg.innerHTML = "*Available";
+                    }
+                }
+                else {
+                    mesg.style.color = "red";
+                    mesg.innerHTML = "*Already Used";
+                }
+            },
+            failure: function (response) {
+                alert(response);
+            }
+        });
+    }
+    function OnChange(txt) {
+        $("#msg1")[0].innerHTML = "";
+    }
+    function CheckEmailAvailability() {
+        var name = document.getElementById('Email').value.toLowerCase();
+        if (name == "") {
+            $("#msg").html("Please Enter email address");
+            $("#msg").css("color", "red");
+
+        }
+        else {
+            var filter = /^([a-zA-Z0-9_\.\-])+\@@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            if (!filter.test(name)) {
+                $("#msg").html("*Please provide a valid email address");
+                $("#msg").css("color", "red");
+
+            }
+            else {
+                $.ajax({
+                    type: "POST",                    
+                    url: '@Url.Content("~/Account/CheckEMailAvailable")',                   
+                    data: '{Email: "' + name + '" }',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        var msg = $("#msg")[0];
+                        if (response == 0) {
+                            msg.style.color = "green";
+                            msg.innerHTML = "*Available";
+                        }
+                        else {
+                            msg.style.color = "red";
+                            msg.innerHTML = "*Already Used";
+                        }
+                    },
+                    failure: function (response) {
+                        alert(response);
+                    }
+                });
+            }
+        }
+    }
+
+    function OnChange(txt) {
+        $("#msg")[0].innerHTML = "";
+    }
+
+    function onSelectedIndexChanged() {
+        var selectedVal = $("#StateName").val();
+       
+        $.ajax({
+            type: "POST",              
+              url: '@Url.Content("~/Account/GetCitiesShow")',
+            data: '{StateName: "' + selectedVal + '"}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                var markup = "<option value=''>Select City</option>";
+                for (var x = 0; x < data.length; x++) {
+                    
+                    markup += "<option value=" + data[x].Text + ">" + data[x].Text + "</option>";
+                }
+                $('#City').html(markup).show();
+            },
+            error: function () {
+
+            }
+        });
+
+    }
+
+    function onSelectedIndexChangedcity() {
+
+        var NoticeSelect = document.getElementById("City");
+        var selectedVal = NoticeSelect.options[NoticeSelect.selectedIndex].text;
+
+       
+
+        $.ajax({
+            type: "POST",             
+             url: '@Url.Content("~/Account/GetZipcodeShow")',
+            data: '{City: "' + selectedVal + '"}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {                
+                document.getElementById('ZipCode').value = data[0];              
+               
+            },
+            error: function () {
+
+            }
+        });
+    }
+ </script>
+ 
+ 
+
+ @* <script type="text/javascript">
+      function AddNewCompany()
+      {
+          var CompanySelect = $("#CompanyName").val();
+         // alert(CompanySelect);
+         // var Comapny = CompanySelect.options[CompanySelect.selectedIndex].text;
+
+          if (CompanySelect == "ADD NEW COMPANY")
+          {
+               $("#divforCounty").show();
+          }
+          else
+          {
+               $("#divforCounty").hide();
+          }
+       }
+</script>*@
+
+
+@{ Html.EnableClientValidation(true); }
+
+@using (Html.BeginForm())
+{
+ 
+         <div class="main_content">
+           <div class="page_heading">
+             <p>Registration</p>
+            </div>
+
+        <div style="clear:both;">
+            <br />
+        </div>
+        <div style="text-align:center;">
+            <strong>
+        <u>Company and Contact Information</u>
+        </strong>
+       
+            <br />
+            @*<div id="errormsg"></div>
+           @*  @Html.ValidationSummary(true, "Account creation was unsuccessful. Please correct the errors and try again.")*@
+         @* <span style="color:red;">   @Html.ValidationSummary(true)</span>    *@
+              </div>
+         <div style="clear:both;text-align:center;font-size:small;padding:10px;">
+              
+              <span style="color:red;">*</span><span>&nbsp;indicates required field</span>
+          
+        </div>
+           
+                  
+                   
+
+            <div class="editor-label">
+              <span style="color:red;">*</span> <strong> @Html.LabelFor(m => m.FirstName):</strong>
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.FirstName, new { @maxlength = "50" })
+               
+            </div>
+
+            <div class="editor-label">
+               <span style="color:red;">*</span> <strong>@Html.LabelFor(m => m.LastName):</strong>
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.LastName, new { @maxlength = "50" })
+               
+            </div>
+
+        
+            <div class="editor-label">
+              <span style="color:red;">*</span> <strong> @Html.LabelFor(m => m.Address1):</strong>
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.Address1, new { @maxlength = "100" })
+              
+            </div>
+            <div class="editor-label">
+               <strong> @Html.LabelFor(m => m.Address2):</strong>
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.Address2, new { @maxlength = "100" })
+              @* <span style="color:red;font-size:10px;"> @Html.ValidationMessageFor(m => m.Address2)</span>*@
+            </div>
+
+           
+            <div class="editor-label">
+               <span style="color:red;">*</span><strong> State:</strong>
+            </div>
+            <div class="editor-field">
+               
+                @Html.DropDownListFor(model => model.StateName, (IEnumerable<SelectListItem>)ViewBag.State, "--Select State--", new { onchange = "onSelectedIndexChanged()", TabIndex = "0" })
+                            
+                
+            </div>
+
+             <div class="editor-label">
+               
+               <span style="color:red;">*</span> <strong>@Html.LabelFor(m => m.City):</strong>
+             
+             </div>
+           <div class="editor-field">
+             @*  <span id="spancity">@Model.City</span>*@
+                @Html.DropDownListFor(model => model.City, (IEnumerable<SelectListItem>)ViewBag.City,Model.City, new { onchange = "onSelectedIndexChangedcity()" })
+                
+            </div>
+             
+          <div class="editor-label">
+               <span style="color:red;">*</span> <strong>@Html.LabelFor(m => m.Email):</strong>
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.Email, new { @onblur = "CheckEmailAvailability()", @maxlength = "50" })
+                
+                <span id="msg" style="font-size:10px"></span>
+            </div>
+            
+            <div class="editor-label">
+               <span style="color:red;">*</span><strong> @Html.LabelFor(m => m.ConfirmEmail):</strong>
+            </div>
+            <div class="editor-field">
+              
+               @Html.TextBoxFor(m => m.ConfirmEmail, new { @onblur = "CheckEmailAvailability()", @maxlength = "50", AutoComplete = "off" })
+                
+            </div>
+
+             <div class="editor-label">
+               <span style="color:red;">*</span><strong> Work Phone:</strong>
+            </div>
+            <div class="editor-field">
+              @Html.TextBoxFor(m => m.Phone, new { @maxlength = "10" })
+             
+            </div>  
+
+            
+            <br />
+             <div style="text-align:center;padding:12px;">
+             <strong>
+
+            <u>Username/Password</u>
+
+            </strong>
+
+            </div>
+
+            <div class="editor-label">
+              <span style="color:red;">*</span> <strong> @Html.LabelFor(m => m.UserName):</strong>
+            </div>
+
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.UserName, new { @onblur = "CheckUserNameAvailability()", @maxlength = "50" })
+                
+                <span id="msg1" style="font-size:10px"></span>
+                <br /><br />
+            </div>
+
+            <div class="editor-label">
+              <span style="color:red;">*</span> <strong> @Html.LabelFor(m => m.Password):</strong>
+            </div>
+            
+            <div class="editor-field">
+
+                @Html.PasswordFor(m => m.Password, new { @maxlength = "50" }) 
+                
+                    
+            </div>
+                @*@Html.ActionLink("Password policy", "", null, new { id = "passwordPolicy" })*@
+
+            <div class="editor-label">
+              <span style="color:red;">*</span> <strong> @Html.LabelFor(m => m.ConfirmPassword):</strong>
+              </div>
+            <div class="editor-field">
+               @Html.PasswordFor(m => m.ConfirmPassword, new { @maxlength = "50" })
+               
+            </div>
+            <br />
+            <br />   
+            <div style="clear :both;"></div>
+            <div class="editor-label">
+            @*<span style="color:red;">*</span> 
+            <strong>
+             
+               Are you a human?:</strong>*@
+             
+             </div>
+
+            @*<div class="editor-field">
+              
+               
+                   
+                @Html.TextBoxFor(m => m.EnterValidationCode)
+                <br />
+                 <div  id="txtCaptchaDiv" style="color:White;width:50%;font-weight:bold; background-color:#999;" align="center"> </div>
+                   <br />              
+                 @Html.HiddenFor(m => m.EnterValidationCode)
+                 <br />
+                 @Html.HiddenFor(m => m.EnterValidationCode1)
+                <div id="invalidcap" style="color:#F00;font-size:12px;"> </div>
+            </div>*@
+
+
+          @* <div class="editor-field">
+              @Html.Raw(Html.GenerateCaptcha("captcha", "white"))
+              @Html.ValidationMessage("captcha")
+           </div>*@
+
+
+
+               <div style="clear :both;"></div>
+       
+          <div style="clear:both;">
+          <br />
+          </div>
+          <div class="editor-label"> &nbsp; </div>
+          <div class="editor-field">
+                <input type="submit" value="SUBMIT"  id="btn_sbmt" onclick="return validation()" class="input_button" />     
+          </div>
+
+          <br />
+          <br />
+           <div class="editor-label"> &nbsp; </div>
+          
+    
+        <div class="editor-field" style="color:red;font-size:12px;"> 
+
+        
+         @*  @if (Model.CompanyName != "" && Model.CompanyName == "ADD NEW COMPANY")
+           {
+             <span style="color:red;">  @Html.ValidationSummary(true)</span>    
+           }
+           else
+           {
+             <div id="errormsg" style="color:red;font-size:12px;"></div>
+           }*@
+
+           
+           <div id="errormsg" style="color:red;font-size:12px;"></div>
+           
+           
+           @* <span style="color:red;">  @Html.ValidationSummary(true)</span>    *@
+           
+           
+          @*  <p >   @Html.ValidationMessageFor(m => m.CompanyName)</p>*@
+          
+            <p>  @Html.ValidationMessageFor(m => m.FirstName)</p>
+            <p>  @Html.ValidationMessageFor(m => m.LastName) </p>
+            <p>  @Html.ValidationMessageFor(m => m.Address1) </p>
+            <p>  @Html.ValidationMessageFor(m => m.StateName) </p> 
+            <p>   @Html.ValidationMessageFor(m => m.City)</p>
+          @* <p>    @Html.ValidationMessageFor(m => m.ZipCode)</p>*@
+           <p>   @Html.ValidationMessageFor(m => m.Email) </p>
+           <p>   @Html.ValidationMessageFor(m => m.ConfirmEmail) </p>
+           <p>  @Html.ValidationMessageFor(m => m.Phone) </p>
+          <p>   @Html.ValidationMessageFor(m => m.UserName) </p>
+          <p>   @Html.ValidationMessageFor(m => m.Password) </p>
+          <p>   @Html.ValidationMessageFor(m => m.ConfirmPassword) </p>
+          <p>   @Html.ValidationMessageFor(m => m.EnterValidationCode1)</p>
+          @*<p>    @Html.ValidationMessageFor(m => m.EnterValidationCode) </p>*@
+          <p>    @Html.ValidationMessageFor(m => m.Checkterms) </p>
+          
+         
+
+
+           </div>     
+              
+         
+    </div>
+}
+
+<script type="text/javascript" language="javascript">
+
+
+//    function validation() {
+//        var str1 = document.getElementById('EnterValidationCode1').value;
+//        var str2 = document.getElementById('EnterValidationCode').value;
+//        if (str2 != '') {
+//            if (str1 != str2) {
+
+//                document.getElementById("invalidcap").innerHTML = 'Invalid captcha code';
+
+//                return false;
+//            } else {
+
+//                document.getElementById("invalidcap").innerHTML = '';
+//            }
+//        }
+//    }
+
+
+    //Generates the captcha function    
+    var code = randomstring(5);
+    document.getElementById("EnterValidationCode1").value = code;
+    document.getElementById("txtCaptchaDiv").innerHTML = code;
+
+    function randomstring(L) {
+        var s = '';
+        var randomchar = function () {
+            var n = Math.floor(Math.random() * 62);
+            if (n < 10) return n; //1-10
+            if (n < 36) return String.fromCharCode(n + 55); //A-Z
+            return String.fromCharCode(n + 61); //a-z
+        }
+        while (s.length < L) s += randomchar();
+        return s;
+    }
+
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+       
+        var myPlugin = $("input[id='Password']").password_strength();
+       
+        $("[id='btnSubmit']").click(function () {
+            var $form = $('form');
+            if ($form.valid()) {
+                return myPlugin.metReq(); //return true or false
+            }
+        });
+
+        $("[id='passwordPolicy']").click(function (event) {
+            var width = 350, height = 300, left = (screen.width / 2) - (width / 2),
+            top = (screen.height / 2) - (height / 2);
+            window.open('@Url.Content("~/xml/PasswordPolicy.xml")', 'Password_poplicy',
+	       'width=' + width + ',height=' + height + ',left=' + left + ',top=' + top);
+            event.preventDefault();
+            return false;
+        });
+    });
+</script>

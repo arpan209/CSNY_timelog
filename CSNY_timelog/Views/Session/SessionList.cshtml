@@ -1,0 +1,345 @@
+﻿@model CSNY_timelog.ViewModel.AddSessionViewModel
+@using Telerik.Web;
+@using Telerik.Web.Mvc;
+@using Telerik.Web.Mvc.UI;
+@using GridMvc.Html;
+
+
+@{
+    ViewBag.Title = "SessionList";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+@helper EditSessionLink(CSNY_timelog.ViewModel.SessionListViewModel item)
+{
+    
+      
+    DateTime TodayDate = DateTime.Today;
+
+    var SessDatevalue = item.SessionDate;
+    var dayValue = TodayDate.Day;
+    if (@Model.Lock == true)
+    {
+
+
+        if (SessDatevalue.Month < TodayDate.Month)
+        {
+            //var MonthValue = TodayDate.getMonth() + 1;
+            //if (SessDatevalue < new date(MonthValue - 1 + "31"  )) { }
+            if (SessDatevalue.Day >= 16 && SessDatevalue.Day <= 31 && SessDatevalue.Month == (TodayDate.Month - 1) && dayValue <= 5)
+            {
+                    
+                    <span >
+         @Html.ActionLink(item.SessionID, "Add-Session", "Session", new { Id = item.SessionID }, new { title = "Edit Session" })              
+                </span>
+            }
+            else
+            {
+                 <span >
+                   @item.SessionID      
+                </span>
+            }
+            //if  (dayValue > 5){
+            //    alert("Session are locked for this date! \n");
+            //    return false;
+            //}
+        }
+        //            else if (dayValue > 20) {
+        else
+        {
+
+            if (SessDatevalue.Day >= 1 && SessDatevalue.Day <= 15 && SessDatevalue.Month == TodayDate.Month && dayValue <= 20)
+            {
+                    <span >
+          @Html.ActionLink(item.SessionID, "Add-Session", "Session", new { Id = item.SessionID }, new { title = "Edit Session" })               
+                </span>
+            }
+            else if (SessDatevalue.Day >= 16 && SessDatevalue.Day <= 31 && SessDatevalue.Month == TodayDate.Month)
+            {
+                    <span >
+          @Html.ActionLink(item.SessionID, "Add-Session", "Session", new { Id = item.SessionID }, new { title = "Edit Session" })           
+                </span>
+            }
+            else
+            {
+                     <span >
+                   @item.SessionID         
+                </span>
+            }
+        }
+    }
+    else
+    {
+    <span >
+        @Html.ActionLink(item.SessionID, "Add-Session", "Session", new { Id = item.SessionID }, new { title = "Edit Session" })
+       @* <a href='@Url.Action( "Add-Session", "Session", new { Value = item.SessionID.ToString()})'> @item.SessionID</a>               *@
+                </span>}
+ }
+
+@helper ChangeColor3(CSNY_timelog.ViewModel.SessionListViewModel item)
+{
+    if (item.ServiceType == "CS")
+    {
+    <span style="color:black;"> SUP </span>
+    }
+    else if (item.ServiceType == "SAS")
+    {
+    <span style="color:black;"> PAS </span>
+    }
+    if (item.ServiceType.Contains("Other"))
+    {
+    <span style="color:black;">Other</span>
+    }
+    else
+    {
+    <span style="color:black;">@item.Group/@item.GroupType</span>
+    }
+    
+}
+@helper AddName(CSNY_timelog.ViewModel.SessionListViewModel item)
+{
+    if (item.SName == " " || string.IsNullOrEmpty(item.SName))
+    {
+        if (item.ServiceType.Contains("Other"))
+        {
+    <span style="color:black;">@item.ServiceType</span>
+        }
+        else
+        {
+    <span style="color:black;">NA</span>}
+
+    }
+    else
+    {
+        <span style="color:black;">@item.SName</span>
+
+    }
+    
+    
+ }
+
+@helper Delete(CSNY_timelog.ViewModel.SessionListViewModel item)
+{
+    
+    DateTime TodayDate = DateTime.Today;
+
+    var SessDatevalue = item.SessionDate;
+    var dayValue = TodayDate.Day;
+    if (@Model.Lock == true)
+    {
+
+
+        if (SessDatevalue.Month < TodayDate.Month)
+        {
+            //var MonthValue = TodayDate.getMonth() + 1;
+            //if (SessDatevalue < new date(MonthValue - 1 + "31"  )) { }
+            if (SessDatevalue.Day >= 16 && SessDatevalue.Day <= 31 && SessDatevalue.Month == (TodayDate.Month - 1) && dayValue <= 5)
+            {
+                    
+                   <span >
+                      
+        <a id="delete" title="Delete the session" href="PleaseEnableJavascript.html" onclick="Confirm(@item.SessionID);return false;">Delete</a>
+                </span>
+            }
+            else
+            {
+               
+            }
+            //if  (dayValue > 5){
+            //    alert("Session are locked for this date! \n");
+            //    return false;
+            //}
+        }
+        //            else if (dayValue > 20) {
+        else
+        {
+
+            if (SessDatevalue.Day >= 1 && SessDatevalue.Day <= 15 && SessDatevalue.Month == TodayDate.Month && dayValue <= 20)
+            {
+                    <span >
+                      
+        <a id="delete" title="Delete the session" href="PleaseEnableJavascript.html" onclick="Confirm(@item.SessionID);return false;">Delete</a>
+                </span>
+            }
+            else if (SessDatevalue.Day >= 16 && SessDatevalue.Day <= 31 && SessDatevalue.Month == TodayDate.Month)
+            {
+                    <span >
+                      
+        <a id="delete" title="Delete the session" href="PleaseEnableJavascript.html" onclick="Confirm(@item.SessionID);return false;">Delete</a>
+                </span>
+            }
+            else
+            {
+                    
+            }
+        }
+    }
+    else
+    {
+    <span >
+        <span >
+                      
+        <a id="delete" title="Delete the session" href="PleaseEnableJavascript.html" onclick="Confirm(@item.SessionID);return false;">Delete</a>
+                </span>
+                </span>}
+    
+   
+ }
+@helper ShortDate(CSNY_timelog.ViewModel.SessionListViewModel item)
+{
+    
+    <span style="color:black;"> @item.SessionDate.ToShortDateString() </span>
+    
+}
+@helper ShortStartTime(CSNY_timelog.ViewModel.SessionListViewModel item)
+{
+    
+    <span style="color:black;"> @item.StartTime.ToShortTimeString()</span>
+    
+}
+@helper ShortEndTime(CSNY_timelog.ViewModel.SessionListViewModel item)
+{
+    
+    <span style="color:black;"> @item.EndTime.ToShortTimeString()</span>
+    
+}
+
+<script>
+    function Confirm(SessionId) {
+       // var error = "";
+        var SessID = SessionId;
+      
+        var a = confirm("Are You sure want to Delete this session? All information associated with the session is removed and NOT retrievable.");
+        if (a == true) {
+           
+            $.ajax({
+                type: "POST",
+                url: '@Url.Content("~/session/delete_session?id=")' + SessID,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    if (data == "Submit Successfully!") {
+                        // alert(data);
+
+                        location.href = '@Url.Content("~/Session/SessionList")';
+                    }
+
+                },
+                error: function () {
+
+                }
+            });
+        }
+    }
+    </script>
+ <link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" />
+   
+    <script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
+
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" />
+    
+        
+   <div class="main_content">
+             <div id="Input">
+           <div class="page_heading">
+             <p>Session List</p>
+            </div>
+                  <div style="clear :both;"></div>
+                 <br/>
+               <span style="color:red;">*</span>  <strong>Note: Click on session ID to edit session</strong>
+      <div style="clear :both;"></div>
+
+       @Html.Grid(Model.SessionList).Columns(columns =>
+  {
+      //columns.Add(c => c.Child).Titled("Student ID").RenderValueAs(c => @<span class = "@((!String.IsNullOrEmpty(c.Child)) ? "ColorRed" : "Normal")">@c.Child</span>);
+      columns.Add(c => c.SessionID).SetWidth(25).Titled("ID")
+          .Sanitized(false)
+          .Encoded(false)
+          .RenderValueAs(c => EditSessionLink(c));
+
+      //.RenderValueAs(o => Html.ActionLink(o.SessionID, "Add-Session", "Session", new { Id = o.SessionID }, new { title = "Edit Session" }).ToHtmlString());
+
+      columns.Add(c => c.SName).Titled("Name").SetWidth(250).Encoded(false).Sanitized(false)
+          .RenderValueAs(c => AddName(c)).Sortable(true).ThenSortBy(c => c.SessionDate);
+      columns.Add(c => c.SessionDate).Titled("Session<br/>Date").SetWidth(50).Encoded(false).Sanitized(false).RenderValueAs(c => ShortDate(c));
+      columns.Add(c => c.StartTime).Titled("Start<br/>Time").SetWidth(30).Encoded(false).Sanitized(false).RenderValueAs(c => ShortStartTime(c));
+      columns.Add(c => c.EndTime).Titled("End<br/>Time").SetWidth(30).Encoded(false).Sanitized(false).RenderValueAs(c => ShortEndTime(c));
+      columns.Add(c => c.Duration).Titled("Duration").SetWidth(30);
+      columns.Add(c => c.GroupType).Titled("Grp<br>Size/<br>Type").SetWidth(25).Encoded(false).Sanitized(false).RenderValueAs(c => ChangeColor3(c));
+      //columns.Add(c => c.Group).Titled("Group");
+      columns.Add(c => c.Group).Titled("Action").SetWidth(30).Encoded(false).Sanitized(false)
+          .RenderValueAs(c => Delete(c));
+  }).WithPaging(100).Sortable(true)
+                 
+</div>
+
+          <div class="editor-label">
+                <strong> Total Hours:</strong>
+            </div>
+        <div class="editor-field">                        
+                       @Model.Duration
+                    </div>
+
+       <div>
+           <div style="clear :both;"></div>
+           <br />  
+           <div><strong>Session Count:</strong></div>
+            <table border="1" style="width:100%">
+  <tr>
+    <td>CPSE</td>
+    <td>@Model.CPSE</td>
+      <td></td>
+    <td>CSE</td>
+  <td>@Model.CSE</td>
+  </tr>
+  <tr>
+   <td>PP</td>
+    <td>@Model.PP</td>
+      <td></td>
+    <td>PI</td>
+  <td>@Model.PI</td>
+  </tr>
+                <tr>
+   <td>RSA</td>
+    <td>@Model.RSA</td>
+                    <td></td>
+    <td>EI</td>
+  <td>@Model.EI</td>
+  </tr>
+                <tr>
+   <td>PAS</td>
+    <td>@Model.PAS</td>
+                    <td></td>   
+    <td>CS</td>
+  <td>@Model.CS</td>
+  </tr>
+                       <tr>
+   <td>Other</td>
+    <td>@Model.Ohers</td>
+<td></td>
+   <td></td>
+    <td></td>
+
+   
+  </tr>
+</table> 
+           <div style="clear :both;"></div>
+           <br />  
+@*         CPSE = @Model.CPSE.ToString() &nbsp&nbsp&nbsp&nbsp CSE = @Model.CSE <br/>
+         PP = @Model.PP &nbsp&nbsp&nbsp&nbsp PI = @Model.PI <br/>
+         RSA = @Model.RSA &nbsp&nbsp&nbsp&nbsp EI = @Model.EI <br/>
+         PAS = @Model.PAS &nbsp&nbsp&nbsp&nbsp CS = @Model.CS <br/>
+         Others = @Model.Ohers*@
+
+
+     </div>
+
+          <span style="float:left;padding-left:200px">
+                      <input type="button" value="Back" class="input_button" style="width:250px" onclick="GoToHome()" /> 
+                </span>
+       </div>
+ <script type="text/javascript">
+
+     function GoToHome() {
+         window.history.back();
+     }
+       </script>

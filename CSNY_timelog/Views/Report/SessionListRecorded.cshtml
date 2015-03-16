@@ -1,0 +1,232 @@
+﻿@model CSNY_timelog.ViewModel.ReportViewModel    
+
+@using Telerik.Web;
+@using Telerik.Web.Mvc;
+@using Telerik.Web.Mvc.UI;
+@using GridMvc.Html;
+
+@{
+    ViewBag.Title = "TherapistList";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+@helper ShortDate(CSNY_timelog.ViewModel.SessionListNotPViewModel item)
+{
+    
+    <span style="color:black;"> @item.SessDate.Value.Date.ToShortDateString() </span>
+    
+}
+@helper Delete(CSNY_timelog.ViewModel.SessionListNotPViewModel item)
+{
+    
+    DateTime TodayDate = DateTime.Today;
+
+    var SessDatevalue = item.SrNo;
+    
+   
+    <span >
+        <span >
+                      
+        <a id="delete" title="Un-Merge the session" href="PleaseEnableJavascript.html" onclick="Confirm(@item.SrNo);return false;">Un-Merge</a>
+                </span>
+                </span>
+    
+   
+ }
+@helper Check(CSNY_timelog.ViewModel.SessionListNotPViewModel item)
+{
+   
+    <span><input type="checkbox" name="vehicle" value="@item.SrNo"><br></span>
+    
+    
+}
+
+
+<script>
+    function Confirm(SrNo) {
+        // var error = "";
+        var SessID = SrNo + ",";
+        var DataValue = '@Model.DataValue';
+        var a = confirm("Are You sure want to Un-Merge this session?");
+        if (a == true) {
+            var OrderViewModel =
+                         {
+                             DataValue: DataValue, SrNo: SrNo
+
+                         };
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Content("~/Report/UnMergeSession")',
+               
+                data: JSON.stringify(OrderViewModel),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    var value = data.split(',');
+                    var DataVal = value[1];
+
+                        window.location.href = '@Url.Content("~/Report/SessionListRecorded/")'+ DataVal;
+
+
+                        
+                    },
+                error: function () {
+
+                }
+            });
+        }
+    }
+    </script>
+
+<script type="text/javascript">
+    function validation() {
+
+
+        var error = "";
+        var DataValue = '@Model.DataValue';
+        var x = document.getElementsByName("vehicle");
+        var SelectedIDs = "";
+        if (x != "") {
+            for (var i = 0; i < x.length; i++) {
+                if (x[i].checked) {
+                    SelectedIDs += x[i].value + ",";
+                }
+            }
+        }
+
+        if(SelectedIDs == "") {
+            error += "No Session are selected.";
+        }
+
+
+       
+
+        if (error != "") {
+
+            alert(error);
+            return false;
+        }
+        else {
+
+
+            var OrderViewModel =
+                {
+
+                    DataValue: DataValue, SrNo: SelectedIDs
+                };
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Content("~/Report/UnMergeSession")',
+
+                data: JSON.stringify(OrderViewModel),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    var value = data.split(',');
+                    var DataVal = value[1];
+
+                    window.location.href = '@Url.Content("~/Report/SessionListRecorded/")' + DataVal;
+
+
+
+                },
+               error: function () {
+
+               }
+           });
+        }
+    }
+    </script>
+<script>
+    $(function () {
+        $("#my-button").on("click", function () {
+            $(".my-checkbox").attr("checked", "checked");
+
+        });
+    });
+</script>
+
+<link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" />
+   
+    <script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
+
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" />
+
+
+ <div class="main_content">
+             <div id="Input">
+           <div class="page_heading">
+             <p>Merged W/DOE List</p>
+            </div>
+                   <a>Count : '@Model.Count' </a>
+      <div style="clear :both;"></div>
+
+       @Html.Grid(Model.SessionListNotP).Columns(columns =>
+  {
+      //columns.Add(c => c.Child).Titled("Student ID").RenderValueAs(c => @<span class = "@((!String.IsNullOrEmpty(c.Child)) ? "ColorRed" : "Normal")">@c.Child</span>);
+      columns.Add(c => c.SessionId).SetWidth(25).Titled("SessionId");
+          // .Sanitized(false)
+          //.Encoded(false)
+          //.RenderValueAs(o => Html.ActionLink(o.TID, "EditTherapist", "admin", new { Id = o.TID }, null).ToHtmlString());
+
+      columns.Add(c => c.StudName).Titled("Student<br/> Name").SetWidth(250).Sortable(true).ThenSortBy(c => c.SessDate);
+      columns.Add(c => c.TherName).Titled("Therapist<br/> Name").SetWidth(50);
+      columns.Add(c => c.SessDate).Titled("Date").SetWidth(50).Encoded(false).Sanitized(false).RenderValueAs(c => ShortDate(c));
+      columns.Add(c => c.FundingCode).Titled("Funding<br/> Code").SetWidth(30);
+      //columns.Add(c => c.Email).Titled("Email").SetWidth(30);
+      columns.Add(c => c.SrNo).Titled("Action").SetWidth(30).Encoded(false).Sanitized(false)
+          .RenderValueAs(c => Delete(c));
+      columns.Add(c => c.Check).Titled("Check").SetWidth(30).Encoded(false).Sanitized(false)
+         .RenderValueAs(c => Check(c));
+  }).WithPaging(100).Sortable(true)
+
+</div>
+
+     <a>Count : '@Model.Count' </a>
+        
+        <div class="editor-field">                        
+                     
+                    </div>
+        <p></p>
+       <div class="editor-label">
+                     Check All :
+ 
+                 </div>
+       <div class="editor-field">
+                     <input type="checkbox" id="select-all-checkbox" />
+ 
+                 </div>
+
+    <span style="float:left;padding-left:200px">
+                <input type="submit" value="SUBMIT"  id="btn_sbmt" style="width:250px" onclick="return validation()" class="input_button" />     
+          </span>
+    <div style="clear :both;"></div>
+     <p></p>
+          <span style="float:left;padding-left:200px">
+                      <input type="button" value="Back" class="input_button" style="width:250px" onclick="GoToHome()" /> 
+                </span>
+       </div>
+<script type="text/javascript">
+    $('#select-all-checkbox').click(function () {
+
+        var id = document.getElementById("select-all-checkbox").checked;
+
+        if (id == true) {
+            document.getElementById("select-all-checkbox").checked = true;
+            $('input[type=checkbox]').attr("checked", true);
+            id = 1;
+        }
+        else {
+            document.getElementById("select-all-checkbox").checked = false;
+            $('input[type=checkbox]').attr("checked", false);
+            id = 0;
+        }
+    });
+</script>
+  <script type="text/javascript">
+
+      function GoToHome() {
+          window.history.back();
+      }
+       </script>

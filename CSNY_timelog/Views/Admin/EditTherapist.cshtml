@@ -1,0 +1,660 @@
+﻿@model CSNY_timelog.ViewModel.RegistrationViewModel    
+
+@{
+    ViewBag.Title = "Edit Therapist";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+  <link href="@Url.Content("~/Content/themes/base/jquery.ui.core.css")" 
+        rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/themes/base/jquery.ui.datepicker.css")" 
+        rel="stylesheet"  type="text/css" />
+    <link href="@Url.Content("~/Content/themes/base/jquery.ui.theme.css")" 
+        rel="stylesheet" type="text/css" />
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.password-strength.js")" type="text/javascript"></script>
+
+<script src="@Url.Content("~/Scripts/jquery-1.7.2.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery-ui-1.8.20.min.js")" type="text/javascript"></script>
+
+<script type="text/javascript">
+    function validation() {
+        var error = "";
+        var error1 = "";
+
+
+        //Client side validation
+
+        var go = "";
+        var checkterms = "";
+        
+
+     
+
+        if (document.getElementById('FirstName').value == "") {
+            error += "Please enter first name.\r\n ";
+        }
+        if (document.getElementById('LastName').value == "") {
+            error += "Please enter last name.\r\n ";
+        }
+        
+        if (document.getElementById('SSN').value == "") {
+            error += "Please enter SSN.\r\n ";
+        }
+       
+        if (document.getElementById('UserType').value == "0") {
+            error += "Please Select User Type.\r\n ";
+        }
+        var UserType = $('#UserType').val();
+
+        var State = $('#StateName').val();
+        var City = $('#City').val();
+
+        
+        var x = document.getElementsByName("Services");
+        var Servicesvalue = "";
+        if (x != "") {
+            for (var i = 0; i < x.length; i++) {
+                if (x[i].checked) {
+                    Servicesvalue += x[i].value + ",";
+               }
+            }
+        }
+
+        
+        var IsActive = $('#IsActive').val();
+        var EndService = $('#EndService').val();
+        if (IsActive == 0) {
+            if (EndService == "") {
+                error += "Please Enter Service End Date."
+            }
+        }
+       
+        var EMail = document.getElementById('Email').value.trim();
+       
+        if (EMail == "") {
+            error += "Please Enter Email Address.\n";
+        }
+        else {
+            var atpos = EMail.indexOf("@@");
+            var dotpos = EMail.lastIndexOf(".");
+
+            if (atpos < 1 || dotpos < atpos + 2 || dotpos + 2 >= EMail.length) {
+                error += "Invalid email address.\n";
+            }
+            else {
+                var namevalidtext = document.getElementById('msg').innerHTML;
+                if (namevalidtext == "*Already Used") {
+                    error += "Please Enter Another Email Address.\n<br>";
+                }
+            }
+        }
+
+        
+
+       
+        
+
+       
+        if (error != "") {
+            alert(error);
+            return false;
+        }
+        else {
+
+
+            var OrderViewModel =
+                {
+                    TID: $('#TID').val(), FirstName: $('#FirstName').val(), LastName: $('#LastName').val(),
+                    Address1: $('#Address1').val(), Address2: $('#Address2').val(),
+                    StateName: $('#StateName').val(), City: $('#City').val(), Phone: $('#Phone').val(),
+                    Email: $('#Email').val(), ServiceType: Servicesvalue, SSN: $('#SSN').val(), UserType: UserType,
+                    IsActive: $('#IsActive').val(), EndService: $('#EndService').val()
+                };
+
+            $.ajax({
+                type: "POST",
+
+                url: '@Url.Content("~/Admin/edit_profile")',
+                // url: "/admin/show_find_user_detail",
+                async: false,
+                data: JSON.stringify(OrderViewModel),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+
+                    if (data == "Success") {
+                        alert("Profile Updated succesfully");
+                    }
+                    else {
+                            alert(data);
+                        }
+                       
+                    },
+                error: function (data) {
+                    //  alert(data);
+                }
+
+            });
+            }
+        }
+
+        function OnChange(txt) {
+            $("#errormsg")[0].innerHTML = "";
+        }
+
+        function CheckUserNameAvailability() {
+            var Name = document.getElementById('UserName').value.toLowerCase();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Content("~/Account/CheckUserNameAvailable")',
+            data: '{userName: "' + Name + '" }',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+
+            success: function (response) {
+                var mesg = $("#msg1")[0];
+                if (response == 0) {
+                    if (Name == "") {
+                        mesg.style.color = "red";
+                        mesg.innerHTML = "*Please Enter User Name";
+                    }
+                    else {
+                        mesg.style.color = "green";
+                        mesg.innerHTML = "*Available";
+                    }
+                }
+                else {
+                    mesg.style.color = "red";
+                    mesg.innerHTML = "*Already Used";
+                }
+            },
+            failure: function (response) {
+                alert(response);
+            }
+        });
+    }
+    function OnChange(txt) {
+        $("#msg1")[0].innerHTML = "";
+    }
+    function CheckEmailAvailability() {
+        var name = document.getElementById('Email').value.toLowerCase();
+        if (name == "") {
+            $("#msg").html("Please Enter email address");
+            $("#msg").css("color", "red");
+
+        }
+        else {
+            var filter = /^([a-zA-Z0-9_\.\-])+\@@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            if (!filter.test(name)) {
+                $("#msg").html("*Please provide a valid email address");
+                $("#msg").css("color", "red");
+
+            }
+            else {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Content("~/Account/CheckEMailAvailable")',
+                    data: '{Email: "' + name + '" }',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        var msg = $("#msg")[0];
+                        if (response == 0) {
+                            msg.style.color = "green";
+                            msg.innerHTML = "*Available";
+                        }
+                        else {
+                            msg.style.color = "red";
+                            msg.innerHTML = "*Already Used";
+                        }
+                    },
+                    failure: function (response) {
+                        alert(response);
+                    }
+                });
+            }
+        }
+    }
+
+    function OnChange(txt) {
+        $("#msg")[0].innerHTML = "";
+    }
+
+    function onSelectedIndexChanged() {
+        var selectedVal = $("#StateName").val();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Content("~/Account/GetCitiesShow")',
+            data: '{StateName: "' + selectedVal + '"}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                var markup = "<option value=''>Select City</option>";
+                for (var x = 0; x < data.length; x++) {
+
+                    markup += "<option value=" + data[x].Text + ">" + data[x].Text + "</option>";
+                }
+                $('#City').html(markup).show();
+            },
+            error: function () {
+
+            }
+        });
+
+    }
+
+
+ </script>
+ 
+ 
+
+  <script type="text/javascript">
+      function GOTO() {
+          var a = confirm("You will be redirected to the therapist home page.Are you sure?");
+          if (a == true) {
+
+
+              $.ajax({
+                  type: "POST",
+                  url: '@Url.Content("~/admin/LoginToUserHome?UserId=")' + '@Model.TID',
+             
+             //data: '{City: "' + selectedVal + '"}',
+             contentType: "application/json; charset=utf-8",
+             dataType: "json",
+             success: function (data) {
+
+                 if (data == "Success") {
+                     
+                     window.location.replace('@Url.Content("~/therapist/index")');
+                     
+                 }
+             },
+             error: function () {
+
+             }
+         });
+     }
+      }
+      function GOTOReset() {
+          var a = confirm("Therapist password will be reset to default.Are you sure?");
+          if (a == true) {
+
+
+              $.ajax({
+                  type: "POST",
+                  url: '@Url.Content("~/admin/ResetPassword?UserId=")' + '@Model.TID',
+
+                  //data: '{City: "' + selectedVal + '"}',
+                  contentType: "application/json; charset=utf-8",
+                  dataType: "json",
+                  success: function (data) {
+
+                      if (data == "Success") {
+
+                          alert("Password reset to default.");
+
+                 }
+             },
+                  error: function () {
+
+                  }
+              });
+     }
+ }
+</script>
+
+
+@{ Html.EnableClientValidation(true); }
+
+@using (Html.BeginForm())
+{
+ 
+         <div class="main_content">
+           <div class="page_heading">
+             <p>Edit Therapist</p>
+            </div>
+
+        <div style="clear:both;">
+            <br />
+        </div>
+             <div style="float:right; padding-right:10px;">
+                 <a href='@Url.Action("StudentList","admin", new { Value = @Model.SSN, SerachBy = "NPI" })'>Student List</a>
+        @*<a href='@Url.Content("StudentList", new { Value = @Model.SSN.Trim(), SerachBy = "NPI" });'>Reset Password</a>*@
+        </div>
+                 <div style="float:left; padding-left:10px;">
+        <input type="button" value="Login As" name="LoginAs" onclick="GOTO()" />
+        </div>
+              <div style="float:left; padding-left:10px;">
+        <input type="button" value="Reset Password" name="reset" onclick="GOTOReset()" />
+        </div>
+        <div style="clear:both;"><br /></div>
+        <div style="text-align:center;">
+            <strong>
+        <u>Company and Contact Information</u>
+        </strong>
+       
+            <br />
+            @*<div id="errormsg"></div>
+           @*  @Html.ValidationSummary(true, "Account creation was unsuccessful. Please correct the errors and try again.")*@
+         @* <span style="color:red;">   @Html.ValidationSummary(true)</span>    *@
+              </div>
+         <div style="clear:both;text-align:center;font-size:small;padding:10px;">
+              
+              <span style="color:red;">*</span><span>&nbsp;indicates required field</span>
+          
+        </div>
+           
+                   <div class="editor-label">
+              <span style="color:red;">*</span> <strong> @Html.LabelFor(m => m.TID):</strong>
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.TID, new { @maxlength = "50",@disabled = true })
+               
+            </div>
+                   
+
+            <div class="editor-label">
+              <span style="color:red;">*</span> <strong> @Html.LabelFor(m => m.FirstName):</strong>
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.FirstName, new { @maxlength = "50" })
+               
+            </div>
+
+            <div class="editor-label">
+               <span style="color:red;">*</span> <strong>@Html.LabelFor(m => m.LastName):</strong>
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.LastName, new { @maxlength = "50" })
+               
+            </div>
+
+        
+            <div class="editor-label">
+           <strong> @Html.LabelFor(m => m.Address1):</strong>
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.Address1, new { @maxlength = "100" })
+              
+            </div>
+            <div class="editor-label">
+               <strong> @Html.LabelFor(m => m.Address2):</strong>
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.Address2, new { @maxlength = "100" })
+              @* <span style="color:red;font-size:10px;"> @Html.ValidationMessageFor(m => m.Address2)</span>*@
+            </div>
+
+           
+            <div class="editor-label">
+              <strong> State:</strong>
+            </div>
+            <div class="editor-field">
+               
+                @Html.DropDownListFor(model => model.StateName, (IEnumerable<SelectListItem>)ViewBag.State, Model.StateName, new { onchange = "onSelectedIndexChanged()", TabIndex = "0" })
+                            
+                
+            </div>
+
+             <div class="editor-label">
+               
+             <strong>@Html.LabelFor(m => m.City):</strong>
+             
+             </div>
+           <div class="editor-field">
+             @*  <span id="spancity">@Model.City</span>*@
+                @Html.DropDownListFor(model => model.City, (IEnumerable<SelectListItem>)ViewBag.City,Model.City)
+                
+            </div>
+             
+             <div class="editor-label">
+               <span style="color:red;">*</span> <strong>@Html.LabelFor(m => m.UserName):</strong>
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.UserName, new { @maxlength = "50",@disabled = true })
+                
+                <span id="msg" style="font-size:10px"></span>
+            </div>
+            
+
+          <div class="editor-label">
+               <span style="color:red;">*</span> <strong>@Html.LabelFor(m => m.Email):</strong>
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(m => m.Email, new { @onblur = "CheckEmailAvailability()", @maxlength = "50",@disabled = true })
+                
+                <span id="msg" style="font-size:10px"></span>
+            </div>
+            
+         
+             <div class="editor-label">
+              <strong> Work Phone:</strong>
+            </div>
+            <div class="editor-field">
+              @Html.TextBoxFor(m => m.Phone, new { @maxlength = "10" })
+             
+            </div>  
+
+               <div class="editor-label">
+              <strong> SSN:</strong>
+            </div>
+            <div class="editor-field">
+              @Html.TextBoxFor(m => m.SSN, new { @maxlength = "10" })
+             
+            </div>
+
+                  <div class="editor-label">
+               <span style="color:red;">*</span><strong> User Type:</strong>
+            </div>
+           
+     @{
+    var UsetRole = new List<SelectListItem>();
+    var item1 = new SelectListItem()
+    {
+        Text = "--Select a User Role--",
+        Value = "0"
+    };
+
+    UsetRole.Add(item1);
+
+    item1 = new SelectListItem()
+    {
+        Text = "Admin",
+        Value = "ADMIN"
+    };
+    UsetRole.Add(item1);
+    
+    item1 = new SelectListItem()
+    {
+        Text = "Licence Therapist",
+        Value = "LIC"
+    };
+    UsetRole.Add(item1);
+    
+    item1 = new SelectListItem()
+    {
+        Text = "Licence Therapist SUP",
+        Value = "LIC-SUP"
+    };
+    UsetRole.Add(item1);
+
+    item1 = new SelectListItem()
+    {
+        Text = "Clinical Fellow",
+        Value = "CFY"
+    };
+    UsetRole.Add(item1);
+    
+}
+     <div class="editor-field">
+        
+         @Html.DropDownListFor(m=>m.UserType,UsetRole,new { onchange = "MyFunction()" })
+        
+    </div>
+
+             <div class="editor-label">
+               <span style="color:red;">*</span><strong> Is Active:</strong>
+            </div>
+           
+     @{
+    var IsActive = new List<SelectListItem>();
+    var item2 = new SelectListItem()
+    {
+        Text = "In-Active",
+        Value = "0"
+    };
+
+    IsActive.Add(item2);
+
+    item2 = new SelectListItem()
+    {
+        Text = "Active",
+        Value = "1"
+    };
+    IsActive.Add(item2);
+    
+}
+     <div class="editor-field">
+        
+         @Html.DropDownListFor(m=>m.IsActive,IsActive,new { onchange = "MyFunction2()" })
+        
+    </div>
+             <div id="EndServiceDate" >
+              <div class="editor-label">
+              <strong> End of Service Date:</strong>
+            </div>
+            <div class="editor-field">
+              @Html.TextBoxFor(m => m.EndService)
+             
+            </div>  
+</div>
+            <br />
+            
+                 <div class="editor-label">
+               <span style="color:red;">*</span><strong>Assigned Services:</strong>
+            </div>
+            <div class="editor-field">
+                 <input type="checkbox" checked disabled id="Child" value="Child" name="Services"/>
+             Child Services<br />
+                 <input type="checkbox" id="SAS" value="SAS" name="Services"/>
+             Pre-Approved Paid Admin Services <br />
+                 <input type="checkbox" id="CS" value="CS" name="Services"/>
+              Pre-Approved Supervising <br />
+                 <input type="checkbox" checked disabled id="Other" value="Other" name="Services" />
+             Other<br />
+                </div>
+           
+         
+
+
+
+               <div style="clear :both;"></div>
+        
+          <div style="clear:both;">
+          <br />
+          </div>
+          <div class="editor-label"> &nbsp; </div>
+          <div class="editor-field">
+                <input type="submit" value="SUBMIT"  id="btn_sbmt" onclick="return validation()" class="input_button" />     
+          </div>
+
+          <br />
+          <br />
+           <div class="editor-label"> &nbsp; </div>
+          
+    
+        <div class="editor-field" style="color:red;font-size:12px;"> 
+
+        
+      
+           
+           <div id="errormsg" style="color:red;font-size:12px;"></div>
+           
+         
+          
+            <p>  @Html.ValidationMessageFor(m => m.FirstName)</p>
+            <p>  @Html.ValidationMessageFor(m => m.LastName) </p>
+            <p>  @Html.ValidationMessageFor(m => m.Address1) </p>
+            <p>  @Html.ValidationMessageFor(m => m.StateName) </p> 
+           
+          @* <p>    @Html.ValidationMessageFor(m => m.ZipCode)</p>*@
+           <p>   @Html.ValidationMessageFor(m => m.Email) </p>
+           <p>   @Html.ValidationMessageFor(m => m.ConfirmEmail) </p>
+           <p>  @Html.ValidationMessageFor(m => m.Phone) </p>
+          <p>   @Html.ValidationMessageFor(m => m.UserName) </p>
+          <p>   @Html.ValidationMessageFor(m => m.Password) </p>
+          <p>   @Html.ValidationMessageFor(m => m.ConfirmPassword) </p>
+          <p>   @Html.ValidationMessageFor(m => m.EnterValidationCode1)</p>
+          @*<p>    @Html.ValidationMessageFor(m => m.EnterValidationCode) </p>*@
+          <p>    @Html.ValidationMessageFor(m => m.Checkterms) </p>
+          
+         
+
+
+           </div>     
+              
+         
+    </div>
+}
+
+<script type="text/javascript" language="javascript">
+
+    $(document).ready(function () {
+
+
+        var ServiceType= '@Model.ServiceType'; 
+        var ServiceValue = ServiceType.split(",");
+       // var i = ServiceValue.length - 1;
+        for (i = 0; i <= ServiceValue.length - 2; i++) {
+
+            document.getElementById(ServiceValue[i]).checked = true;
+            
+        }
+
+        $('#EndService').datepicker({
+          
+
+        });
+
+        var IsActive = '@Model.IsActive';
+        if (IsActive == "1") {
+            document.getElementById("EndServiceDate").style.display = "none";
+        }
+        else {
+            document.getElementById("EndServiceDate").style.display = "block";
+        }
+       
+
+    });
+
+</script>
+
+<script type="text/javascript">
+    function MyFunction() {
+        //alert("Changed");
+        var UserType = $('#UserType').val();
+        if (UserType == "LIC-SUP") {
+            document.getElementById("CS").checked = true;
+        }
+        else {
+            document.getElementById("CS").checked = false;
+        }
+    }
+    function MyFunction2() {
+        //alert("Changed");
+        var UserType = $('#IsActive').val();
+        if (UserType == "1") {
+            
+            document.getElementById("EndServiceDate").style.display = "none";
+           // $('#UserType').val() = "";
+        }
+        else {
+            alert("Beware: In-Active status changes the Service End Date of all the case mandates assigned to the therapist. Also, the therapist's password will change so they will no longer have access to the system.  Please confirm status before changing Is Active Status.")
+            document.getElementById("EndServiceDate").style.display = "block";
+        }
+    }
+</script>

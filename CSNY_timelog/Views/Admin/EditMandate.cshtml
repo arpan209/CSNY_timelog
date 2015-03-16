@@ -1,0 +1,860 @@
+﻿@model CSNY_timelog.ViewModel.AddStudentViewModel    
+
+
+@{
+    ViewBag.Title = "EditMandate";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+
+  <link href="@Url.Content("~/Content/themes/base/jquery.ui.core.css")" 
+        rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/themes/base/jquery.ui.datepicker.css")" 
+        rel="stylesheet"  type="text/css" />
+    <link href="@Url.Content("~/Content/themes/base/jquery.ui.theme.css")" 
+        rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/css/chosen.css")" rel="stylesheet"  type="text/css" />
+
+<script src="@Url.Content("~/Scripts/jquery-1.7.2.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery-ui-1.8.20.min.js")" type="text/javascript"></script>
+
+<script src="@Url.Content("~/Scripts/chosen.jquery.js")" type="text/javascript"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#StartDate").datepicker({
+
+        });
+        $("#EndDate").datepicker({
+
+        });
+
+        var ID = '@Model.MID';
+        if (ID != "0") {
+          
+            var FundingCode = '@Model.FundingCode';
+            document.getElementById("chk" + FundingCode.trim()).checked = true;
+
+            var Language = '@Model.language';
+            document.getElementById("chk" + Language.trim()).checked = true;
+           
+            var Frequecy = '@Model.Frequency';
+            var Frequecy1 = '@Model.Frequency1';
+           // var Freq1 = Frequecy.substring(0, 1);
+           // var Freq2 = Frequecy.substring(2, 3);
+
+            //var Frequency1DropDown = document.getElementById('Frequency');
+            //Frequency1DropDown.options[Frequency1DropDown.selectedIndex].text = Frequecy.trim();
+            //var Frequency2DropDown = document.getElementById('Frequency1');
+            //Frequency2DropDown.options[Frequency2DropDown.selectedIndex].text = Frequecy1.trim();
+
+            if (Frequecy != "0") {
+                document.getElementById("CheckS1").checked = true;
+            }
+            else {
+                $('#divS1').hide();
+               
+            }
+            if (Frequecy1 != "0") {
+                document.getElementById("CheckSP").checked = true;
+            }
+            else {
+                
+                $('#divSP').hide();
+            }
+            var Duration = '@Model.Duration';
+            var Duration1 = '@Model.Duration1';
+            //var Dur1 = Duration.substring(0, 2);
+            //var Dur2 = Duration.substring(3,5);
+
+            //var Duration1DropDown = document.getElementById('Duration');
+            //Duration1DropDown.options[Duration1DropDown.selectedIndex].text = Duration;
+            //var Duration2DropDown = document.getElementById('Duration1');
+            //Duration2DropDown.options[Duration2DropDown.selectedIndex].text = Duration1;
+
+            var Group = '@Model.GroupSize';
+            var Group1 = '@Model.GroupSize1';
+            //var Group1 = Group.substring(0, 1);
+            //var Group2 = Group.substring(2, 3);
+
+            var GroupSize1DropDown = document.getElementById('GroupSize');
+            GroupSize1DropDown.options[GroupSize1DropDown.selectedIndex].text = Group;
+            var GroupSize2DropDown = document.getElementById('GroupSize1');
+            GroupSize2DropDown.options[GroupSize2DropDown.selectedIndex].text = Group1;
+            
+        }
+        else {
+
+            $('#divSP').hide();
+            $('#divS1').hide();
+           
+        }
+    });
+    </script>
+
+<script type="text/javascript">
+
+    //$('#CheckSP').change(
+
+    //     function (e) {
+    //         // code here to hide your text
+
+    //         var checked = $(this).attr('checked');
+    //         if (checked) {
+    //             $('#divSP').show();
+    //         }
+
+    //         else {
+    //             $('#divSP').hide();
+    //         }
+    //     }
+    //);
+    //function CheckSP() {
+    //    if (document.getElementById('CheckSP').checked)
+    //        $('#divSP').show();
+    //    else
+    //        $('#divSP').hide();
+    //}
+
+    function OnChangeCheckbox(checkbox) {
+        if (checkbox.checked) {
+            $('#divS1').show();
+        }
+        else {
+            $('#divS1').hide();
+        }
+    }
+    function OnChangeCheckboxSP(checkbox) {
+        if (checkbox.checked) {
+            $('#divSP').show();
+        }
+        else {
+            $('#divSP').hide();
+        }
+    }
+
+</script>
+<script type="text/javascript">
+    function validation() {
+        var error = "";
+        var error1 = "";
+        var MID = '@Model.MID';
+        var SID = '@Model.SID';
+        var Fiscal = $('#Fiscal').val();
+
+        if (Fiscal == null || Fiscal == "") {
+            error += "Please Enter Fiscal year.\n";
+        }
+        var FundingCode = $('input[name=Fundingcode]:checked').val();
+        if (FundingCode == "") {
+            error += "Please Select FundingCode \n";
+        }
+
+
+        var StartDate = $('#StartDate').val();
+
+        if (StartDate == null || StartDate == "") {
+            error += "Please Select Service Start Date.\n";
+        }
+
+        var EndDate = $('#EndDate').val();
+
+        if (EndDate == null || EndDate == "") {
+            error += "Please Select Service End Date.\n";
+        }
+
+        var Start = new Date(StartDate);
+        var End = new Date(EndDate);
+
+        if (Start > End)
+        {
+            error += "Service End Date can not be before Service Start Date."
+        }
+
+        var Frequency = "0";
+        var Duration = "00";
+        var GroupSize = "0";
+        //Client side validation
+        var CheckS1 = document.getElementById("CheckS1").checked;
+        if (CheckS1 == true) {
+            //var Frequency = document.getElementById("Frequency").value;
+             Frequency = $('#Frequency').val();
+            if (Frequency == "0") {
+                error += "Select the Frequency for S1.\n";
+            }
+
+             Duration = document.getElementById("Duration").value;
+            if (Duration == "00") {
+                error += "Select the Duration for S1.\n";
+            }
+
+
+             GroupSize = document.getElementById("GroupSize").value;
+            if (GroupSize == "0") {
+                error += "Select the Group Size for S1.\n";
+            }
+
+        }
+     
+        var addFreq = "";
+        var addGroup = "";
+        var AddDuration = "";
+        var Frequency1 = "0";
+        var Duration1 = "00";
+        var GroupSize1 = "0";
+
+        var CheckSP = document.getElementById("CheckSP").checked;
+        if (CheckSP == true) {
+             Frequency1 = $('#Frequency1').val();
+            //var Frequency1 = document.getElementById("Frequency1").value;
+            if (Frequency1 == "0") {
+                error += "Select the Frequency for SP.\n";
+            }
+            
+             Duration1 = document.getElementById("Duration1").value;
+            if (Duration1 == "00") {
+                error += "Select the Duration for SP.\n";
+            }
+           
+
+             GroupSize1 = document.getElementById("GroupSize1").value;
+            if (GroupSize1 == "0") {
+                error += "Select the Group Size for SP.\n";
+            }
+           
+        }
+       
+        addFreq = Frequency + "," + Frequency1;
+        AddDuration = Duration + "," + Duration1;
+        addGroup = GroupSize + "," + GroupSize1;
+
+        //var LangValues = "";
+        //var Language = document.getElementsByName('Language');
+        //for (var x = 0; x < Language.length; x++) {
+        //    if (Language[x].checked) {
+        //        LangValues += Language[x].value;
+
+        //    }
+        //}
+        //if (Language == "") {
+        //    error += "Select the language.\n";
+        //}
+        var Language = $('input[name=Language]:checked').val();
+        if (Language == "") {
+            error += "Please Select Language \n";
+        }
+        var TherapistList = "";
+        var TherapistListText = "";
+        var x = document.getElementById("TherepistList");
+
+        if (x != "") {
+            for (var i = 0; i < x.options.length; i++) {
+                if (x.options[i].selected == true) {
+                    TherapistList += x.options[i].value + ",";
+                    TherapistListText += x.options[i].text + ",";
+
+                    GroupSize += 1;
+                }
+            }
+        }
+        if (TherapistList == "") {
+            error += "Select Fellow Name.\n";
+        }
+
+        if (error != "") {
+            alert(error);
+            return false;
+        }
+        else {
+
+
+            var OrderViewModel =
+                {
+
+                    //Parent details
+                    SID: $('#SID').val(), MID: MID,TID:TherapistList,  
+                    
+                    //Child/DOE detials
+                    Fiscal: $('#Fiscal').val(), StartDate: $('#StartDate').val(), EndDate: $('#EndDate').val(),
+                   FundingCode: FundingCode, SchoolName: $('#SchoolName').val(), SchoolCode: $('#SchoolCode').val(),
+                   Districtcode: $('#Districtcode').val(), BoroughCode: $('#BoroughCode').val(), SchoolCode: $('#SchoolCode').val(),
+                    Frequency: addFreq, Duration: AddDuration, GroupSize: addGroup,
+                    language: Language
+
+                };
+
+            $.ajax({
+                type: "POST",
+
+                url: '@Url.Content("~/Admin/EditMandate")',
+                // url: "/admin/show_find_user_detail",
+                async: false,
+                data: JSON.stringify(OrderViewModel),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+
+                    if (data != "") {
+                        alert("Mandate Updated Sucessfully.");
+                       // location.href = '@Url.Content("~/admin/view-find-user-bids-detail?UserId=")' 
+                        window.location = '@Url.Content("~/admin/AddStudent/")' + data;
+                    } else {
+                        alert(data);
+                    }
+
+                },
+                error: function (data) {
+                    //  alert(data);
+                }
+
+            });
+        }
+
+
+    }
+</script>
+
+ <div class="main_content">
+             <div id="Input">
+           <div class="page_heading">
+             <p>Edit Mandate</p>
+            </div>
+                  @Html.HiddenFor(m => m.SID)
+                  
+                   <div class="editor-label">
+               <span style="color:red;">*</span><strong> Student Name:</strong>
+            </div>
+                 <div class="editor-field">                        
+                         @Model.FirstName
+                    </div>
+
+                    <div class="editor-label">
+               <span style="color:red;">*</span><strong> Fiscal Year:</strong>
+            </div>
+            @{
+    var FiscalList = new List<SelectListItem>();
+    int Fiscal = DateTime.Today.Year;
+    var FiscalItem = new SelectListItem()
+    {
+        Text = "--Select Fiscal Year--",
+        Value = ""
+    };
+
+    FiscalList.Add(FiscalItem);
+
+    FiscalItem = new SelectListItem()
+    {
+        Text =  (Fiscal - 1).ToString(),
+        Value = (Fiscal - 1).ToString()
+    };
+    FiscalList.Add(FiscalItem);
+
+    FiscalItem = new SelectListItem()
+    {
+        Text = (Fiscal).ToString(),
+        Value = (Fiscal).ToString()
+    };
+    FiscalList.Add(FiscalItem);
+
+    FiscalItem = new SelectListItem()
+    {
+        Text = (Fiscal + 1).ToString(),
+        Value = (Fiscal + 1).ToString()
+    };
+    FiscalList.Add(FiscalItem);
+
+    
+}
+              <div class="editor-field">
+        
+         @Html.DropDownListFor(m=>m.Fiscal,FiscalList)
+        
+    </div>
+  
+
+
+                <div class="editor-label">
+              <span style="color:red;">*</span> <strong> @Html.LabelFor(m => m.FundingCode):</strong>
+            </div>
+
+          <div class="editor-field">
+            <div style="float:left;width:100%;">
+                <input type="radio" id="chkCPSE" name="Fundingcode" checked value="CPSE"/>
+                <span>CPSE</span>
+                <br />
+                </div> 
+                  <div style="float:left;width:100%;">
+                 <input type="radio" id="chkCSE" name="Fundingcode" value="CSE"/>
+                 <span>CSE</span>
+                 <br />
+                 </div>
+                   <div style="float:left;width:100%;">
+                 <input type="radio" id="chkPP" name="Fundingcode" value="PP"/>
+                 <span>PP School Group</span>
+                 <br />
+                 </div>
+                   <div style="float:left;width:100%;">
+                 <input type="radio" id="chkPI" name="Fundingcode" value="PI"/>
+                 <span>PP Individual</span>
+                 <br />
+                 </div>
+                <div style="float:left;width:100%;">
+                 <input type="radio" id="chkEI" name="Fundingcode" value="EI"/>
+                 <span>EI (Early Intervention)</span>
+                 <br />
+                 </div>
+                <div style="float:left;width:100%;">
+                 <input type="radio" id="chkRSA" name="Fundingcode" value="RSA"/>
+                 <span>RSA</span>
+                 <br />
+                 </div>
+                
+            </div>
+
+
+  <div class="editor-label">
+               <span style="color:red;">*</span><strong> Start Date:</strong>
+            </div>
+          <div class="editor-field">                        
+                         @Html.TextBoxFor(m => m.StartDate)
+                    </div>
+
+                    <div class="editor-label">
+               <span style="color:red;">*</span><strong> End Date:</strong>
+            </div>
+            <div class="editor-field">
+              @Html.TextBoxFor(m => m.EndDate)
+             
+            </div>  
+
+                     <div class="editor-label">
+            <span style="color:red;">*</span>  <b>  Therapist: </b>
+     </div>
+                
+  <div class="editor-field">
+         
+            @Html.ListBox("TherepistList", Model.TherapistList
+
+     , new
+
+     {
+
+         @class = "chzn-select",
+          data_placeholder = "Choose  therapist..."
+
+     }
+     )
+      </div>
+             
+
+             <div style="width: 97%; float: left; border: 1px solid gray; padding-left: 5px;">
+
+         <div style="text-align:center;padding:12px;">
+             <strong><u> S1(Private Session) </u>
+                  </strong>
+               
+            </div>
+                     <div style="text-align:center;padding:12px;">
+                 
+                 <input type="checkbox" onclick="OnChangeCheckbox(this)" id="CheckS1" />
+             <span style="color:red;">*</span> Check to enable S1 mandate
+                      </div>
+                  <div id="divS1">
+                     
+
+
+            <div class="editor-label">
+            <span style="color:red;">*</span>  <b>  Frequency: </b>
+     </div>
+
+     @{
+    var FreqList = new List<SelectListItem>();
+    var item1 = new SelectListItem()
+    {
+        Text = "--Select a Frequency--",
+        Value = "0"
+    };
+
+    FreqList.Add(item1);
+
+    item1 = new SelectListItem()
+    {
+        Text = "1",
+        Value = "1"
+    };
+    FreqList.Add(item1);
+    
+    item1 = new SelectListItem()
+    {
+        Text = "2",
+        Value = "2"
+    };
+    FreqList.Add(item1);
+
+    item1 = new SelectListItem()
+    {
+        Text = "3",
+        Value = "3"
+    };
+    FreqList.Add(item1);
+    item1 = new SelectListItem()
+    {
+        Text = "4",
+        Value = "4"
+    };
+    FreqList.Add(item1);
+    item1 = new SelectListItem()
+    {
+        Text = "5",
+        Value = "5"
+    };
+    FreqList.Add(item1);
+}
+     <div class="editor-field">
+        
+         @Html.DropDownListFor(m=>m.Frequency,FreqList)
+        
+    </div>
+
+             <div style="clear :both;"></div>
+            <div class="editor-label">
+            <span style="color:red;">*</span>  <b>  Duration: </b>
+     </div>
+
+     @{
+    var DurationList = new List<SelectListItem>();
+    var item2 = new SelectListItem()
+    {
+        Text = "--Select a Duration--",
+        Value = "00"
+    };
+
+    DurationList.Add(item2);
+
+    item2 = new SelectListItem()
+    {
+        Text = "10",
+        Value = "10"
+    };
+    DurationList.Add(item2);
+    
+    item2 = new SelectListItem()
+    {
+        Text = "20",
+        Value = "20"
+    };
+    DurationList.Add(item2);
+
+    item2 = new SelectListItem()
+    {
+        Text = "30",
+        Value = "30"
+    };
+    DurationList.Add(item2);
+    item2 = new SelectListItem()
+    {
+        Text = "40",
+        Value = "40"
+    };
+    DurationList.Add(item2);
+
+    item2 = new SelectListItem()
+    {
+        Text = "45",
+        Value = "45"
+    };
+    DurationList.Add(item2);
+
+    item2 = new SelectListItem()
+    {
+        Text = "60",
+        Value = "60"
+    };
+    DurationList.Add(item2);
+    
+    item2 = new SelectListItem()
+    {
+        Text = "90",
+        Value = "90"
+    };
+    DurationList.Add(item2);
+}
+     <div class="editor-field">
+        
+         @Html.DropDownListFor(m=>m.Duration,DurationList)
+        
+    </div>
+
+            <br />
+               <div class="editor-label">
+               <span style="color:red;">*</span><strong> Group Size:</strong>
+            </div>
+                  @{
+    var GroupList = new List<SelectListItem>();
+    var item4 = new SelectListItem()
+    {
+        Text = "--Select a Group Size--",
+        Value = "0"
+    };
+
+    GroupList.Add(item4);
+
+    item4 = new SelectListItem()
+    {
+        Text = "1",
+        Value = "1"
+    };
+
+    GroupList.Add(item4);
+
+
+}
+            <div class="editor-field">
+             
+                @Html.DropDownListFor(m=>m.GroupSize,GroupList)
+             
+            </div>  
+                 </div>
+</div>
+                 <div style="width: 97%; float: left; border: 1px solid gray; padding-left: 5px;">
+
+         <div style="text-align:center;padding:12px;">
+             <strong><u> SP(Group Session) </u>
+                  </strong>
+
+            </div>
+                        
+                       <div style="text-align:center;padding:12px;">
+                 
+                 <input type="checkbox" onclick="OnChangeCheckboxSP(this)" id="CheckSP" />
+             <span style="color:red;">*</span> Check to enable SP mandate
+                      </div>
+                     <div id="divSP">
+                  @*      <div class="editor-label">
+            <span style="color:red;">*</span>  <b>  Therapist: </b>
+     </div>
+  <div class="editor-field">
+         
+            @Html.ListBox("TherepistList1", Model.TherapistList
+
+     , new
+
+     {
+
+         @class = "chzn-select",
+          data_placeholder = "Choose  therapist..."
+
+     }
+     )
+      </div>*@
+                     @*   <div class="editor-label">
+               <span style="color:red;">*</span><strong> Start Date:</strong>
+            </div>
+          <div class="editor-field">                        
+                         @Html.TextBoxFor(model => model.StartDate1)
+                    </div>
+
+                    <div class="editor-label">
+               <span style="color:red;">*</span><strong> End Date:</strong>
+            </div>
+            <div class="editor-field">
+              @Html.TextBoxFor(m => m.EndDate1)
+             
+            </div>  *@
+
+
+            <div class="editor-label">
+            <span style="color:red;">*</span>  <b>  Frequency: </b>
+     </div>
+
+   
+     <div class="editor-field">
+        
+         @Html.DropDownListFor(m=>m.Frequency1,FreqList)
+        
+        
+    </div>
+
+             <div style="clear :both;"></div>
+            <div class="editor-label">
+            <span style="color:red;">*</span>  <b>  Duration: </b>
+     </div>
+
+       <div class="editor-field">
+        
+         @Html.DropDownListFor(m=>m.Duration1,DurationList)
+        
+    </div>
+
+            <br />
+               <div class="editor-label">
+               <span style="color:red;">*</span><strong> Group Size:</strong>
+            </div>
+
+                            @{
+    var GroupList1 = new List<SelectListItem>();
+    var item41 = new SelectListItem()
+    {
+        Text = "--Select a Group Size--",
+        Value = "0"
+    };
+
+    GroupList1.Add(item41);
+
+    item41 = new SelectListItem()
+    {
+        Text = "1",
+        Value = "1"
+    };
+
+    GroupList1.Add(item41);
+    
+    item41 = new SelectListItem()
+    {
+        Text = "2",
+        Value = "2"
+    };
+
+    GroupList1.Add(item41);
+    
+    item41 = new SelectListItem()
+    {
+        Text = "3",
+        Value = "3"
+    };
+
+    GroupList1.Add(item41);
+    
+    item41 = new SelectListItem()
+    {
+        Text = "4",
+        Value = "4"
+    };
+
+    GroupList1.Add(item41);
+    
+    item41 = new SelectListItem()
+    {
+        Text = "5",
+        Value = "5"
+    };
+
+    GroupList1.Add(item41);
+    
+    item41 = new SelectListItem()
+    {
+        Text = "6",
+        Value = "6"
+    };
+
+    GroupList1.Add(item41);
+    
+    item41 = new SelectListItem()
+    {
+        Text = "7",
+        Value = "7"
+    };
+
+    GroupList1.Add(item41);
+
+    item41 = new SelectListItem()
+    {
+        Text = "8",
+        Value = "8"
+    };
+
+    GroupList1.Add(item41);
+
+}
+
+
+
+
+            <div class="editor-field">
+             @Html.DropDownListFor(m=>m.GroupSize1,GroupList1)
+             
+            </div>  
+                     </div>
+                 </div>
+
+            <br />   
+
+              <div class="editor-label">
+               <span style="color:red;">*</span><strong> Language:</strong>
+            </div>
+              <div class="editor-field">
+            <div style="float:left;width:100%;">
+                <input type="radio" id="chkEN" name="Language" value="EN" checked/>
+                <span>English</span>
+                <br />
+                </div> 
+                  <div style="float:left;width:100%;">
+                 <input type="radio" id="chkSP" name="Language" value="SP"/>
+                 <span>Spanish</span>
+                 <br />
+                 </div>
+                   <div style="float:left;width:100%;">
+                 <input type="radio" id="chkRU" name="Language" value="RU"/>
+                 <span>Russian</span>
+                 <br />
+                 </div>
+                   <div style="float:left;width:100%;">
+                 <input type="radio" id="chkPL" name="Language" value="PL"/>
+                 <span>Polish</span>
+                 <br />
+                 </div>
+                   <div style="float:left;width:100%;">
+                 <input type="radio" id="chkCN" name="Language" value="CN"/>
+                 <span>Cantonese</span>
+                 <br />
+                 </div>
+                
+            </div>
+
+     <div class="editor-label">
+               <span style="color:red;"> </span><strong> School District Code:</strong>
+            </div>
+            <div class="editor-field">
+              @Html.TextBoxFor(m => m.Districtcode)
+             
+            </div>  
+
+               <div class="editor-label">
+               <span style="color:red;"> </span><strong> Borough Code:</strong>
+            </div>
+            <div class="editor-field">
+              @Html.TextBoxFor(m => m.BoroughCode)
+             
+            </div>  
+
+                      <div class="editor-label">
+               <span style="color:red;"> </span><strong> School Location Code:</strong>
+            </div>
+            <div class="editor-field">
+              @Html.TextBoxFor(m => m.SchoolCode)
+             
+            </div>  
+
+                           
+                <div style="clear :both;"></div>
+
+
+                 <span style="float:left;padding-left:200px">
+                      <input type="button" value="Submit" class="input_button" style="width:250px" onclick="validation()" /> 
+                </span>
+            <br />
+    <br />
+        <span style="float:left;padding-left:200px">
+                      <input type="button" value="Back" class="input_button" style="width:250px" onclick="GoToHome()" /> 
+                </span>
+
+
+</div>
+     </div>
+
+       @*Hookup Chosen Plugin*@
+<script >
+
+    $(".chzn-select").chosen({ no_results_text: "Oops, nothing found!" });
+
+</script> 

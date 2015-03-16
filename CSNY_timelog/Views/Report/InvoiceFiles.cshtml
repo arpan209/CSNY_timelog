@@ -1,0 +1,69 @@
+﻿@model CSNY_timelog.ViewModel.ReportViewModel
+@using Telerik.Web;
+@using Telerik.Web.Mvc;
+@using Telerik.Web.Mvc.UI;
+@using GridMvc.Html;
+
+<link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" />
+   
+    <script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
+
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" />
+
+@helper FileName(CSNY_timelog.ViewModel.DOEFilelist item)
+{
+    
+      <span >
+                <a href="~/DOEFiles/@item.FileName";> @item.FileName</a>    
+                </span>
+ }
+
+@{
+    ViewBag.Title = "Invoice Files";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+@using (Html.BeginForm())
+{
+
+
+ <div class="main_content">
+             <div id="Input">
+           <div class="page_heading"> 
+             <p>Invoice Files</p>
+            </div>
+                 <div>
+                    
+
+                 </div>
+      <div style="clear :both;"></div>
+
+       @Html.Grid(Model.Filelist).Columns(columns =>
+  {
+      //columns.Add(c => c.Child).Titled("Student ID").RenderValueAs(c => @<span class = "@((!String.IsNullOrEmpty(c.Child)) ? "ColorRed" : "Normal")">@c.Child</span>);
+      columns.Add(c => c.FileName).SetWidth(25).Titled("File Name")
+               .Sanitized(false)
+          .Encoded(false)
+          .RenderValueAs(c => FileName(c));
+      
+      columns.Add(c => c.LastModield).Titled("Last Modified").SetWidth(250);
+    
+      
+  }).WithPaging(100).Sortable(false)
+
+</div>
+
+        
+        <div class="editor-field">                        
+                     
+                    </div>
+
+         
+       </div>
+  <script type="text/javascript">
+
+      function GoToHome() {
+          window.history.back();
+      }
+       </script>
+
+}

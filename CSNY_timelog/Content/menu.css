@@ -1,0 +1,49 @@
+
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      font: 300 21px "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+      
+      margin: 0 auto 15px;
+    }
+    nav {
+      background: none repeat scroll 0 0 #FFFFFF;
+    display: block;
+	padding-bottom:10px;
+	border-bottom:1px solid #CCCCCC;
+    }
+    nav ul {
+      list-style: none;
+    }
+    nav li {
+      display: inline-block;
+    }
+    nav a {
+      display: inline-block;
+      
+      color: white;
+     
+      
+      text-decoration: none;
+    }
+    nav a:hover {
+      
+     
+    }
+    nav a:active {
+      
+    }
+    nav select {
+      display: none;
+    }
+    
+    @media (max-width: 960px) {
+		 nav {padding-left:0;}
+      nav ul     { display: none; }
+      nav select { display: inline-block; }
+    }
+	
+
+	

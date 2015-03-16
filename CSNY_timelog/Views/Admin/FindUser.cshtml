@@ -1,0 +1,76 @@
+﻿@model CSNY_timelog.ViewModel.FindUserViewModel    
+
+@{
+    ViewBag.Title = "Find Child";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+@using (Html.BeginForm()) 
+{
+   
+   <div class="main_content">
+             <div id="Input">
+           <div class="page_heading">
+             <p>Find Child</p>
+            </div>
+
+      <div style="clear :both;"></div>
+</div>
+
+         <div>
+        <fieldset>
+
+            <p style="color:red;font:bold">  @Html.ValidationSummary(true)    </p>     
+            
+            <div class="editor-label"><b>Search By:</b></div>
+                 <div class="editor-field">
+                     <div style="float:left">
+                        <input type="radio" value="ByLast" name="Finfuser" checked="checked" />Last Name
+                      <br />
+                         </div>
+                       <div style="float:left">
+                       <input type="radio" value="ByFirst" name="Finfuser" />First Name
+                      <br />
+                         </div>
+                     <div style="float:left">
+                      <input type="radio" value="ByOSIS" name="Finfuser" />OSIS
+                     <br />
+                     </div>
+                      <div style="float:left">
+                      <input type="radio" value="Byid" name="Finfuser" />Student Id(SID)
+                     <br />    
+                     </div>
+                   
+                    
+                   
+            </div>
+            <div style="clear:both;"></div>
+                     
+           
+           
+            <div class="editor-label">
+                <b>Enter Search Keyword:</b> 
+            </div>
+             <div class="editor-field">
+                @Html.TextBoxFor(m => m.UserType) 
+                 <div style="clear:both;"></div>
+                  <input type="submit" value="Search" name="searchuser" style="width:100px" onclick="return validate()"/>
+            </div>
+            @* <div style="float:right;width:60%;">
+                 <br />
+                 <br />
+                  <input type="button" value="All Users" name="searchuser" onclick="return ViewAllUser()" />
+                 <br />
+                 <br />
+                 <input type="button" value="Users with IN PROGRESS Bids" name="searchuser"  onclick="return ViewUserInProgressBid()" /><br />
+                 <br />
+                 <input type="button" value="Users with Admin Rights" name="searchuser"  onclick="return ViewUserAdminright()"/><br />
+                 <br />
+                
+
+            </div>*@
+           
+            </fieldset>
+            </div>
+       </div>
+}

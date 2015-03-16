@@ -1,0 +1,132 @@
+﻿@model CSNY_timelog.ViewModel.FindUserViewModel    
+
+@using Telerik.Web;
+@using Telerik.Web.Mvc;
+@using Telerik.Web.Mvc.UI;
+@using GridMvc.Html;
+
+
+@{
+    ViewBag.Title = "StudentList";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+<link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" />
+   
+    <script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
+
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" />
+<script>
+
+
+    function myFunction() {
+
+        var error = "";
+  
+        var Fisacl = document.getElementById("Fiscal").value;
+        if (Fisacl == "") {
+            error += "Select the Fiscal Year.\n";
+        }
+
+   
+        var dataVal = Fisacl;
+
+        if (error == "") {
+
+            var URL = '@Url.Content("~/Therapist/StudentListInfo/")' + dataVal;
+            $.get(URL, function (data) {
+                $("#Result").html(data);
+            });
+        }
+        else { alert(error) }
+    }
+</script>   
+
+ <div class="main_content">
+             <div id="Input">
+           <div class="page_heading">
+             <p>Caseload</p>
+            </div>
+
+                     <div style="clear :both;"></div> <br />
+                        <div class="editor-label">
+                     <span style="color: red;">*</span>  <b>Fiscal year: </b>
+                 </div>
+
+     @{
+    var FiscalList = new List<SelectListItem>();
+    int Fiscal = DateTime.Today.Year;
+    var FiscalItem = new SelectListItem()
+    {
+        Text = "--Select Fiscal Year--",
+        Value = ""
+    };
+
+    FiscalList.Add(FiscalItem);
+
+    FiscalItem = new SelectListItem()
+    {
+        Text = (Fiscal - 1).ToString(),
+        Value = (Fiscal - 1).ToString()
+    };
+    FiscalList.Add(FiscalItem);
+    
+    FiscalItem = new SelectListItem()
+    {
+        Text =  (Fiscal).ToString(),
+        Value = (Fiscal).ToString()
+    };
+    FiscalList.Add(FiscalItem);
+
+    FiscalItem = new SelectListItem()
+    {
+        Text = (Fiscal + 1).ToString(),
+        Value = (Fiscal + 1).ToString(),
+       
+    };
+    FiscalList.Add(FiscalItem);
+
+    FiscalItem = new SelectListItem()
+    {
+        Text = (Fiscal + 2).ToString(),
+        Value = (Fiscal + 2).ToString()
+    };
+    FiscalList.Add(FiscalItem);
+
+    
+}
+              <div class="editor-field">
+        
+         @Html.DropDownListFor(m=>m.Fiscal,FiscalList)
+        
+    </div>
+      <div style="clear :both;"></div>
+                 <div style="clear :both;"></div>
+     <span style="float:left;padding-left:200px">
+         
+                     <button type="button" class="input_button" style="width:250px" onclick="myFunction()">Student List</button>      
+                </span>
+
+                  <div style="clear :both;"></div><br/>
+     <span></span>
+
+     <div id="Result" style="width:950px"></div>
+      <br />
+
+    
+</div>
+
+        
+        <div class="editor-field">                        
+                     
+                    </div>
+
+          <span style="float:left;padding-left:200px">
+                      <input type="button" value="Back" class="input_button" style="width:250px" onclick="GoToHome()" /> 
+                </span>
+       </div>
+  <script type="text/javascript">
+
+      function GoToHome() {
+          window.history.back();
+      }
+       </script>

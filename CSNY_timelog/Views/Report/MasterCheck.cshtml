@@ -1,0 +1,65 @@
+﻿@model CSNY_timelog.ViewModel.BillingViewModel
+@using Telerik.Web;
+@using Telerik.Web.Mvc;
+@using Telerik.Web.Mvc.UI;
+@using GridMvc.Html;
+
+<link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" />
+   
+    <script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
+
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" />
+
+
+
+@using (Html.BeginForm())
+{
+
+
+ <div class="main_content">
+             <div id="Input">
+           <div class="page_heading">
+             <p>Session List</p>
+            </div>
+                 <div>
+                
+                    
+                 </div>
+      <div style="clear :both;"></div>
+
+       @Html.Grid(Model.MasterCheck).Columns(columns =>
+  {
+      //columns.Add(c => c.Child).Titled("Student ID").RenderValueAs(c => @<span class = "@((!String.IsNullOrEmpty(c.Child)) ? "ColorRed" : "Normal")">@c.Child</span>);
+      columns.Add(c => c.Therapist).SetWidth(25).Titled("Therapist");
+      
+      columns.Add(c => c.Session).Titled("Session").SetWidth(50);
+      columns.Add(c => c.Billing).Titled("Billing").SetWidth(50);
+      columns.Add(c => c.BillingNew).Titled("Billing New").SetWidth(50);
+      columns.Add(c => c.Rs).Titled("Rs").SetWidth(50);
+      columns.Add(c => c.Ps).Titled("Ps").SetWidth(50);
+      //columns.Add(c => c.Group).Titled("Actual <br/> Group <br/> Size").SetWidth(30);
+      
+  }).WithPaging(100).Sortable(false)
+
+</div>
+     <a>&nbsp&nbsp&nbsp   Total Count: @Model.MasterCount</a>
+    <a>  &nbsp&nbsp&nbsp       *Total Hours(HH:MM): @Model.MasterHour</a>
+        
+        <div class="editor-field">                        
+                     
+                    </div>
+      <div style="color:red">
+        * Note: Total Hour does <u>not</u> include value of "Other" funding code hours.
+
+    </div>
+         
+       </div>
+   
+  <script type="text/javascript">
+
+      function GoToHome() {
+          window.history.back();
+      }
+       </script>
+
+}

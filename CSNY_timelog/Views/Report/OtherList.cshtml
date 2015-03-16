@@ -1,0 +1,114 @@
+﻿@model CSNY_timelog.ViewModel.BillingViewModel
+@using Telerik.Web;
+@using Telerik.Web.Mvc;
+@using Telerik.Web.Mvc.UI;
+@using GridMvc.Html;
+
+@{
+    ViewBag.Title = "Funding Code List";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+<link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" />
+   
+    <script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
+
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" />
+@*@helper EditSessionLink(CSNY_timelog.ViewModel.SessionCountList item)
+{
+
+      
+    DateTime TodayDate = DateTime.Today;
+
+    var Count = item.SessionCount;
+    //var DataValue = @Model.StartDate+","+@Model.EndDate+","+@Model.Therepist;
+   
+    if (Count > 0)
+    {
+
+
+       
+            if (item.FundingCode == "Other")
+            {
+                    
+                    <span >
+         @Html.ActionLink("Other", "OtherList", "Report", new { title = "Other List" })              
+                </span>
+            }
+            else
+            {
+                 <span >
+                   @item.FundingCode      
+                </span>
+            }
+           
+        
+       
+    }
+    else{
+      <span >
+                   @item.FundingCode      
+                </span>
+    }
+        
+}
+ *@
+
+
+@using (Html.BeginForm())
+{
+
+
+ <div class="main_content">
+             <div id="Input">
+           <div class="page_heading">
+             <p>Funding Code List</p>
+            </div>
+                 <div>
+                
+                     <br />
+                     <b>Therapist Name:</b> @Session["Thername"]
+                      <br />
+                     <b>Half:</b> @Session["Half"]
+                     <br />
+                     <b>Funding Code:</b> @Model.AgeGroup
+
+                 </div>
+      <div style="clear :both;"></div>
+
+       @Html.Grid(Model.Other).Columns(columns =>
+  {
+      //columns.Add(c => c.Child).Titled("Student ID").RenderValueAs(c => @<span class = "@((!String.IsNullOrEmpty(c.Child)) ? "ColorRed" : "Normal")">@c.Child</span>);
+      columns.Add(c => c.SessionDate).SetWidth(25).Titled("Date");
+      var FCode = Model.AgeGroup.ToString();
+      if (FCode != "SAS" || FCode != "CS" || !FCode.Contains("Other"))
+      {
+          columns.Add(c => c.Firstname).Titled("First Name").SetWidth(40);
+          columns.Add(c => c.Lastname).Titled("Last Name").SetWidth(40);
+      }
+      columns.Add(c => c.StartTime).Titled("Start").SetWidth(20);
+      columns.Add(c => c.EndTime).Titled("End").SetWidth(20);
+      columns.Add(c => c.Duration).Titled("Duration").SetWidth(30);
+      columns.Add(c => c.Desc).Titled("Description").SetWidth(200);
+      //columns.Add(c => c.GroupType).Titled("Funding Code").SetWidth(20);
+      //columns.Add(c => c.Group).Titled("Actual <br/> Group <br/> Size").SetWidth(30);
+      
+  }).WithPaging(100).Sortable(false)
+
+</div>
+@*     <a>&nbsp&nbsp&nbsp   Total Count: @Model.MasterCount</a>
+    <a>  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp   &nbsp&nbsp&nbsp        Total Hour: @Model.MasterHour</a>*@
+        
+        <div class="editor-field">                        
+                     
+                    </div>
+
+         
+       </div>
+  <script type="text/javascript">
+
+      function GoToHome() {
+          window.history.back();
+      }
+       </script>
+
+}

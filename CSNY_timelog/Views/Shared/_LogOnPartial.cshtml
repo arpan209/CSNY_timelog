@@ -1,0 +1,33 @@
+﻿
+@if(Request.IsAuthenticated) 
+{
+   <text>Welcome <strong>@User.Identity.Name</strong>!
+    | @Html.ActionLink("Home", "Index", "Account") 
+    | @Html.ActionLink("Post-A-Bid", "create_order", "orderbid") 
+    | @Html.ActionLink("Log Off", "log_off", "account")| </text>
+}
+else {
+    <img src="http://net.classifiedsolutionsgroup.com/opbids/images/FinalOpENR5.jpg"/>
+   
+ <a href="http://net.classifiedsolutionsgroup.com/opbids/home/contact_us">
+      <p style="  float: left;
+    font-size: 13px;
+    margin: 0;
+    padding: 3px 9px 0;
+    text-transform: capitalize;
+	color:#FF9900;">  Contact Us</p></a> 
+    <span>|</span>
+<p>
+<a href="http://net.classifiedsolutionsgroup.com/opbids/account/registration">
+<img style="border:none;" src="http://net.classifiedsolutionsgroup.com/opbids/images/register.jpg">
+</a>
+</p>
+<span>|</span>
+    
+
+   <p>
+<a href="http://net.classifiedsolutionsgroup.com/opbids/account/log_on">
+<img style="border:none;" src="http://net.classifiedsolutionsgroup.com/opbids/images/sign-in.jpg">
+</a>
+</p>
+}

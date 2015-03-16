@@ -1,0 +1,104 @@
+﻿@model CSNY_timelog.ViewModel.BillingViewModel
+@using Telerik.Web;
+@using Telerik.Web.Mvc;
+@using Telerik.Web.Mvc.UI;
+@using GridMvc.Html;
+
+<link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" />
+   
+    <script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
+
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" />
+@helper EditSessionLink(CSNY_timelog.ViewModel.MastercheckLsit1 item)
+{
+
+      
+    DateTime TodayDate = DateTime.Today;
+
+    var Count = Convert.ToInt32(item.Group);
+    //var DataValue = @Model.StartDate+","+@Model.EndDate+","+@Model.Therepist;
+   
+    if (Count > 0)
+    {
+
+
+
+        if (item.Fcode != "")
+            {
+                    
+                    <span >
+         @Html.ActionLink(item.TID, "OtherList", "Report", new { id = item.Fcode.ToString() },new { target = "_blank" })              
+                </span>
+            }
+            else
+            {
+                 <span >
+                   @item.TID      
+                </span>
+            }
+           
+        
+       
+    }
+    else{
+      <span >
+                   @item.Fcode      
+                </span>
+    }
+        
+}
+ 
+
+
+@using (Html.BeginForm())
+{
+
+
+ <div class="main_content">
+             <div id="Input">
+           <div class="page_heading">
+             <p>Session List</p>
+            </div>
+                 <div>
+                
+                    
+                 </div>
+      <div style="clear :both;"></div>
+
+       @Html.Grid(Model.MasterCheck1).Columns(columns =>
+  {
+      //columns.Add(c => c.Child).Titled("Student ID").RenderValueAs(c => @<span class = "@((!String.IsNullOrEmpty(c.Child)) ? "ColorRed" : "Normal")">@c.Child</span>);
+      columns.Add(c => c.TID).SetWidth(200).Titled("TID").Sanitized(false)
+         .Encoded(false)
+         .RenderValueAs(c => EditSessionLink(c));
+      
+    
+      columns.Add(c => c.Fcode).Titled("FCode").SetWidth(50);
+    
+      columns.Add(c => c.Group).Titled("Group").SetWidth(50);
+      //columns.Add(c => c.Group).Titled("Actual <br/> Group <br/> Size").SetWidth(30);
+      
+  }).WithPaging(100).Sortable(false)
+
+</div>
+     <a>&nbsp&nbsp&nbsp   Total Count: @Model.MasterCount</a>
+    <a>  &nbsp&nbsp&nbsp       *Total Hours(HH:MM): @Model.MasterHour</a>
+        
+        <div class="editor-field">                        
+                     
+                    </div>
+      <div style="color:red">
+        * Note: Total Hour does <u>not</u> include value of "Other" funding code hours.
+
+    </div>
+         
+       </div>
+   
+  <script type="text/javascript">
+
+      function GoToHome() {
+          window.history.back();
+      }
+       </script>
+
+}

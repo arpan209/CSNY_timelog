@@ -1,0 +1,281 @@
+﻿@model CSNY_timelog.ViewModel.ReportViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+<script>
+    function Generate() {
+        var error = "";
+        var AgeGroup = document.getElementById("AgeGroup").value;
+        if (AgeGroup == "") {
+            error += "Select the Age Group.\n";
+        }
+      
+        var Fiscal = document.getElementById("Fiscal").value;
+        if (Fiscal == "") {
+            error += "Select the Fiscal Year.\n";
+        }
+      
+        var Month = document.getElementById("Month").value;
+        if (Month == "") {
+            error += "Select the Month.\n";
+        }
+
+     
+
+
+       
+        if (error != "") {
+            alert(error);
+            return false;
+        }
+        else {
+            var OrderViewModel =
+                  {
+                      AgeGroup: AgeGroup, Fiscal: Fiscal,Month:Month
+                     
+                  };
+
+            $.ajax({
+                type: "POST",
+
+                url: '@Url.Content("~/Report/GenerateReport")',
+
+                async: false,
+                data: JSON.stringify(OrderViewModel),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+
+                    if (data != "") {
+
+                        alert(data);
+                        window.location.href = '@Url.Content("~/Report/Index")';
+
+                    } else {
+                        alert("There was an error in report generation.");
+                    }
+
+                },
+                error: function (data) {
+                    //  alert(data);
+                }
+
+            });
+        }
+
+    }
+        </script>
+   <div class="main_content">
+             <div id="Input">
+           <div class="page_heading">
+             <p>Generate DOE Report</p>
+         </div>
+                   <div style="clear:both;">
+            <br />
+        </div>
+                 <div class="editor-label">
+                     <span style="color: red;">*</span>  <b>Select Age Group: </b>
+                 </div>
+
+     @{
+    var AgeList = new List<SelectListItem>();
+    var item1 = new SelectListItem()
+    {
+        Text = "--Select a Age Group--",
+        Value = ""
+    };
+
+    AgeList.Add(item1);
+
+    item1 = new SelectListItem()
+    {
+        Text = "CPSE",
+        Value = "CPSE"
+    };
+   AgeList.Add(item1);
+    
+    item1 = new SelectListItem()
+    {
+        Text = "CSE",
+        Value = "CSE"
+    };
+    AgeList.Add(item1);
+
+    item1 = new SelectListItem()
+    {
+        Text = "Independent",
+        Value = "Independent"
+    };
+    AgeList.Add(item1);
+
+    
+}
+              <div class="editor-field">
+        
+         @Html.DropDownListFor(m=>m.AgeGroup,AgeList)
+        
+    </div>
+
+                  <div class="editor-label">
+                     <span style="color: red;">*</span>  <b>Fiscal year: </b>
+                 </div>
+
+     @{
+    var FiscalList = new List<SelectListItem>();
+    int Fiscal = DateTime.Today.Year;
+    var FiscalItem = new SelectListItem()
+    {
+        Text = "--Select Fiscal Year--",
+        Value = ""
+    };
+
+    FiscalList.Add(FiscalItem);
+
+    FiscalItem = new SelectListItem()
+    {
+        Text =  (Fiscal - 1).ToString(),
+        Value = (Fiscal - 1).ToString()
+    };
+    FiscalList.Add(FiscalItem);
+
+    FiscalItem = new SelectListItem()
+    {
+        Text = (Fiscal).ToString(),
+        Value = (Fiscal).ToString()
+    };
+    FiscalList.Add(FiscalItem);
+
+    FiscalItem = new SelectListItem()
+    {
+        Text = (Fiscal + 1).ToString(),
+        Value = (Fiscal + 1).ToString()
+    };
+    FiscalList.Add(FiscalItem);
+
+    
+}
+              <div class="editor-field">
+        
+         @Html.DropDownListFor(m=>m.Fiscal,FiscalList)
+        
+    </div>
+
+                  <div class="editor-label">
+                     <span style="color: red;">*</span>  <b>Month: </b>
+                 </div>
+
+     @{
+    var MonthList = new List<SelectListItem>();
+    
+    var MonthItem = new SelectListItem()
+    {
+        Text = "--Select Month--",
+        Value = ""
+    };
+
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text =  "January",
+        Value = "1"
+    };
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "February",
+        Value = "2"
+    };
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "March",
+        Value = "3"
+    };
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "Arpil",
+        Value = "4"
+    };
+    MonthList.Add(MonthItem);
+
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "May",
+        Value = "5"
+    };
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "June",
+        Value = "6"
+    };
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "July",
+        Value = "7"
+    };
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "August",
+        Value = "8"
+    };
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "September",
+        Value = "9"
+    };
+    MonthList.Add(MonthItem);
+
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "October",
+        Value = "10"
+    };
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "November",
+        Value = "11"
+    };
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "December",
+        Value = "12"
+    };
+    MonthList.Add(MonthItem);
+}
+              <div class="editor-field">
+        
+         @Html.DropDownListFor(m=>m.Month,MonthList)
+        
+    </div>
+
+          <div style="clear:both;">
+            <br />
+        </div>
+          <span style="float:left;padding-left:200px">
+                <input type="submit" value="Generate Report" style="min-width:200px" id="btn_sbmt" onclick="return Generate()" class="input_button" />     
+          </span>
+</div>
+        <div style="clear:both;">
+            <br />
+        </div>          
+             </div>

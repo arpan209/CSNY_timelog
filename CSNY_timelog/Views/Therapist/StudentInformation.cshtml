@@ -1,0 +1,127 @@
+﻿@model CSNY_timelog.ViewModel.StudentInfoViewModel
+@using Telerik.Web;
+@using Telerik.Web.Mvc;
+@using Telerik.Web.Mvc.UI;
+@using GridMvc.Html;
+
+<link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" />
+   
+    <script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
+
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" />
+
+@helper EditSessionLink(CSNY_timelog.ViewModel.StudSessionListViewModel item)
+{
+    
+      
+    DateTime TodayDate = DateTime.Today;
+
+    var SessDatevalue = DateTime.Parse(item.SessionDate);
+    var dayValue = TodayDate.Day;
+    if (@Model.Lock == true)
+    {
+
+
+        if (SessDatevalue.Month < TodayDate.Month)
+        {
+            //var MonthValue = TodayDate.getMonth() + 1;
+            //if (SessDatevalue < new date(MonthValue - 1 + "31"  )) { }
+            if (SessDatevalue.Day >= 16 && SessDatevalue.Day <= 31 && SessDatevalue.Month == (TodayDate.Month - 1) && dayValue <= 5)
+            {
+                    
+                    <span >
+         @Html.ActionLink(item.SessionDate, "Add-Session", "Session", new { Id = item.SessionID }, new { title = "Edit Session" })              
+                </span>
+            }
+            else
+            {
+                 <span >
+                   @item.SessionDate      
+                </span>
+            }
+            //if  (dayValue > 5){
+            //    alert("Session are locked for this date! \n");
+            //    return false;
+            //}
+        }
+        //            else if (dayValue > 20) {
+        else
+        {
+
+            if (SessDatevalue.Day >= 1 && SessDatevalue.Day <= 15 && SessDatevalue.Month == TodayDate.Month && dayValue <= 20)
+            {
+                    <span >
+          @Html.ActionLink(item.SessionDate, "Add-Session", "Session", new { Id = item.SessionID }, new { title = "Edit Session" })               
+                </span>
+            }
+            else if (SessDatevalue.Day >= 16 && SessDatevalue.Day <= 31 && SessDatevalue.Month == TodayDate.Month)
+            {
+                    <span >
+          @Html.ActionLink(item.SessionDate, "Add-Session", "Session", new { Id = item.SessionID }, new { title = "Edit Session" })           
+                </span>
+            }
+            else
+            {
+                     <span >
+                   @item.SessionDate         
+                </span>
+            }
+        }
+    }
+    else
+    {
+    <span >
+        @Html.ActionLink(item.SessionDate, "Add-Session", "Session", new { Id = item.SessionID }, new { title = "Edit Session" })
+       @* <a href='@Url.Action( "Add-Session", "Session", new { Value = item.SessionID.ToString()})'> @item.SessionID</a>               *@
+                </span>}
+ }
+
+
+@using (Html.BeginForm())
+{
+
+
+ <div class="main_content">
+             <div id="Input">
+           <div class="page_heading"> 
+             <p>Session List</p>
+            </div>
+                 <div>
+                     Click on Date to Edit/Update Session Details.
+
+                 </div>
+      <div style="clear :both;"></div>
+
+       @Html.Grid(Model.SessionList).Columns(columns =>
+  {
+      //columns.Add(c => c.Child).Titled("Student ID").RenderValueAs(c => @<span class = "@((!String.IsNullOrEmpty(c.Child)) ? "ColorRed" : "Normal")">@c.Child</span>);
+      columns.Add(c => c.SessionDate).SetWidth(25).Titled("Session date")
+               .Sanitized(false)
+          .Encoded(false)
+          .RenderValueAs(c => EditSessionLink(c));
+      
+      columns.Add(c => c.SName).Titled("Name").SetWidth(250);
+      columns.Add(c => c.StartTime).Titled("Start Time").SetWidth(50);
+      columns.Add(c => c.EndTime).Titled("End Time").SetWidth(50);
+      columns.Add(c => c.GroupType).Titled("Group Type").SetWidth(20);
+      columns.Add(c => c.Group).Titled("Actual <br/> Group <br/> Size").SetWidth(30);
+      
+  }).WithPaging(100).Sortable(false)
+
+</div>
+
+        
+        <div class="editor-field">                        
+                     
+                    </div>
+
+         
+       </div>
+  <script type="text/javascript">
+
+      function GoToHome() {
+          window.history.back();
+      }
+       </script>
+
+}

@@ -1,0 +1,354 @@
+﻿@model CSNY_timelog.ViewModel.BillingViewModel    
+
+@using Telerik.Web;
+@using Telerik.Web.Mvc;
+@using Telerik.Web.Mvc.UI;
+@using GridMvc.Html;
+
+
+@{
+    ViewBag.Title = "Billing";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+<link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" />
+   
+ <script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
+
+<link href="@Url.Content("~/css/chosen.css")" rel="stylesheet"  type="text/css" />
+<script src="@Url.Content("~/Scripts/chosen.jquery.js")" type="text/javascript"></script>
+<script type="text/css">
+       .chzn-container .chzn-results { 
+        clear: both; 
+    }
+</script>
+
+<script>
+
+
+    function myFunction(id) {
+
+        var error = "";
+        var Month = document.getElementById("Month").value;
+        if (Month == "") {
+            error += "Select the Month.\n";
+        }
+        var Fisacl = document.getElementById("Fiscal").value;
+        if (Fisacl == "") {
+            error += "Select the Session Year.\n";
+        }
+
+        var x = document.getElementById("TherapistList");
+        var Therapist = "";
+        var TherapistListText = "";
+        if (x != "") {
+            for (var i = 0; i < x.options.length; i++) {
+                if (x.options[i].selected == true) {
+                    Therapist += x.options[i].value + ",";
+                    TherapistListText += x.options[i].text + ",";
+                    
+                }
+            }
+        }
+        if (Therapist == "") {
+            error += "Select therapist.\n";
+        }
+
+
+        var days = "";
+        if (id == 1) {
+            days = "1,15";
+        }
+        else if (id == 2) {
+            days = "16,31";
+        }
+        else { days = "1,31"; }
+
+
+        var dataVal = Therapist + Month + ',' + days + ','+Fisacl;
+       
+        if (error == "") {
+
+            var URL = '@Url.Content("~/Report/BillingInformation/")' + dataVal;
+            $.get(URL, function (data) {
+                $("#Result").html(data);
+            });
+        }
+        else { alert(error) }
+    }
+</script>   
+<script type="text/javascript">
+    $(function () {
+        $("#Month").change(function () {
+            var selectedItem = $(this).val();
+            var year = $("#Fiscal").val();
+            var ddlStudent = document.getElementById("TherapistList");
+            var statesProgress = $("#student-loading-progress");
+            statesProgress.show();
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.Action("GetTherapistListByMonth", "Report", new  {area="" }))",
+                data: { "Month": selectedItem, "Fiscal": year, "addEmptyStateIfRequired": "true" },
+                    success: function (data) {
+                        var x = document.getElementById("TherapistList");
+                        x.innerHTML = "";
+                        var listItems = "";
+                        //var terms = {};
+                        //$.each(data, function (i, val) {
+                        //    terms[i] = val;
+                        //});
+                        //return terms;
+                        //console.log($("#ddlStudent").val());
+                        $.each(data, function (id, option) {
+                        //    //ddlStudent.append($('<option></option>').val(option.id).html(option.name));
+                        //    //x.appendChild($('<options></options>').val(option.id).html(option.name));
+                        //    //ddlStudent.append($("<option />").val(option.id).text(option.name));
+                        //    //$("#ddlStudent").get(0).options[$("#ddlStudent").get(0).options.length] = new Option(option.id, option.name);
+                        //    // $('.chzn-select').append('<li class="active-result">' + item.name + '</li>');
+                          listItems += "<option value='" + option.id + "'>" + option.name + "</option>";
+                        //  //  ddlStudent.appendChild($('<options></options>').val(option.id).html(option.name));
+                        });
+                        $(".chzn-select").append(listItems).trigger("chosen:updated");
+                        statesProgress.hide();
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        alert('Failed to retrieve Student.');
+                        statesProgress.hide();
+                    }
+                });
+            });
+        });
+    </script>
+ <div class="main_content">
+             <div id="Input">
+           <div class="page_heading">
+             <p>Billing</p>
+            </div>
+
+    
+
+                            
+      <div style="clear :both;"></div>
+                        <div class="editor-label">
+                     <span style="color: red;">*</span>  <b>Session Year: </b>
+                 </div>
+
+     @{
+    var FiscalList = new List<SelectListItem>();
+    int Fiscal = DateTime.Today.Year;
+    var FiscalItem = new SelectListItem()
+    {
+        Text = "--Select Session Year--",
+        Value = ""
+    };
+
+    FiscalList.Add(FiscalItem);
+
+    FiscalItem = new SelectListItem()
+    {
+        Text =  (Fiscal - 1).ToString(),
+        Value = (Fiscal - 1).ToString()
+    };
+    FiscalList.Add(FiscalItem);
+
+    FiscalItem = new SelectListItem()
+    {
+        Text = (Fiscal).ToString(),
+        Value = (Fiscal).ToString()
+    };
+    FiscalList.Add(FiscalItem);
+
+    FiscalItem = new SelectListItem()
+    {
+        Text = (Fiscal + 1).ToString(),
+        Value = (Fiscal + 1).ToString()
+    };
+    FiscalList.Add(FiscalItem);
+
+    
+}
+              <div class="editor-field">
+        
+         @Html.DropDownListFor(m=>m.Fiscal,FiscalList)
+        
+    </div>
+               
+      <div style="clear :both;"></div>
+                         <div class="editor-label">
+                     <span style="color: red;">*</span>  <b>Month: </b>
+                 </div>
+
+     @{
+    var MonthList = new List<SelectListItem>();
+    
+    var MonthItem = new SelectListItem()
+    {
+        Text = "--Select Month--",
+        Value = ""
+    };
+
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text =  "January",
+        Value = "1"
+    };
+    MonthList.Add(MonthItem);
+
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "February",
+        Value = "2"
+    };
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "March",
+        Value = "3"
+    };
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "April",
+        Value = "4"
+    };
+    MonthList.Add(MonthItem);
+
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "May",
+        Value = "5"
+    };
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "June",
+        Value = "6"
+    };
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "July",
+        Value = "7"
+    };
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "August",
+        Value = "8"
+    };
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "September",
+        Value = "9"
+    };
+    MonthList.Add(MonthItem);
+
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "October",
+        Value = "10"
+    };
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "November",
+        Value = "11"
+    };
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "December",
+        Value = "12"
+    };
+    MonthList.Add(MonthItem);
+}
+              <div class="editor-field">
+        
+         @Html.DropDownListFor(m=>m.Month,MonthList)
+       <span style="color:red;font-size:10px;"> @Html.ValidationMessageFor(m => m.Month)</span>
+        
+    </div>
+    
+
+</div>
+                  <div id="FelloList">
+                     <div class="editor-label">
+
+                         <span style="color: red;">*</span> <strong>Select Therapist:</strong>
+                          <span id="student-loading-progress" style="display: none;" class="please-wait">Wait...</span>
+                     </div>
+                    <div class="editor-field">
+        
+                    @Html.DropDownList("TherapistList", Enumerable.Empty<SelectListItem>()
+                         , new
+
+     {
+
+         @class = "chzn-select",
+         data_placeholder = "Choose  Therapist"
+
+     }
+     )
+     
+
+         </div>
+
+                 </div>
+
+
+
+          <span style="float:left;padding-left:200px">
+              <button type="button" class="input_button" style="width:100px" onclick="myFunction(1)">First half</button>        
+             
+          
+     
+              <button type="button" class="input_button" style="width:100px" onclick="myFunction(2)">Second Half</button>        
+             
+              
+              <button type="button" class="input_button" style="width:100px" onclick="myFunction(3)">Full Month</button>        
+             
+                </span>
+          <div style="clear :both;"></div><br/>
+     <span></span>
+
+     <div id="Result" style="width:950px"></div>
+      <br />
+     <div style="clear :both;"></div>
+     <span style="float:left;padding-left:200px;padding-top:10px">
+         
+                      <input type="button" value="Back" class="input_button" style="width:300px" onclick="GoToHome()" /> 
+                </span>
+
+       </div>
+ 
+  <script type="text/javascript">
+
+      function GoToHome() {
+          window.history.back();
+      }
+       </script>
+@*Hookup Chosen Plugin*@
+<script >
+
+    $(".chzn-select").chosen({
+    
+        no_results_text: "Oops, nothing found!"
+    });
+
+ 
+    
+</script> 

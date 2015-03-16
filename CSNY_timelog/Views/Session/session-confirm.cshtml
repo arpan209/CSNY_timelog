@@ -1,0 +1,402 @@
+﻿@using Telerik.Web;
+@using Telerik.Web.Mvc;
+@using Telerik.Web.Mvc.UI;
+@using GridMvc.Html;
+
+
+@model CSNY_timelog.ViewModel.AddSessionViewModel
+@{
+    ViewBag.Title = "session-confirm";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+  <link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" />
+   
+    <script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
+
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" />
+    
+@helper ChangeColor4(CSNY_timelog.ViewModel.ErrorListViewModel item)
+{
+    if (!string.IsNullOrEmpty(item.Error4))
+    {
+    <span style="color:red;">1</span>
+    }
+    else
+    {
+    <span style="color:black;">1</span>
+    }
+    
+}
+@helper ChangeColor1(CSNY_timelog.ViewModel.ErrorListViewModel item)
+{
+    if (!string.IsNullOrEmpty(item.Error1))
+    {
+    <span style="color:red;">@Model.GroupSize</span>
+    }
+    else
+    {
+    <span style="color:black;">@Model.GroupSize</span>
+    }
+
+}
+
+@helper ChangeColor2(CSNY_timelog.ViewModel.ErrorListViewModel item)
+{
+    if (!string.IsNullOrEmpty(item.Error2))
+    {
+    <span style="color:red;">@Model.Duration</span>
+    }
+    else
+    {
+    <span style="color:black;">@Model.Duration</span>
+    }
+
+}
+
+@helper ChangeColor3(CSNY_timelog.ViewModel.ErrorListViewModel item)
+{
+    if (!string.IsNullOrEmpty(item.Error3))
+    {
+    <span style="color:red;">@Model.Language</span>
+    }
+    else
+    {
+    <span style="color:black;">@Model.Language</span>
+    }
+
+}
+<script>
+    function Confirm() {
+        
+        document.getElementById('SubmitButton').disabled = true;
+        //document.getElementById('SubmitButton').style.display = "None";
+
+        var error = "";
+        if ('@Model.ServiceType' == "Child") {
+            var StudentList = $('#StudentList').val();
+            var StudentListText = '@Model.StudentListText';
+        } else if ('@Model.ServiceType' == "CS") {
+            var StudentList = $('#FellowList').val();
+           
+           
+        }
+        var SessionDate = '@Model.SessionDate';
+        var Location = '@Model.Location';
+        var ServiceType = '@Model.ServiceType';
+        var StartTime = '@Model.StartTime';
+        var EndTime = '@Model.EndTime';
+        var Duration = '@Model.Duration';
+        var GroupSize = '@Model.GroupSize';
+        var errorExist = '@Model.ErrorExist';
+        var GroupType = '@Model.GroupType';
+        var sessionId = '@Model.SessionId';
+        if (errorExist == "True") {
+            document.getElementById('SubmitButton').disabled = false;
+            alert("There was an error in session detail, please edit the session information and try again.");
+            
+
+            return false;
+        }
+        else {
+
+
+            // Second Check for Time and session overlap//
+
+
+            // Check for time descripencies
+            var StudViewModel =
+                  {
+                      SessionDate: SessionDate, StartTime: StartTime, EndTime: EndTime, SessionId: sessionId
+
+                  };
+
+            $.ajax({
+                type: "POST",
+
+                url: '@Url.Content("~/Session/CheckSessioTime")',
+
+            async: false,
+            data: JSON.stringify(StudViewModel),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+
+                if (data != "No Overlap") {
+
+                    error += data + "\n";
+
+                }
+               
+
+            },
+            error: function (data) {
+                //  alert(data);
+            }
+
+        });
+
+
+            /// Check session existe of same date for a child.
+        if (ServiceType == "Child") {
+            var StudViewModel =
+                   {
+                       SessionDate: SessionDate, StudentList: StudentList, StudentListText: StudentListText, SessionId: sessionId
+
+                   };
+
+            $.ajax({
+                type: "POST",
+
+                url: '@Url.Content("~/Session/CheckSessioDate")',
+
+            async: false,
+            data: JSON.stringify(StudViewModel),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+
+                if (data != "") {
+                    var studId = data.split(',');
+                    for (var x = 0; x < studId.length - 1; x++) {
+
+                        error += "Session already exist for this date for Student:" + studId[x] + "\n";
+                    }
+
+
+                }
+              
+
+            },
+            error: function (data) {
+                //  alert(data);
+            }
+
+        });
+    }
+
+
+            //////////////////////////////////////////////
+
+
+
+
+
+            $("#divLoading").show();
+         var OrderViewModel =
+               {
+                   SessionDate: SessionDate, Location: Location,
+                   ServiceType: ServiceType, StudentList: StudentList,
+                   GroupSize: GroupSize, StartTime: StartTime,
+                   EndTime: EndTime, GroupType: GroupType, SessionId: sessionId 
+               };
+
+            $.ajax({
+                type: "POST",
+
+                url: '@Url.Content("~/Session/SessionConfirm")',
+               
+                async: false,
+                data: JSON.stringify(OrderViewModel),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+
+                    if (data == "Success") {
+                        
+                        alert("Session recorded succesfully!");
+                        window.location.href = '@Url.Content("~/session/add-session/0")';
+                        
+                       
+                    } else {
+                        alert("There was an error in session information , please edit the session information and try again.");
+                    }
+
+                },
+               error: function (data) {
+                   //  alert(data);
+               }
+
+           });}
+    }
+    </script>
+<div class="main_content">
+     @Html.HiddenFor(model => model.ErrorExist)
+    @Html.HiddenFor(model => model.StudentList)
+    @Html.HiddenFor(model => model.FellowList)
+           <div class="Input"> 
+               <div class="page_heading">
+                <p>Session Confirmation</p>
+              </div>
+                <a> @if (Convert.ToInt32(Model.SessionId) > 0)
+                     {
+                      <div class="editor-label">
+                   <strong>Session ID:</strong>
+               </div>
+                     <div class="editor-field">
+               @Model.SessionId
+               </div>
+                     
+                     }
+                 </a>
+
+             @if (Model.SessionDate != null)
+             {
+               <div class="editor-label">
+                   <strong>Session Date:</strong>
+               </div>
+               <div class="editor-field">
+               @Model.SessionDate
+               </div>
+             }
+                @if (Model.ServiceType != null)
+                {
+                 <div class="editor-label">
+                   <strong>Service Type:</strong>
+               </div>
+               <div class="editor-field">
+                  @Model.ServiceType
+               </div>
+                }
+
+                @if (Model.Location != null)
+                {
+                <div class="editor-label">
+                   <strong>Location:</strong>
+               </div>
+               <div class="editor-field">
+                   @Model.Location
+               </div>
+                }
+                @if (Model.StartTime != null)
+                {
+                 <div class="editor-label">
+                   <strong>Start Time:</strong>
+               </div>
+               <div class="editor-field">
+                  @Model.StartTime
+               </div>
+                }
+                @if (Model.EndTime != null)
+                {
+                 <div class="editor-label">
+                   <strong>End Time:</strong>
+               </div>
+               <div class="editor-field">
+                  @Model.EndTime
+               </div>
+                }
+                @if (Model.Duration != null)
+                {
+                 <div class="editor-label">
+                   <strong>Duration:</strong>
+               </div>
+               <div class="editor-field">
+                     @if (Model.Duration.Contains("-"))
+                   {
+                                  <span style="color:red">   @Model.Duration </span>
+                    }else
+                   {
+                   @Model.Duration}
+               </div>
+                }
+                @if (Model.GroupSize != null)
+                {
+                <div class="editor-label">
+                   <strong>Total Group:</strong>
+               </div>
+               <div class="editor-field">
+                  @Model.GroupSize
+               </div>
+                }
+                @if (Model.GroupType != null)
+                {
+                <div class="editor-label">
+                   <strong>Group Type:</strong>
+               </div>
+               <div class="editor-field">
+                 @if (Model.GroupType == "S1")
+                 { <div>Single Mandated Session (S1)</div> }
+                 else
+                 { <div>Group Mandated Session (SP)</div> }
+               </div>
+                }
+
+                @if (Model.FellowList != null)
+                {
+                <div class="editor-label">
+                   <strong>Fellow List:</strong>
+               </div>
+               <div class="editor-field">
+               @Model.FellowListText
+               </div>
+                }
+
+               @if (Model.StudentListText != null)
+                {
+                <div class="editor-label">
+                   <strong>Student List:</strong>
+               </div>
+               <div class="editor-field">
+               @Model.StudentListText
+               </div>
+                }
+             
+        </div>
+<div style="clear: both;">
+                <br />
+            </div>
+              <div class="Input">
+                  @if (@Model.ServiceType == "Child")
+                  { 
+                
+
+                  if (@Model.ErrorArry != null)
+                  {
+                       <div class="editor-label">
+                   <strong>Error Messages</strong>
+               </div>
+                      <div style="clear: both;">
+                <br />
+            </div>
+          
+                      
+                       @Html.Grid(Model.ErrorArry).Columns(columns =>
+                  {
+                      //columns.Add(c => c.Child).Titled("Student ID").RenderValueAs(c => @<span class = "@((!String.IsNullOrEmpty(c.Child)) ? "ColorRed" : "Normal")">@c.Child</span>);
+                      columns.Add(c => c.Child).Titled("Student ID");
+
+                      columns.Add(c => c.Error4).Titled("Frequency").Encoded(false).Sanitized(false).RenderValueAs(c => ChangeColor4(c));
+                      columns.Add(c => c.Error1).Titled("Group Size").Encoded(false).Sanitized(false).RenderValueAs(c => ChangeColor1(c));
+                      columns.Add(c => c.Error2).Titled("Duration").Encoded(false).Sanitized(false).RenderValueAs(c => ChangeColor2(c));
+                      columns.Add(c => c.Error3).Titled("Language").Encoded(false).Sanitized(false).RenderValueAs(c => ChangeColor3(c));
+                  }).WithPaging(3).Sortable(true)
+                                     
+            
+                  }
+                  }   
+    </div>
+     <span style="float:left;padding-left:200px">
+                      <input type="button" value="Make Edits" class="input_button" style="width:250px" onclick="GoToHome()" /> 
+                </span>
+    <br />
+    <div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none" >
+    <div style="position: absolute; top: 30%; left: 45%; color: White;">
+        Loading, please wait<img src="@Url.Content("~/Content/images/loader.gif") "/>
+    </div>
+</div>
+    <br />
+    <p></p>
+    <div id="SubmitButton" style="float:left;padding-left:200px">
+                      <input type="button" value="Confirm" class="input_button" style="width:250px" onclick="Confirm()" /> 
+                </div>
+ </div>
+   <script type="text/javascript">
+
+       function GoToHome() {
+           window.history.back();
+       }
+       </script>
+
+  

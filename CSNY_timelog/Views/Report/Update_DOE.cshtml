@@ -1,0 +1,596 @@
+﻿@model CSNY_timelog.ViewModel.ReportViewModel
+@{
+    ViewBag.Title = "Updata_DOE";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+@using Telerik.Web.Mvc
+@using Telerik.Web.Mvc.UI
+<link href="@Url.Content("~/css/chosen.css")" rel="stylesheet"  type="text/css" />
+<script src="@Url.Content("~/Scripts/chosen.jquery.js")" type="text/javascript"></script>
+
+
+@(Html.Telerik().StyleSheetRegistrar().DefaultGroup(group => group.Add("telerik.common.min.css")
+    .Add("telerik.default.min.css")
+    .Compress(false)
+    .Combined(false).DefaultPath("~/Content/2011.3.1115")))
+
+
+<link href="@Url.Content("~/css/chosen.css")" rel="stylesheet"  type="text/css" />
+<script src="@Url.Content("~/Scripts/chosen.jquery.js")" type="text/javascript"></script>
+
+<script src="@Url.Content("~/Scripts/ui/jquery.fileupload.js")" type="text/javascript"></script>
+<style>
+    .s1 {
+        background: none repeat scroll 0px 0px #808080; border: 2px solid;float: left;
+        margin: 2px 0px 2px 5px;width: 95%;
+    }
+    
+</style>
+<script>
+    function Generate() {
+        var error = "";
+        var AgeGroup = document.getElementById("AgeGroup").value;
+        if (AgeGroup == "") {
+            error += "Select the Age Group.\n";
+        }
+      
+        var Fiscal = document.getElementById("Fiscal").value;
+        if (Fiscal == "") {
+            error += "Select the Session Year.\n";
+        }
+      
+        var Month = document.getElementById("Month").value;
+        if (Month == "") {
+            error += "Select the Month.\n";
+        }
+
+        var x = document.getElementById("TherapistList");
+        var Therapist = "";
+        var TherapistListText = "";
+        if (x != "") {
+            for (var i = 0; i < x.options.length; i++) {
+                if (x.options[i].selected == true) {
+                    Therapist += x.options[i].value+ ",";
+                    TherapistListText += x.options[i].text+",";
+
+                }
+            }
+        }
+        if (Therapist == "") {
+            error += "Select therapist.\n";
+        }
+
+        
+        if ($('#Savedfile_name').val() == "") {
+            error += "Please upload pdf set type file.\n";
+        }
+      
+        var filename = $('#Savedfile_name').val();
+        //alert(filename);
+        //return false;
+        if (error != "") {
+            alert(error);
+            return false;
+        }
+        else {
+            $("#divLoading").show();
+            var OrderViewModel =
+                  {
+                      AgeGroup: AgeGroup, Fiscal: Fiscal, Month: Month, TID: Therapist, Filename: filename
+                     
+                  };
+
+            $.ajax({
+                type: "POST",
+
+                url: '@Url.Content("~/Report/GenerateReport1")',
+
+                async: false,
+                data: JSON.stringify(OrderViewModel),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+
+                    if (data.indexOf("Success") > -1) {
+
+                        var value = data.split(",");
+
+                        $("#divLoading").hide();
+                        alert(value[0]);
+                        var filename = value[1];
+                        //alert(value[1]);
+                        window.location.href = '@Url.Content("~/DOEFiles/")' + filename;
+                        
+                      
+                    } else {
+                        alert(data);
+                    }
+
+                },
+                error: function (data) {
+                    //  alert(data);
+                }
+
+            });
+        }
+
+    }
+        </script>
+
+@* For Upload Pdf file*@
+<script  type="text/javascript">
+    function onLogoLoded(e) {
+
+    }
+
+    function onLogoSelect(e) {
+
+
+    }
+
+    function OnLogoSuccess(e) {
+
+        var testResult = e;
+        //alert('success');
+        // $('#file_name').html(e.response.name);
+        alert(e.response.type);
+        alert(e.response.savedfilename);
+        if (e.response.type == "xls") {
+
+            $('#Savedfile_name').val(e.response.savedfilename);
+        }
+        else if (data.type == "Document") {
+            //selectBidBodyJquery();
+        }
+    }
+
+    function OnfileSuccess(e) {
+
+        var testResult = e;
+        // alert('success');
+        // $('#file_name').html(e.response.name);
+        alert(e.response.type);
+        alert(e.response.savedfilename);
+        if (e.response.type == "xls") {
+
+            $('#Savedfile_affidavid').val(e.response.savedfilename);
+        }
+        else if (data.type == "Document") {
+            //selectBidBodyJquery();
+        }
+    }
+    function onLogoError(e) {
+        // $("#loadingLogoMessages").html("")
+
+    }
+
+    function onLogoComplete(e) {
+
+        GetUploadLogoDetail();
+
+    }
+    function onfileComplete(e) {
+
+        GetUploadaffidavidDetail();
+
+    }
+
+
+    function onLogoUpload(e) {
+
+        var files = e.files;
+        // alert(files[0].extension);
+        var Extensions = files[0].extension;
+        
+        if (Extensions == ".xls") {
+           
+        }
+        else {
+
+            //$("#loadingMessages").html("")
+            alert("Only .xls file can be uploaded.")
+            e.preventDefault();
+            return false;
+        }
+    }
+
+    
+  </script>
+<script type="text/javascript">
+    function GetUploadLogoDetail() {
+        var randomNum = Math.floor(Math.random() * 2); /* Pick random number */
+        $.ajax({
+            type: "GET",
+            url: '@Url.Content("~/report/GetLogoFileDetail")?' + Math.random(),
+            success: function (data) {
+                if (data.Error == false) {
+
+
+                    // $('#file_name').html(data.name);
+
+                    if (data.type == "pdf") {
+                        // $('#img_usrimage').attr("src", "../Logos/" + data.savedfilename);
+                        $('#Savedfile_name').val(data.savedfilename);
+                        //  $('#img_usrimage1').attr("src", "../Logos/" + data.savedfilename);
+                        //  $('#img_usrimage11').attr("src", "../Logos/" + data.savedfilename);
+
+                    }
+
+
+                } else {
+                    alert("There are some error.")
+                }
+            }
+        });
+
+        // $("#loadingMessages").html("")
+    }
+
+        </script>
+
+   <div class="main_content">
+             <div id="Input">
+           <div class="page_heading">
+             <p>DOE Invoicing</p>
+         </div>
+                   <div style="clear:both;">
+            <br />
+        </div>
+          
+                  <div class="s1">
+                  <div class="editor-label">
+                     <span style="color: red; font-size:18px">*</span>  <b>STEP 1 (Import DOE Report): </b>
+                 </div>
+                        <div class="editor-field">
+        
+        Manually download DOE Report from  <a href="https://vendorportal.nycenet.edu/vendorportal/login.aspx">DOE Vendor Portal</a> by Funding Code and Month. Then import the DOE Report into the CSNY Portal.
+        <br />
+
+
+    </div>
+           
+                                        <div id="file_name"></div>
+                  
+                    <input type="hidden" id="Savedfile_name" name="Savedfile_name" />
+                        <div class="editor-label">
+                            <strong>Import DOE File :<span id="PDFName" style="font-size: 10px;"> </span></strong><br />
+                           
+                        </div>
+                        <div class="editor-field">
+
+                       @(Html.Telerik().Upload()
+                            .Name("attachments")
+                            .Multiple(false)
+                            .Async(async => async
+                            .Save("UploadFiles", "Report")
+
+                            )
+                                .ClientEvents(events => events
+                                .OnComplete("onLogoComplete")
+                                .OnLoad("onLogoLoded")
+                                .OnSelect("onLogoSelect")
+                                .OnError("onLogoError")
+                                .OnUpload("onLogoUpload")
+
+                            ))
+                        
+                  
+                        </div>
+
+        
+</div>
+               <div style="clear:both;">
+            <br />
+        </div>
+                            <div class="s1">
+                  <div class="editor-label">
+                     <span style="color: red; font-size:18px">*</span>  <b>STEP 2 (Select CSNY Case Session Details): </b>
+                 </div>
+                        <div class="editor-field">
+        
+        Select CSNY Case Session Details with the same Funding Code and Month as the Imported DOE Report:
+        <br />
+
+
+    </div>
+           
+
+        
+</div>     
+</div>
+          <div style="clear:both;">
+            <br />
+        </div>
+                 <div class="editor-label">
+                     <span style="color: red;">*</span>  <b>Select Age Group: </b>
+                 </div>
+
+     @{
+    var AgeList = new List<SelectListItem>();
+    var item1 = new SelectListItem()
+    {
+        Text = "--Select a Age Group--",
+        Value = ""
+    };
+
+    AgeList.Add(item1);
+
+    item1 = new SelectListItem()
+    {
+        Text = "CPSE",
+        Value = "CPSE"
+    };
+   AgeList.Add(item1);
+    
+    item1 = new SelectListItem()
+    {
+        Text = "CSE",
+        Value = "CSE"
+    };
+    AgeList.Add(item1);
+
+    item1 = new SelectListItem()
+    {
+        Text = "Independent",
+        Value = "Independent"
+    };
+    AgeList.Add(item1);
+
+    
+}
+              <div class="editor-field">
+        
+         @Html.DropDownListFor(m=>m.AgeGroup,AgeList)
+        
+    </div>
+
+                  <div class="editor-label">
+                     <span style="color: red;">*</span>  <b>Year of Session: </b>
+                 </div>
+
+     @{
+    var FiscalList = new List<SelectListItem>();
+    int Fiscal = DateTime.Today.Year;
+    var FiscalItem = new SelectListItem()
+    {
+        Text = "--Select Session Year--",
+        Value = ""
+    };
+
+    FiscalList.Add(FiscalItem);
+
+    FiscalItem = new SelectListItem()
+    {
+        Text =  (Fiscal - 1).ToString(),
+        Value = (Fiscal - 1).ToString()
+    };
+    FiscalList.Add(FiscalItem);
+
+    FiscalItem = new SelectListItem()
+    {
+        Text = (Fiscal).ToString(),
+        Value = (Fiscal).ToString()
+    };
+    FiscalList.Add(FiscalItem);
+
+    FiscalItem = new SelectListItem()
+    {
+        Text = (Fiscal + 1).ToString(),
+        Value = (Fiscal + 1).ToString()
+    };
+    FiscalList.Add(FiscalItem);
+
+    
+}
+              <div class="editor-field">
+        
+         @Html.DropDownListFor(m=>m.Fiscal,FiscalList)
+        
+    </div>
+
+                  <div class="editor-label">
+                     <span style="color: red;">*</span>  <b>Month: </b>
+                 </div>
+
+     @{
+    var MonthList = new List<SelectListItem>();
+    
+    var MonthItem = new SelectListItem()
+    {
+        Text = "--Select Month--",
+        Value = ""
+    };
+
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text =  "January",
+        Value = "1"
+    };
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "February",
+        Value = "2"
+    };
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "March",
+        Value = "3"
+    };
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "April",
+        Value = "4"
+    };
+    MonthList.Add(MonthItem);
+
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "May",
+        Value = "5"
+    };
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "June",
+        Value = "6"
+    };
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "July",
+        Value = "7"
+    };
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "August",
+        Value = "8"
+    };
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "September",
+        Value = "9"
+    };
+    MonthList.Add(MonthItem);
+
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "October",
+        Value = "10"
+    };
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "November",
+        Value = "11"
+    };
+    MonthList.Add(MonthItem);
+
+    MonthItem = new SelectListItem()
+    {
+        Text = "December",
+        Value = "12"
+    };
+    MonthList.Add(MonthItem);
+}
+              <div class="editor-field">
+        
+         @Html.DropDownListFor(m=>m.Month,MonthList)
+        
+    </div>
+
+                 
+                   <div id="FelloList">
+                     <div class="editor-label">
+
+                         <span style="color: red;">*</span> <strong>Select Therapist:</strong>
+                     </div>
+                    <div class="editor-field">
+        
+            @Html.ListBox("TherapistList", Model.TherapistList
+
+     , new
+
+     {
+
+         @class = "chzn-select",
+         data_placeholder = "Choose  Therapist"
+
+     }
+     )
+     
+  
+         </div>
+                           <div style="clear:both;">
+            <br />
+        </div>
+                       <div class="s1">
+                  <div class="editor-label">
+                     <span style="color: red; font-size:18px">*</span>  <b>STEP 3 (Merge DOE Report with CSNY Case Session Details): </b>
+                 </div>
+                        <div class="editor-field">
+        
+       <span style="float:left; padding-top:10px;">
+                <input type="submit" value="Merge DOE Report with CSNY Sessions Details" style="min-width:350px" id="btn_sbmt" onclick="return Generate()" class="input_button" />     
+          </span>
+        <br />
+
+
+    </div>
+           
+
+        
+</div>     
+                           <div style="clear:both;">
+            <br />
+        </div>
+                       
+                        <div class="s1">
+                  <div class="editor-label">
+                     <span style="color: red; font-size:18px">*</span>  <b>STEP 4 (Download Merged DOE/CSNY File): </b>
+                 </div>
+                        <div class="editor-field">
+        
+       When Step 3 Merge Successful, download merged DOE/CSNY File
+
+    </div>
+
+</div>     
+                           <div style="clear:both;">
+            <br />
+        </div>
+                       <div class="s1">
+                  <div class="editor-label">
+                     <span style="color: red; font-size:18px">*</span>  <b>STEP 5 (Submit Case Sessions to DOE for payment): </b>
+                 </div>
+                        <div class="editor-field">
+        
+       To upload and submit case sessions to DOE for payment processing by therapist, follow these instructions:
+                            <a href="https://docs.google.com/document/d/1OAH9x7Povl04DS9wJeH6yJV7L7x2qNREP7YDYWwhvSI/edit">Link</a>
+    </div>
+
+</div>     
+                        <div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none" >
+    <div style="position: absolute; top: 30%; left: 45%; color: White;">
+       <img src="@Url.Content("~/Content/images/loader.gif") "/>
+        <div>Files are merging. This may take a while.  Please open a new tab to access other pages of csny portal.</div>
+    </div>
+</div>
+
+                 </div>
+
+
+          <div style="clear:both;">
+            <br />
+        </div>
+               
+             </div>
+@*Hookup Chosen Plugin*@
+<script >
+
+    $(".chzn-select").chosen({
+
+        no_results_text: "Oops, nothing found!"
+    });
+
+</script> 
+
+@(Html.Telerik().ScriptRegistrar()) 

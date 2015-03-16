@@ -1,0 +1,61 @@
+﻿@using System.Data.OleDb;
+@using System.Data.SqlClient;
+
+
+@{
+    ViewBag.Title = "Upload-DOE-data";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+<script type="text/javascript">
+    function validation() {
+        var error = "";
+        var error1 = "";
+    }
+    </script>
+
+
+@using (Html.BeginForm("Upload-DOE-data", "Admin",
+                    FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+   
+<div class="main_content">
+
+         <div class="page_heading">
+                <p>Upload Mandates --(Add/Edit/Delete)</p>
+              </div>
+         <br />
+
+     <div style="color:red">
+     @Html.ValidationSummary(true)
+     </div>
+    <div style="clear:both;"> <br />     
+            
+    </div>
+      
+          
+     <div style="clear:both;"></div>
+     <div class="editor-label">
+           <span style="color:red;">*</span>  <b> Uplaod File: </b>
+     </div>
+     <div class="editor-field">
+        
+         <input id="uploadFile" name="uploadFile" type="file" />
+     </div>
+      <div style="clear:both;"></div>
+
+
+  
+
+
+               <div style="clear :both;"></div>
+               
+    <div class="editor-label">&nbsp;
+    </div>
+            <div class="editor-field">
+                <input type="submit" value="SUBMIT" class="input_button" onclick="return validation()"/>
+            </div>
+
+</div>
+
+}

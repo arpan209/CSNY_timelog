@@ -1,0 +1,226 @@
+﻿@model CSNY_timelog.ViewModel.LockSessionViewModel    
+
+@using Telerik.Web;
+@using Telerik.Web.Mvc;
+@using Telerik.Web.Mvc.UI;
+@using GridMvc.Html;
+
+@{
+    ViewBag.Title = "LockSession";
+    Layout = "~/Views/Shared/_LayoutPage1.cshtml";
+}
+
+
+@helper Check(CSNY_timelog.ViewModel.TherapistLockList item)
+{
+    if (item.LockSession == true)
+    {
+    <span><input type="checkbox" name="vehicle" value="@item.TID" checked><br></span>
+    }
+    else{
+     <span><input type="checkbox"  name="vehicle" value="@item.TID" ><br></span>
+    }
+   
+    
+}
+
+@helper Notify(CSNY_timelog.ViewModel.TherapistLockList item)
+{
+    if (item.LockSession == true)
+    {
+     @Html.ActionLink("Notify", "LockNotify", "Admin", new { Id = item.TID }, new { title = "Notify Therapist" }) 
+    }
+  
+    
+}
+
+<link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" />
+   
+    <script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
+
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" />
+
+<script>
+$(function(){
+      $("#my-button").on("click", function(){
+             $(".my-checkbox").attr("checked","checked");
+
+      });
+
+});
+</script>
+
+<script type="text/javascript">
+    function validation() {
+    
+
+    //    $('[name="selectchecked"]:checked').each(function () {            
+
+    //        var CheckboxId = checkboxId;
+      
+
+
+    //});
+
+        var x = document.getElementsByName("vehicle");
+        var SelectedIDs = "";
+        if (x != "") {
+            for (var i = 0; i < x.length; i++) {
+                if (x[i].checked) {
+                    SelectedIDs += x[i].value + ",";
+                }
+            }
+        }
+        
+        var x = document.getElementsByName("vehicle");
+        var NotSelectedIDs = "";
+        if (x != "") {
+            for (var i = 0; i < x.length; i++) {
+                if (!x[i].checked) {
+                    NotSelectedIDs += x[i].value + ",";
+                }
+            }
+        }
+
+      error = "";
+
+      
+       
+        if (error != "") {
+            alert(error);
+            alert(SelectedIDs);
+            return false;
+        }
+        else {
+
+
+            var OrderViewModel =
+                {
+                    SelectedTID: SelectedIDs, NotSelectedTID: NotSelectedIDs
+                };
+
+            $.ajax({
+                type: "POST",
+
+                url: '@Url.Content("~/Admin/UpdateLockSession")',
+                // url: "/admin/show_find_user_detail",
+                async: false,
+                data: JSON.stringify(OrderViewModel),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+
+                    if (data == "Success") {
+                        alert("Updated succesfully");
+                    }
+                    else {
+                        alert(data);
+                    }
+                       
+                },
+                error: function (data) {
+                    //  alert(data);
+                }
+
+            });
+        }
+    }
+    </script>
+<script>
+    function Notify() {
+
+
+    }
+
+</script>
+<div class="main_content">
+             <div id="Input">
+           <div class="page_heading">
+             <p>Lock Session</p>
+            </div>
+
+                 <span>
+                    
+                     <b>  
+                     </b>
+
+                 </span>
+                  
+<div style="padding-left:10px;padding-top:10px" >At 11:59 PM every <span style="color:red">5th</span> and <span style="color:red">20th</span> of the month, all previous sessions input by therapists will be un-editable (i.e. locked).Two ways to unlock sessions: 
+ </div>
+<div style="padding-left:10px">
+    <b>1) Send Email Notice:</b> Click “Notify” to unlock sessions and send email to the therapist notifying them that their sessions will be unlocked for 72 hours.  The therapist’s sessions will auto-lock when the 72-hour period expires.  
+<br />
+    <b>2) Do Not Send Email:</b>  Uncheck the box next to therapist name and click submit.  No email will be sent to therapist.Regardless of the 72-hour unlock period, all sessions will lock at 11:59pm on the 5th and 20th of every month for billing purposes.
+</div>
+       @Html.Grid(Model.LockList).Columns(columns =>
+  {
+
+      columns.Add(c => c.TID).SetWidth(25).Titled("Therapist ID").Sanitized(false)
+          .Encoded(false)
+          .RenderValueAs(o => Html.ActionLink(o.TID, "EditTherapist", "admin", new { Id = o.TID }, null).ToHtmlString());
+
+      columns.Add(c => c.FirstName).Titled("First Name").Sanitized(false)
+          .Encoded(false)
+          .RenderValueAs(o => Html.ActionLink(o.FirstName, "EditTherapist", "admin", new { Id = o.TID }, null).ToHtmlString());
+          //.RenderValueAs(o => Html.ActionLink(o.TID, "EditTherapist", "admin", new { Id = o.TID }, null).ToHtmlString());
+
+      //columns.Add(c => c.LockSession)
+      //       .Encoded(false)
+      //       .Sanitized(false)
+      //       .SetWidth(30)
+      //       .RenderValueAs(o => Html.CheckBox("checked", false, new { @class = "my-checkbox" }));
+
+      columns.Add(c => c.LockSession).Titled("Action").SetWidth(50).Encoded(false).Sanitized(false).RenderValueAs(c => Check(c));
+      columns.Add(c => c.Notify).Titled("Notify").SetWidth(50).Encoded(false).Sanitized(false).RenderValueAs(c => Notify(c));
+      
+  }).Sortable(true)
+
+</div>
+   <br />
+
+        <div style="clear :both;"></div>
+                        <div class="editor-label">
+                     Check All :
+ 
+                 </div>
+       <div class="editor-field">
+                     <input type="checkbox" id="select-all-checkbox" />
+ 
+                 </div>
+   
+      <div class="editor-label"> &nbsp; </div>
+          <div class="editor-field">
+                <input type="submit" value="SUBMIT"  id="btn_sbmt" onclick="return validation()" class="input_button" />     
+          </div>
+       <div class="editor-label"> &nbsp; </div>
+          <div class="editor-field">
+                   <input type="button" value="Back" class="input_button" onclick="GoToHome()" />    
+          </div>
+       
+
+</div>
+
+<script type="text/javascript">
+    $('#select-all-checkbox').click(function () {
+       
+        var id = document.getElementById("select-all-checkbox").checked;
+       
+        if (id == true) {
+            document.getElementById("select-all-checkbox").checked = true;
+            $('input[type=checkbox]').attr("checked", true);
+            id = 1;
+        }
+        else {
+            document.getElementById("select-all-checkbox").checked = false;
+            $('input[type=checkbox]').attr("checked", false);
+            id = 0;
+        }
+    });
+</script>
+ <script type="text/javascript">
+
+     function GoToHome() {
+         window.history.back();
+     }
+       </script>
