@@ -252,11 +252,9 @@
       <Parameter Name="UserName" Mode="In" Type="String" />
       <Parameter Name="Password" Mode="In" Type="String" />
     </FunctionImport>
-    <FunctionImport Name="GetStudentInformation_Pdf" ReturnType="Collection(csnyModel.GetStudentInformation_Pdf_Result)">
-      <Parameter Name="sid" Mode="In" Type="Int32" />
-      <Parameter Name="FundingCode" Mode="In" Type="String" />
+    <FunctionImport Name="ResetTherapistLock">
+      <Parameter Name="TID" Mode="In" Type="String" />
     </FunctionImport>
-    <FunctionImport Name="ResetTherapistLock" />
     <FunctionImport Name="Sp_AddMandate">
       <Parameter Name="SID" Mode="In" Type="String" />
       <Parameter Name="NPI" Mode="In" Type="String" />
@@ -332,11 +330,13 @@
       <Parameter Name="FundingCode" Mode="In" Type="String" />
       <Parameter Name="FiscalYear" Mode="In" Type="String" />
       <Parameter Name="Month" Mode="In" Type="String" />
+      <Parameter Name="NPI" Mode="In" Type="String" />
     </FunctionImport>
     <FunctionImport Name="SP_GenerateReportAsR" ReturnType="Collection(csnyModel.SP_GenerateReportAsR_Result)">
       <Parameter Name="FundingCode" Mode="In" Type="String" />
       <Parameter Name="FiscalYear" Mode="In" Type="String" />
       <Parameter Name="Month" Mode="In" Type="String" />
+      <Parameter Name="NPI" Mode="In" Type="String" />
     </FunctionImport>
     <FunctionImport Name="sp_get_MandateInfo" ReturnType="Collection(csnyModel.sp_get_MandateInfo_Result)">
       <Parameter Name="SID" Mode="In" Type="String" />
@@ -458,6 +458,7 @@
       <Parameter Name="EndDay" Mode="In" Type="String" />
       <Parameter Name="TID" Mode="In" Type="String" />
       <Parameter Name="FundingCode" Mode="In" Type="String" />
+      <Parameter Name="NPI" Mode="In" Type="String" />
     </FunctionImport>
     <FunctionImport Name="SP_SessCountByServiceType" ReturnType="Collection(csnyModel.SP_SessCountByServiceType_Result)">
       <Parameter Name="StartDay" Mode="In" Type="String" />
@@ -534,6 +535,8 @@
       <Parameter Name="SSN" Mode="In" Type="String" />
       <Parameter Name="ServiceType" Mode="In" Type="String" />
       <Parameter Name="UserType" Mode="In" Type="String" />
+      <Parameter Name="IsActive" Mode="In" Type="Boolean" />
+      <Parameter Name="EndService" Mode="In" Type="DateTime" />
     </FunctionImport>
     <FunctionImport Name="SP_UpdateTherapistPassword">
       <Parameter Name="TID" Mode="In" Type="String" />
@@ -554,14 +557,73 @@
       <Parameter Name="NPI" Mode="In" Type="String" />
       <Parameter Name="FundingCode" Mode="In" Type="String" />
     </FunctionImport>
-    <FunctionImport Name="Sp_GetStudentSessionDetail_Pdf" ReturnType="Collection(csnyModel.Sp_GetStudentSessionDetail_Pdf_Result)">
-      <Parameter Name="NPI" Mode="In" Type="String" />
-      <Parameter Name="FundingCode" Mode="In" Type="String" />
-      <Parameter Name="SID" Mode="In" Type="Int32" />
-      <Parameter Name="year" Mode="In" Type="Int32" />
-      <Parameter Name="month" Mode="In" Type="Int32" />
-    </FunctionImport>
     <EntitySet Name="TherapistMasters" EntityType="csnyModel.TherapistMaster" />
+    <EntitySet Name="InvoiceDetails" EntityType="csnyModel.InvoiceDetail" />
+    <FunctionImport Name="AdminList" ReturnType="Collection(csnyModel.AdminList_Result)" />
+    <FunctionImport Name="BillingSession" ReturnType="Collection(csnyModel.BillingSession_Result)">
+      <Parameter Name="StartDay" Mode="In" Type="String" />
+      <Parameter Name="EndDay" Mode="In" Type="String" />
+      <Parameter Name="TID" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="CreateInvoice">
+      <Parameter Name="TID" Mode="In" Type="String" />
+      <Parameter Name="AgeGroup" Mode="In" Type="String" />
+      <Parameter Name="Year" Mode="In" Type="String" />
+      <Parameter Name="Month" Mode="In" Type="String" />
+      <Parameter Name="InvoiceNo" Mode="In" Type="String" />
+      <Parameter Name="Note" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="GetStudentInformation_Pdf" ReturnType="Collection(csnyModel.GetStudentInformation_Pdf_Result1)">
+      <Parameter Name="sid" Mode="In" Type="Int32" />
+      <Parameter Name="FundingCode" Mode="In" Type="String" />
+      <Parameter Name="NPI" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="SetServiceEndInMandate">
+      <Parameter Name="NPI" Mode="In" Type="String" />
+      <Parameter Name="Fiscal" Mode="In" Type="String" />
+      <Parameter Name="ServiceEnd" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="SP_BillingNew" ReturnType="Collection(csnyModel.SP_BillingNew_Result)">
+      <Parameter Name="fiscal" Mode="In" Type="String" />
+      <Parameter Name="StartDay" Mode="In" Type="String" />
+      <Parameter Name="EndDay" Mode="In" Type="String" />
+      <Parameter Name="TID" Mode="In" Type="String" />
+      <Parameter Name="FundingCode" Mode="In" Type="String" />
+      <Parameter Name="NPI" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="SP_GetSessionCount" ReturnType="Collection(Int32)">
+      <Parameter Name="FundingCode" Mode="In" Type="String" />
+      <Parameter Name="FiscalYear" Mode="In" Type="String" />
+      <Parameter Name="Month" Mode="In" Type="String" />
+      <Parameter Name="NPI" Mode="In" Type="String" />
+      <Parameter Name="AttCode" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="SP_GetTherapistListByFCode" ReturnType="Collection(csnyModel.SP_GetTherapistListByFCode_Result)">
+      <Parameter Name="FundingCode" Mode="In" Type="String" />
+      <Parameter Name="FiscalYear" Mode="In" Type="String" />
+      <Parameter Name="Month" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="SP_TherapistListByMonthFiscal" ReturnType="Collection(csnyModel.SP_TherapistListByMonthFiscal_Result)">
+      <Parameter Name="Month" Mode="In" Type="String" />
+      <Parameter Name="year" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="SP_Unlock">
+      <Parameter Name="TID" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="UpdateInvocie">
+      <Parameter Name="ID" Mode="In" Type="String" />
+      <Parameter Name="InvoiceNo" Mode="In" Type="String" />
+      <Parameter Name="Note" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="Sp_GetStudentSessionDetail_Pdf" ReturnType="Collection(csnyModel.Sp_GetStudentSessionDetail_Pdf_Result)">
+      <Parameter Name="SID" Mode="In" Type="Int32" />
+      <Parameter Name="fiscal" Mode="In" Type="String" />
+      <Parameter Name="StartDay" Mode="In" Type="String" />
+      <Parameter Name="EndDay" Mode="In" Type="String" />
+      <Parameter Name="TID" Mode="In" Type="String" />
+      <Parameter Name="FundingCode" Mode="In" Type="String" />
+      <Parameter Name="NPI" Mode="In" Type="String" />
+    </FunctionImport>
   </EntityContainer>
   <ComplexType Name="GetStudentInformation_Pdf_Result">
     <Property Type="String" Name="BoroughCode" Nullable="true" MaxLength="10" />
@@ -1200,35 +1262,6 @@
     <Property Type="Int32" Name="SID" Nullable="false" />
     <Property Type="String" Name="StudentName" Nullable="true" />
   </ComplexType>
-  <ComplexType Name="Sp_GetStudentSessionDetail_Pdf_Result">
-    <Property Type="Int32" Name="SrNo" Nullable="false" />
-    <Property Type="Int32" Name="SessionID" Nullable="false" />
-    <Property Type="String" Name="BoroughCode" Nullable="true" MaxLength="10" />
-    <Property Type="String" Name="HomeDistrict" Nullable="true" MaxLength="10" />
-    <Property Type="String" Name="SchoolLocationCode" Nullable="true" MaxLength="10" />
-    <Property Type="String" Name="LastName" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="FirstName" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="NPI" Nullable="true" MaxLength="15" />
-    <Property Type="String" Name="Address1" Nullable="true" />
-    <Property Type="String" Name="address2" Nullable="true" />
-    <Property Type="String" Name="Phone" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="NYCI" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="StudentFirstName" Nullable="true" />
-    <Property Type="String" Name="StudentLastName" Nullable="true" />
-    <Property Type="String" Name="DOB" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="MandGroupType" Nullable="true" MaxLength="10" />
-    <Property Type="DateTime" Name="ServiceStart" Nullable="true" Precision="23" />
-    <Property Type="DateTime" Name="ServiceEnd" Nullable="true" Precision="23" />
-    <Property Type="String" Name="MandFrequency" Nullable="true" MaxLength="10" />
-    <Property Type="String" Name="MandDuration" Nullable="true" MaxLength="10" />
-    <Property Type="String" Name="MandGroupSize" Nullable="true" MaxLength="10" />
-    <Property Type="String" Name="Language" Nullable="true" MaxLength="50" />
-    <Property Type="DateTime" Name="Date" Nullable="true" />
-    <Property Type="String" Name="GroupSize" Nullable="true" MaxLength="10" />
-    <Property Type="Time" Name="StartTime" Nullable="true" />
-    <Property Type="Time" Name="EndTime" Nullable="true" />
-    <Property Type="String" Name="Location" Nullable="true" MaxLength="25" />
-  </ComplexType>
   <EntityType Name="TherapistMaster">
     <Key>
       <PropertyRef Name="TID" />
@@ -1252,5 +1285,145 @@
     <Property Name="IsActive" Type="Boolean" />
     <Property Name="UserType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="Lock" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+    <Property Type="DateTime" Name="EndService" Precision="0" />
   </EntityType>
+  <EntityType Name="InvoiceDetail">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Type="String" Name="TID" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Type="String" Name="FundingCode" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Type="String" Name="Fiscal" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Type="String" Name="month" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Type="String" Name="InvoiceNo" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="Note" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <ComplexType Name="AdminList_Result">
+    <Property Type="Int32" Name="TID" Nullable="false" />
+    <Property Type="String" Name="FirstName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="LastName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Address1" Nullable="true" />
+    <Property Type="String" Name="address2" Nullable="true" />
+    <Property Type="String" Name="State" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="City" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Email" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="Phone" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="NPI" Nullable="true" MaxLength="15" />
+    <Property Type="String" Name="UserName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Password" Nullable="true" />
+    <Property Type="String" Name="ServiceType" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="PayScale" Nullable="true" MaxLength="10" />
+    <Property Type="DateTime" Name="DateOfRegistratio" Nullable="true" />
+    <Property Type="DateTime" Name="LastLogin" Nullable="true" Precision="23" />
+    <Property Type="Boolean" Name="IsActive" Nullable="true" />
+    <Property Type="DateTime" Name="EndService" Nullable="true" />
+    <Property Type="String" Name="UserType" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Lock" Nullable="true" MaxLength="50" />
+  </ComplexType>
+  <ComplexType Name="BillingSession_Result">
+    <Property Type="Int32" Name="SrNo" Nullable="false" />
+    <Property Type="Int32" Name="SessionID" Nullable="false" />
+    <Property Type="String" Name="SID" Nullable="true" MaxLength="15" />
+    <Property Type="DateTime" Name="Date" Nullable="true" />
+    <Property Type="String" Name="AttnCode" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="GroupSize" Nullable="true" MaxLength="10" />
+    <Property Type="Time" Name="StartTime" Nullable="true" />
+    <Property Type="Time" Name="EndTime" Nullable="true" />
+    <Property Type="String" Name="Location" Nullable="true" MaxLength="25" />
+    <Property Type="String" Name="TID" Nullable="true" MaxLength="15" />
+    <Property Type="String" Name="ServiceType" Nullable="true" />
+    <Property Type="String" Name="GroupType" Nullable="true" MaxLength="10" />
+    <Property Type="DateTime" Name="LastModified" Nullable="true" Precision="23" />
+  </ComplexType>
+  <ComplexType Name="GetStudentInformation_Pdf_Result1">
+    <Property Type="String" Name="BoroughCode" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="HomeDistrict" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="SchoolLocationCode" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="NYCI" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="StudentFirstName" Nullable="true" />
+    <Property Type="String" Name="StudentLastName" Nullable="true" />
+    <Property Type="String" Name="DOB" Nullable="true" MaxLength="50" />
+    <Property Type="DateTime" Name="ServiceStart" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="ServiceEnd" Nullable="true" Precision="23" />
+    <Property Type="String" Name="MandFrequency" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="MandDuration" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="MandGroupSize" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="Language" Nullable="true" MaxLength="50" />
+  </ComplexType>
+  <ComplexType Name="SP_BillingNew_Result">
+    <Property Type="Int32" Name="SrNo" Nullable="false" />
+    <Property Type="Int32" Name="SessionID" Nullable="false" />
+    <Property Type="String" Name="SID" Nullable="true" MaxLength="15" />
+    <Property Type="DateTime" Name="Date" Nullable="true" />
+    <Property Type="String" Name="AttnCode" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="GroupSize" Nullable="true" MaxLength="10" />
+    <Property Type="Time" Name="StartTime" Nullable="true" />
+    <Property Type="Time" Name="EndTime" Nullable="true" />
+    <Property Type="String" Name="Location" Nullable="true" MaxLength="25" />
+    <Property Type="String" Name="TID" Nullable="true" MaxLength="15" />
+    <Property Type="String" Name="ServiceType" Nullable="true" />
+    <Property Type="String" Name="GroupType" Nullable="true" MaxLength="10" />
+    <Property Type="DateTime" Name="LastModified" Nullable="true" Precision="23" />
+    <Property Type="String" Name="StudentFirstName" Nullable="true" />
+    <Property Type="String" Name="StudentLastName" Nullable="true" />
+    <Property Type="String" Name="Language" Nullable="true" MaxLength="10" />
+    <Property Type="Int32" Name="RowNum" Nullable="true" />
+    <Property Type="String" Name="FundingCode" Nullable="true" MaxLength="10" />
+    <Property Type="DateTime" Name="ServiceStart" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="ServiceEnd" Nullable="true" Precision="23" />
+  </ComplexType>
+  <ComplexType Name="SP_GetTherapistListByFCode_Result">
+    <Property Type="String" Name="LastName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="FirstName" Nullable="true" MaxLength="50" />
+    <Property Type="Int32" Name="TID" Nullable="false" />
+    <Property Type="String" Name="NPI" Nullable="true" MaxLength="15" />
+  </ComplexType>
+  <ComplexType Name="SP_TherapistListByMonthFiscal_Result">
+    <Property Type="Int32" Name="TID" Nullable="false" />
+    <Property Type="String" Name="FirstName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="LastName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Address1" Nullable="true" />
+    <Property Type="String" Name="address2" Nullable="true" />
+    <Property Type="String" Name="State" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="City" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Email" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="Phone" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="NPI" Nullable="true" MaxLength="15" />
+    <Property Type="String" Name="UserName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Password" Nullable="true" />
+    <Property Type="String" Name="ServiceType" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="PayScale" Nullable="true" MaxLength="10" />
+    <Property Type="DateTime" Name="DateOfRegistratio" Nullable="true" />
+    <Property Type="DateTime" Name="LastLogin" Nullable="true" Precision="23" />
+    <Property Type="Boolean" Name="IsActive" Nullable="true" />
+    <Property Type="DateTime" Name="EndService" Nullable="true" />
+    <Property Type="String" Name="UserType" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Lock" Nullable="true" MaxLength="50" />
+  </ComplexType>
+  <ComplexType Name="Sp_GetStudentSessionDetail_Pdf_Result">
+    <Property Type="Int32" Name="SrNo" Nullable="false" />
+    <Property Type="Int32" Name="SessionID" Nullable="false" />
+    <Property Type="String" Name="SID" Nullable="true" MaxLength="15" />
+    <Property Type="DateTime" Name="Date" Nullable="true" />
+    <Property Type="String" Name="AttnCode" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="GroupSize" Nullable="true" MaxLength="10" />
+    <Property Type="Time" Name="StartTime" Nullable="true" />
+    <Property Type="Time" Name="EndTime" Nullable="true" />
+    <Property Type="String" Name="Location" Nullable="true" MaxLength="25" />
+    <Property Type="String" Name="TID" Nullable="true" MaxLength="15" />
+    <Property Type="String" Name="ServiceType" Nullable="true" />
+    <Property Type="String" Name="GroupType" Nullable="true" MaxLength="10" />
+    <Property Type="DateTime" Name="LastModified" Nullable="true" Precision="23" />
+    <Property Type="String" Name="StudentFirstName" Nullable="true" />
+    <Property Type="String" Name="StudentLastName" Nullable="true" />
+    <Property Type="String" Name="Language" Nullable="true" MaxLength="10" />
+    <Property Type="Int32" Name="RowNum" Nullable="true" />
+    <Property Type="String" Name="FundingCode" Nullable="true" MaxLength="10" />
+    <Property Type="DateTime" Name="ServiceStart" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="ServiceEnd" Nullable="true" Precision="23" />
+    <Property Type="String" Name="MandFrequency" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="MandGroupSize" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="MandDuration" Nullable="true" MaxLength="10" />
+  </ComplexType>
 </Schema>

@@ -9,6 +9,7 @@
     <script src="@Url.Content("~/Scripts/gridmvc.min.js")"></script>
 
     <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" />
+   
 @helper EditSessionLink(CSNY_timelog.ViewModel.MastercheckLsit1 item)
 {
 
@@ -21,24 +22,22 @@
     if (Count > 0)
     {
 
-
-
         if (item.Fcode != "")
             {
                     
                     <span >
-         @Html.ActionLink(item.TID, "OtherList", "Report", new { id = item.Fcode.ToString() },new { target = "_blank" })              
+                     
+                     
+         @Html.ActionLink(item.TName, "OtherList", "Report", new { id = item.Fcode.ToString() + "," + item.TID + "," + Model.StartDate + ","  + Model.EndDate},new { target = "_blank" })              
                 </span>
             }
             else
             {
                  <span >
-                   @item.TID      
+                   @item.TName      
                 </span>
             }
-           
         
-       
     }
     else{
       <span >
@@ -68,7 +67,7 @@
        @Html.Grid(Model.MasterCheck1).Columns(columns =>
   {
       //columns.Add(c => c.Child).Titled("Student ID").RenderValueAs(c => @<span class = "@((!String.IsNullOrEmpty(c.Child)) ? "ColorRed" : "Normal")">@c.Child</span>);
-      columns.Add(c => c.TID).SetWidth(200).Titled("TID").Sanitized(false)
+      columns.Add(c => c.TName).SetWidth(200).Titled("TID").Sanitized(false)
          .Encoded(false)
          .RenderValueAs(c => EditSessionLink(c));
       

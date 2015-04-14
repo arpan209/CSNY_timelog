@@ -69,6 +69,7 @@ namespace CSNY_timelog.ViewModel
     {
 
         public string TID { get; set; }
+        public string TName { get; set; }
         public string Date { get; set; }
         public string Student { get; set; }
         public string Fcode { get; set; }

@@ -11,6 +11,12 @@ using System.IO;
 using System.Data;
 using System.Data.OleDb;
 using System.Globalization;
+using ClosedXML.Excel;
+using NPOI.HSSF.Model;
+using NPOI.HSSF.UserModel;
+using NPOI.SS.UserModel;
+
+
 namespace CSNY_timelog.Controllers
 {
     public class ReportController : Controller
@@ -447,7 +453,7 @@ namespace CSNY_timelog.Controllers
                 xlWorkSheet.Range["AC2", "AC" + noOfRows].NumberFormat = "@"; // Service Location 
                 xlWorkSheet.Range["AD2", "AD" + noOfRows].NumberFormat = "@"; // Vendor Invooice
                 xlWorkSheet.Range["AE2", "AE" + noOfRows].NumberFormat = "000000000.00"; // Vendor Invoice
-                xlWorkSheet.Columns[32].ColumnWidth = 12; 
+                //xlWorkSheet.Columns[32].ColumnWidth = 12; 
                 xlWorkSheet.Range["AF2", "AF" + noOfRows].NumberFormat = "@"; // Prog ID
                 
                 /////
@@ -488,6 +494,7 @@ namespace CSNY_timelog.Controllers
                 // Create and display the value of two GUIDs.
                 guid = Guid.NewGuid();
                 var fileName = Path.GetFileName(file.FileName);
+                //var fileName = Fname + ".xlsx";
                 savedfilename = fileName;
                 //savedfilename = guid.ToString() + ".xls";//Save as xls
                 //savedfilename = guid.ToString() + ".csv";//Save as xls
@@ -526,23 +533,56 @@ namespace CSNY_timelog.Controllers
           
             string FName = Path1;
 
+           ///
+            HSSFWorkbook hssfwb;
+            using (FileStream file = new FileStream(Path1, FileMode.Open, FileAccess.Read))
+            {
+                hssfwb = new HSSFWorkbook(file);
+                file.Close();
+            }
+
+
+           // HSSFWorkbook wb = new HSSFWorkbook(fsIP); //Access the workbook
+
+            var SheetName = hssfwb.GetSheetAt(0).SheetName.ToString(); ; //Access the worksheet, so that we can update / modify it.
+            ISheet sheet = hssfwb.GetSheetAt(0);
+
+           // var name = sheet.SheetName.ToString();
+
+            //ISheet sheet = hssfwb.GetSheet("Arkusz1");
+            //for (int row = 0; row <= sheet.LastRowNum; row++)
+            //{
+            //    if (sheet.GetRow(row) != null) //null is when the row only contains empty cells 
+            //    {
+            //        MessageBox.Show(string.Format("Row {0} = {1}", row, sheet.GetRow(row).GetCell(0).StringCellValue));
+            //    }
+            //}
+            //var xlWorkBooks = new XLWorkbook(Path1);
+            ////var Sheetname = "";
+            //var xlWorkSheet = xlWorkBooks.Worksheet(1);
+           
+           // var worksheet = workbook.Worksheets.First(s => s.Name.tos);
            
 
 
-                Microsoft.Office.Interop.Excel.Application excel = new Microsoft.Office.Interop.Excel.Application();
-                excel.Application.Workbooks.Add(true);
 
-                Microsoft.Office.Interop.Excel.Workbooks xlWorkBooks = null;
-                Microsoft.Office.Interop.Excel.Workbook xlWorkBook = null;
-                object misValue = System.Reflection.Missing.Value;
-                Excel.Worksheet xlWorkSheet;
-                xlWorkBooks = excel.Workbooks;
-                xlWorkBook = xlWorkBooks.Open(FName);
+            /////
+
+
+                //Microsoft.Office.Interop.Excel.Application excel = new Microsoft.Office.Interop.Excel.Application();
+                //excel.Application.Workbooks.Add(true);
+
+                //Microsoft.Office.Interop.Excel.Workbooks xlWorkBooks = null;
+                //Microsoft.Office.Interop.Excel.Workbook xlWorkBook = null;
+                //object misValue = System.Reflection.Missing.Value;
+                //Excel.Worksheet xlWorkSheet;
+                //xlWorkBooks = excel.Workbooks;
+                //xlWorkBook = xlWorkBooks.Open(FName);
 
 
                
-                xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
-                var SheetName = xlWorkSheet.Name;
+                //xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+               // var SheetName = xlWorkSheet.Name;
                 var PreCode = string.Empty;
                 if (AgeGroup == "CPSE")
                 {
@@ -555,19 +595,47 @@ namespace CSNY_timelog.Controllers
                 else { PreCode = "SIAP_"; }
                 try
                 {
-                xlWorkSheet.Cells[1, 11] = PreCode + "ACT_PROVIDER";
-                xlWorkSheet.Cells[1, 12] = PreCode + "OSIS_ID";
+                    //xlWorkSheet.Cell(1, 15).Value = "";
+                   
+                //xlWorkSheet.Cell(1, 11).Value = PreCode + "ACT_PROVIDER";
+                sheet.GetRow(0).GetCell(10).SetCellValue(PreCode + "ACT_PROVIDER");
+               // xlWorkSheet.Cell(1, 12).Value = PreCode + "OSIS_ID";
+                sheet.GetRow(0).GetCell(11).SetCellValue(PreCode + "OSIS_ID");
+                //xlWorkSheet.Cell(1, 15).Value = PreCode + "SERV_SUBTYPE";
+                sheet.GetRow(0).GetCell(14).SetCellValue(PreCode + "SERV_SUBTYPE");
+                //xlWorkSheet.Cell(1, 16).Value = PreCode + "START_DT";
+                sheet.GetRow(0).GetCell(15).SetCellValue(PreCode + "START_DT");
 
-                xlWorkSheet.Cells[1, 15] = PreCode + "SERV_SUBTYPE";
-                xlWorkSheet.Cells[1, 16] = PreCode + "START_DT";
-                xlWorkSheet.Cells[1, 23] = "SCIN_INVOICE_DAYS";
+                sheet.GetRow(0).GetCell(17).SetCellValue(PreCode + "SESSIONS");
+
+                sheet.GetRow(0).GetCell(18).SetCellValue(PreCode + "SESS_LEN");
+
+                sheet.GetRow(0).GetCell(19).SetCellValue(PreCode + "GROUP_SIZE");
+
+                sheet.GetRow(0).GetCell(20).SetCellValue(PreCode + "LANG_CD");
+
+                //xlWorkSheet.Cell(1, 23).Value = "SCIN_INVOICE_DAYS";
+                sheet.GetRow(0).GetCell(22).SetCellValue("SCIN_INVOICE_DAYS");
+
                 //// Enter by Therapist Start///
-                xlWorkSheet.Cells[1, 24] = "SCIN_ATTEND_CODE";
-                xlWorkSheet.Cells[1, 25] = "SCIN_ACT_GRP_SIZE";
-                xlWorkSheet.Cells[1, 26] = "SCIN_START_TIME";
-                xlWorkSheet.Cells[1, 27] = "SCIN_END_TIME";
-                xlWorkSheet.Cells[1, 28] = "SCIN_SCHOOL_OTHER";
+                //xlWorkSheet.Cell(1, 24).Value = "SCIN_ATTEND_CODE";
+                sheet.GetRow(0).GetCell(23).SetCellValue("SCIN_ATTEND_CODE");
+                //xlWorkSheet.Cell(1, 25).Value = "SCIN_ACT_GRP_SIZE";
+                sheet.GetRow(0).GetCell(24).SetCellValue("SCIN_ACT_GRP_SIZE");
+                //xlWorkSheet.Cell(1, 26).Value = "SCIN_START_TIME";
+                sheet.GetRow(0).GetCell(25).SetCellValue("SCIN_START_TIME");
+                //xlWorkSheet.Cell(1, 27).Value = "SCIN_END_TIME";
+                sheet.GetRow(0).GetCell(26).SetCellValue("SCIN_END_TIME");
+                //xlWorkSheet.Cell(1, 28).Value = "SCIN_SCHOOL_OTHER";
+                sheet.GetRow(0).GetCell(27).SetCellValue("SCIN_SCHOOL_OTHER");
 
+                using (FileStream file = new FileStream(Path1, FileMode.Open, FileAccess.Write))
+                {
+                    hssfwb.Write(file);
+                    file.Close();
+                    file.Flush();
+                }
+                    
                 //if (System.IO.File.Exists(Path))
                 //{
                 //   System.IO.File.Delete(Path);
@@ -580,20 +648,25 @@ namespace CSNY_timelog.Controllers
 
                 //}
                 //
-                string tmpName = Path.GetTempFileName();
-                System.IO.File.Delete(tmpName);
+
+               // xlWorkBooks.Save();
+                //releaseObject(xlWorkBooks);
+               // releaseObject(xlWorkSheet);
+                //string tmpName = Path.GetTempFileName();
+                //System.IO.File.Delete(tmpName);
 
 
-                //xlWorkBook.Save();
-                xlWorkBook.SaveAs(tmpName, Excel.XlFileFormat.xlWorkbookNormal, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
-                xlWorkBook.Close(true, misValue, misValue);
-                ///
-                excel.Quit();
-                releaseObject(xlWorkSheet);
-                releaseObject(xlWorkBook);
-                releaseObject(excel);
-                System.IO.File.Delete(FName);
-                System.IO.File.Move(tmpName, FName);
+                ////xlWorkBook.Save();
+                //xlWorkBook.SaveAs(tmpName, Excel.XlFileFormat.xlWorkbookNormal, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
+                //xlWorkBook.Close(true, misValue, misValue);
+                /////
+                //excel.Quit();
+                releaseObject(sheet);
+                releaseObject(hssfwb);
+                
+                //releaseObject(excel);
+                //System.IO.File.Delete(FName);
+                //System.IO.File.Move(tmpName, FName);
                 
             }
             catch (Exception ex){
@@ -620,15 +693,22 @@ namespace CSNY_timelog.Controllers
             var TID = objviewmodel.TID;
             var filename = objviewmodel.Filename;
             var path = Path.Combine(Server.MapPath("~/DOEFiles/"), filename);
-            //var SheetName = ReWriteFile(path,objviewmodel.AgeGroup).ToString();
-            var SheetName = "Sheet1";
+            var SheetName = ReWriteFile(path,objviewmodel.AgeGroup).ToString();
+            //var SheetName = "Sheet1";
             OleDbConnection con = new OleDbConnection();
             OleDbCommand cmd = new OleDbCommand();
             OleDbCommand ocmd = new OleDbCommand();
            // string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source="+path+";Extended Properties=\"Excel 12.0;ReadOnly=False;HDR=Yes;\"";
-           string connectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + path + ";Extended Properties=\"Excel 8.0;HDR=Yes;\"";
+            /////////string connectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + path + ";Extended Properties=\"Excel 8.0;HDR=Yes;\"";
+            //string path = @"c:\teste.xlsx";
+           // string connectionString = string.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Extended Properties=\"Excel 8.0;HDR=YES\";");", path);
+              string connectionString = string.Format("Provider=Microsoft.Jet.OLEDB.4.0; Data source={0};Extended Properties=\"Excel 8.0;HDR=Yes;\"", path);
            //string connectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + path + ";Extended Properties=\"Excel 8.0;ReadOnly=False;HDR=Yes;\"";
-                     
+
+              int Frequency;
+              int GroupSize;
+              int Duration;
+
             try
             {
 
@@ -673,7 +753,8 @@ namespace CSNY_timelog.Controllers
                     //var Result = db.SP_GenerateReportNotP(objviewmodel.AgeGroup, objviewmodel.Fiscal, objviewmodel.Month);
                     foreach (var item in Result)
                     {
-                        message = item.Date + " " + item.NPI + " " + item.NYCI + "<br/>";
+                        //message = item.Date + " " + item.NPI + " " + item.NYCI + "<br/>";
+                        message = path + "<br/>";
                         var SrNo = item.SrNo.ToString();
                         int npi = Convert.ToInt32(item.NPI.Trim());
                         int osis = Convert.ToInt32(item.NYCI.Trim());
@@ -685,6 +766,23 @@ namespace CSNY_timelog.Controllers
                         if (item.Location.Trim() == "School") { location = "S"; }
                         else if (item.Location.Trim() == "Home") { location = "H"; }
                         else { location = "B"; }
+
+                        var freq = item.MandFrequency.Split(',');
+                        var dura = item.MandDuration.Split(',');
+                        var grop = item.MandGroupSize.Split(',');
+                        var lang = item.Language;
+                        if (item.MandGroupType.Trim() == "S1")
+                        {
+
+                            Frequency = Convert.ToInt32(freq[0]);
+                            Duration = Convert.ToInt32(dura[0]);
+                            GroupSize = Convert.ToInt32(grop[0]);
+                        }
+                        else {
+                            Frequency = Convert.ToInt32(freq[1]);
+                            Duration = Convert.ToInt32(dura[1]);
+                            GroupSize = Convert.ToInt32(grop[1]);
+                        }
                         //date formate
                         //var day = item.Date.Value.Day.ToString();
                         //var month = item.Date.Value.Month.ToString();
@@ -726,79 +824,119 @@ namespace CSNY_timelog.Controllers
                         //ocmd.ExecuteNonQuery();
                         OleDbDataReader odr = ocmd.ExecuteReader();
 
-                        string[] ServiceStart = new string[5];
-                        string[] ServiceEnd = new string[5];
-                        int i = 0;
+                         string[] ServiceStart = new string[5];
+                              string[] ServiceEnd = new string[5];
+                              string[] Mandfreq = new string[5];
+                              string[] Manddura = new string[5];
+                              string[] Mandgrop = new string[5];
+                              string[] Mandlang = new string[5];
+                              int i = 0;
 
-                        while (odr.Read())
-                        {
-                            //var abc = valid(odr, -1).ToString();
-                            ServiceStart[i] = valid(odr, 15).ToString();
-                            ServiceEnd[i] = valid(odr, 16).ToString();
-                            //NYCID = valid(odr, 2);
-                            //lname = valid(odr, 3);
-                            i += 1;
-                        }
-                        var CorrectStartDate = "";
-                        int j = 0;
-                        con.Close();
-                        if (i > 0)
-                        {
-                            if (i == 1)
-                            {
-                                CorrectStartDate = DateTime.Parse(ServiceStart[j]).ToOADate().ToString();
+                              while (odr.Read())
+                              {
+                                  //var abc = valid(odr, -1).ToString();
+                                  ServiceStart[i] = valid(odr, 15).ToString();
+                                  ServiceEnd[i] = valid(odr, 16).ToString();
+                                  Mandfreq[i] = valid(odr, 17).ToString();
+                                  Manddura[i] = valid(odr, 18).ToString();
+                                  Mandgrop[i] = valid(odr, 19).ToString();
+                                  Mandlang[i] = valid(odr, 20).ToString();
+                                 
+                                  //NYCID = valid(odr, 2);
+                                  //lname = valid(odr, 3);
+                                  i += 1;
+                              }
+                               var CorrectStartDate = "";
+                               var CorrectFreq = "";
+                               var CorrectDura = "";
+                               var CorrectGrop = "";
+                               var CorrectLang = "";
+                              int j = 0;
+                              con.Close();
+                              if (i > 0)
+                              {
+                                  if (i == 1)
+                                  {
+                                      CorrectStartDate = DateTime.Parse(ServiceStart[j]).ToOADate().ToString();
+                                      CorrectFreq = Mandfreq[j].ToString();
+                                      CorrectDura = Manddura[j].ToString();
+                                      CorrectGrop = Mandgrop[j].ToString();
+                                      CorrectLang = Mandlang[j].ToString();
 
-                            }
-                            else
-                            {
+                                  }
+                                  else
+                                  {
 
-                                for (j = 0; j < i - 1; j++)
-                                {
-
-
-                                    if (DateTime.Parse(ServiceStart[j]).ToOADate() <= SessDate && DateTime.Parse(ServiceStart[j + 1]).ToOADate() > SessDate)
-                                    {
-                                        CorrectStartDate = DateTime.Parse(ServiceStart[j]).ToOADate().ToString();
-
-
-                                    }
-                                    else { CorrectStartDate = DateTime.Parse(ServiceStart[j + 1]).ToOADate().ToString(); }
-
-                                }
-                            }
-                            //SRAP_START_DT
-                            string UpdateString = "";
-                            if (objviewmodel.AgeGroup == "CPSE")
-                            {
-                                // string selectString = "UPDATE [Sheet1$] SET Name ='Nameddd' WHERE ID1=8";
-                                //CPSE SQL
-                                UpdateString = "Update [" + SheetName + "$] set SCIN_ATTEND_CODE = 'P',SCIN_ACT_GRP_SIZE ='" + item.GroupSize.Trim() + "',SCIN_START_TIME ='" + StartTime +
-                                     "',SCIN_END_TIME='" + EndTime + "',SCIN_SCHOOL_OTHER ='" + location + "' where RSAP_ACT_PROVIDER='" + npi.ToString("D9") + "' AND RSAP_OSIS_ID='" + osis.ToString("D9") + "' AND SCIN_INVOICE_DAYS=" + SessDate +
-                                     " AND RSAP_SERV_SUBTYPE='" + item.MandGroupType.Trim() + "' AND RSAP_START_DT=" + CorrectStartDate;
-                            }
-                            else
-                            {
-                                // CSE SQL
-                                UpdateString = "Update [" + SheetName + "$] set SCIN_ATTEND_CODE = 'P',SCIN_ACT_GRP_SIZE ='" + item.GroupSize.Trim() + "',SCIN_START_TIME ='" + StartTime +
-                                  "',SCIN_END_TIME='" + EndTime + "' where SRAP_ACT_PROVIDER='" + npi.ToString("D9") + "' AND SRAP_OSIS_ID='" + osis.ToString("D9") + "' AND SCIN_INVOICE_DAYS=" + SessDate +
-                                  " AND SRAP_SERV_SUBTYPE='" + item.MandGroupType.Trim() + "' AND SRAP_START_DT=" + CorrectStartDate;
-                            }
-                            //string val = npi.ToString("D9");
-                            //string selectString = "Update [Sheet1$] set SCIN_ACT_GRP_SIZE = '" + item.GroupSize.Trim() +"' where SRAP_OSIS_ID='" + osis.ToString("D9") + "'";
-                            //string selectString = "Update [Sheet1$] set SCIN_ATTEND_CODE = 'P' where SCIN_INVOICE_DAYS =" + SessDate;
+                                      for (j = 0; j < i - 1; j++)
+                                      {
 
 
-                            /// Updat Atend_code from P to R in Session Detail
-                            MergeList.Add(SrNo);
+                                          if (DateTime.Parse(ServiceStart[j]).ToOADate() <= SessDate && DateTime.Parse(ServiceStart[j + 1]).ToOADate() > SessDate)
+                                          {
+                                              CorrectStartDate = DateTime.Parse(ServiceStart[j]).ToOADate().ToString();
+                                              CorrectFreq = Mandfreq[j].ToString();
+                                              CorrectDura = Manddura[j].ToString();
+                                              CorrectGrop = Mandgrop[j].ToString();
+                                              CorrectLang = Mandlang[j].ToString();
 
-                            con = new OleDbConnection(connectionString);
-                            cmd = new OleDbCommand(UpdateString, con);
-                            con.Open();
-                            var val = cmd.ExecuteNonQuery();
 
-                            con.Close();
-                            //myCommand.CommandText = sql;
-                        }
+                                          }
+                                          else
+                                          {
+                                              CorrectStartDate = DateTime.Parse(ServiceStart[j + 1]).ToOADate().ToString();
+                                              CorrectFreq = Mandfreq[j].ToString();
+                                              CorrectDura = Manddura[j].ToString();
+                                              CorrectGrop = Mandgrop[j].ToString();
+                                              CorrectLang = Mandlang[j].ToString();
+                                          }
+
+                                      }
+                                  }
+
+                                  //if (osis == 224624791 || osis == 224508259 || osis == 220723365)
+                                  //{
+                                  //    var abc = 0;
+                                  //}
+
+
+                                  if (Convert.ToInt32(CorrectFreq) == Frequency && Convert.ToInt32(CorrectDura) == Duration && Convert.ToInt32(CorrectGrop) == GroupSize && CorrectLang == lang)
+                                  {
+                                      //SRAP_START_DT
+                                      string UpdateString = "";
+                                      if (objviewmodel.AgeGroup == "CPSE")
+                                      {
+                                          // string selectString = "UPDATE [Sheet1$] SET Name ='Nameddd' WHERE ID1=8";
+                                          //CPSE SQL
+                                          UpdateString = "Update [" + SheetName + "$] set SCIN_ATTEND_CODE = 'P',SCIN_ACT_GRP_SIZE ='" + item.GroupSize.Trim() + "',SCIN_START_TIME ='" + StartTime +
+                                               "',SCIN_END_TIME='" + EndTime + "',SCIN_SCHOOL_OTHER ='" + location + "' where RSAP_ACT_PROVIDER='" + npi.ToString("D9") + "' AND RSAP_OSIS_ID='" + osis.ToString("D9") + "' AND SCIN_INVOICE_DAYS=" + SessDate +
+                                               " AND RSAP_SERV_SUBTYPE='" + item.MandGroupType.Trim() + "' AND RSAP_START_DT=" + CorrectStartDate + " AND RSAP_SESSIONS=" + Frequency.ToString("D1") + " AND  RSAP_GROUP_SIZE=" + GroupSize.ToString("D3") +
+                                               "AND RSAP_GROUP_SIZE=" + GroupSize.ToString("D2") + " AND RSAP_LANG_CD='" + lang + "'";
+                                      }
+                                      else
+                                      {
+                                          // CSE SQL
+                                          UpdateString = "Update [" + SheetName + "$] set SCIN_ATTEND_CODE = 'P',SCIN_ACT_GRP_SIZE ='" + item.GroupSize.Trim() + "',SCIN_START_TIME ='" + StartTime +
+                                            "',SCIN_END_TIME='" + EndTime + "' where SRAP_ACT_PROVIDER='" + npi.ToString("D9") + "' AND SRAP_OSIS_ID='" + osis.ToString("D9") + "' AND SCIN_INVOICE_DAYS=" + SessDate +
+                                            " AND SRAP_SERV_SUBTYPE='" + item.MandGroupType.Trim() + "' AND SRAP_START_DT=" + CorrectStartDate + " AND SRAP_SESSIONS=" + Frequency.ToString("D1") + " AND  SRAP_GROUP_SIZE=" + GroupSize.ToString("D3") +
+                                            "AND SRAP_GROUP_SIZE=" + GroupSize.ToString("D2") + " AND SRAP_LANG_CD='" + lang + "'";
+                                      }
+                                      //string val = npi.ToString("D9");
+                                      //string selectString = "Update [Sheet1$] set SCIN_ACT_GRP_SIZE = '" + item.GroupSize.Trim() +"' where SRAP_OSIS_ID='" + osis.ToString("D9") + "'";
+                                      //string selectString = "Update [Sheet1$] set SCIN_ATTEND_CODE = 'P' where SCIN_INVOICE_DAYS =" + SessDate;
+
+
+                                      /// Updat Atend_code from P to R in Session Detail
+                                      MergeList.Add(SrNo);
+
+                                      con = new OleDbConnection(connectionString);
+                                      cmd = new OleDbCommand(UpdateString, con);
+                                      con.Open();
+                                      var val = cmd.ExecuteNonQuery();
+
+                                      con.Close();
+                                      //myCommand.CommandText = sql;
+                                  }
+                              }
 
                    
                     }
@@ -824,7 +962,8 @@ namespace CSNY_timelog.Controllers
                           //var Result = db.SP_GenerateReportNotP(objviewmodel.AgeGroup, objviewmodel.Fiscal, objviewmodel.Month);
                           foreach (var item in Result)
                           {
-                              message = item.Date + " " + item.NPI + " " + item.NYCI + "<br/>";
+                              //message = item.Date + " " + item.NPI + " " + item.NYCI + "<br/>";
+                              message = path + "<br/>";
                               var SrNo = item.SrNo.ToString();
                               int npi = Convert.ToInt32(item.NPI.Trim());
                               int osis = Convert.ToInt32(item.NYCI.Trim());
@@ -856,12 +995,35 @@ namespace CSNY_timelog.Controllers
                               //int k = 0;
 
                               //}
+
+
+                              var freq = item.MandFrequency.Split(',');
+                              var dura = item.MandDuration.Split(',');
+                              var grop = item.MandGroupSize.Split(',');
+                              var lang = item.Language;
+                              if (item.MandGroupType.Trim() == "S1")
+                              {
+
+                                  Frequency = Convert.ToInt32(freq[0]);
+                                  Duration = Convert.ToInt32(dura[0]);
+                                  GroupSize = Convert.ToInt32(grop[0]);
+                              }
+                              else
+                              {
+                                  Frequency = Convert.ToInt32(freq[1]);
+                                  Duration = Convert.ToInt32(dura[1]);
+                                  GroupSize = Convert.ToInt32(grop[1]);
+                              }
+
+
                               string selectString = "";
                               if (objviewmodel.AgeGroup == "CSE")
                               {
                                   // CSE SQL
+                                  //selectString = "Select * from [" + SheetName + "$] where SRAP_ACT_PROVIDER='" + npi.ToString("D9") + "' AND SRAP_OSIS_ID='" + osis.ToString("D9") + "' AND SCIN_INVOICE_DAYS=" + SessDate +
+                                  //    " AND SRAP_SERV_SUBTYPE='" + item.MandGroupType.Trim() + "'";
                                   selectString = "Select * from [" + SheetName + "$] where SRAP_ACT_PROVIDER='" + npi.ToString("D9") + "' AND SRAP_OSIS_ID='" + osis.ToString("D9") + "' AND SCIN_INVOICE_DAYS=" + SessDate +
-                                      " AND SRAP_SERV_SUBTYPE='" + item.MandGroupType.Trim() + "'";
+                                    " AND SRAP_SERV_SUBTYPE='" + item.MandGroupType.Trim() + "'";
                               }
                               else
                               {
@@ -870,15 +1032,21 @@ namespace CSNY_timelog.Controllers
                                      " AND RSAP_SERV_SUBTYPE='" + item.MandGroupType.Trim() + "'";
 
                               }
+                              con.Close();
+                              con.Dispose();
                               con = new OleDbConnection(connectionString);
                               ocmd = new OleDbCommand(selectString, con);
-
+                              
                               con.Open();
                               //ocmd.ExecuteNonQuery();
                               OleDbDataReader odr = ocmd.ExecuteReader();
 
                               string[] ServiceStart = new string[5];
                               string[] ServiceEnd = new string[5];
+                              string[] Mandfreq = new string[5];
+                              string[] Manddura = new string[5];
+                              string[] Mandgrop = new string[5];
+                              string[] Mandlang = new string[5];
                               int i = 0;
 
                               while (odr.Read())
@@ -886,11 +1054,20 @@ namespace CSNY_timelog.Controllers
                                   //var abc = valid(odr, -1).ToString();
                                   ServiceStart[i] = valid(odr, 15).ToString();
                                   ServiceEnd[i] = valid(odr, 16).ToString();
+                                  Mandfreq[i] = valid(odr, 17).ToString();
+                                  Manddura[i] = valid(odr, 18).ToString();
+                                  Mandgrop[i] = valid(odr, 19).ToString();
+                                  Mandlang[i] = valid(odr, 20).ToString();
+                                 
                                   //NYCID = valid(odr, 2);
                                   //lname = valid(odr, 3);
                                   i += 1;
                               }
-                              var CorrectStartDate = "";
+                               var CorrectStartDate = "";
+                               var CorrectFreq = "";
+                               var CorrectDura = "";
+                               var CorrectGrop = "";
+                               var CorrectLang = "";
                               int j = 0;
                               con.Close();
                               if (i > 0)
@@ -898,6 +1075,10 @@ namespace CSNY_timelog.Controllers
                                   if (i == 1)
                                   {
                                       CorrectStartDate = DateTime.Parse(ServiceStart[j]).ToOADate().ToString();
+                                      CorrectFreq =  Mandfreq[j].ToString();
+                                      CorrectDura = Manddura[j].ToString();
+                                      CorrectGrop =  Mandgrop[j].ToString();
+                                      CorrectLang = Mandlang[j].ToString();
 
                                   }
                                   else
@@ -910,15 +1091,37 @@ namespace CSNY_timelog.Controllers
                                           if (DateTime.Parse(ServiceStart[j]).ToOADate() <= SessDate && DateTime.Parse(ServiceStart[j + 1]).ToOADate() > SessDate)
                                           {
                                               CorrectStartDate = DateTime.Parse(ServiceStart[j]).ToOADate().ToString();
+                                              CorrectFreq = Mandfreq[j].ToString();
+                                              CorrectDura = Manddura[j].ToString();
+                                              CorrectGrop = Mandgrop[j].ToString();
+                                              CorrectLang = Mandlang[j].ToString();
 
 
                                           }
-                                          else { CorrectStartDate = DateTime.Parse(ServiceStart[j + 1]).ToOADate().ToString(); }
+                                          else { 
+                                              CorrectStartDate = DateTime.Parse(ServiceStart[j + 1]).ToOADate().ToString();
+                                              CorrectFreq = Mandfreq[j].ToString();
+                                              CorrectDura = Manddura[j].ToString();
+                                              CorrectGrop = Mandgrop[j].ToString();
+                                              CorrectLang = Mandlang[j].ToString();
+                                          }
 
                                       }
                                   }
+
+                                  //if (osis == 224624791 || osis == 224508259 || osis == 220723365)
+                                  //{
+                                  //    var abc = 0;
+                                  //}
+
+
+                                  if (Convert.ToInt32(CorrectFreq) == Frequency && Convert.ToInt32(CorrectDura) == Duration && Convert.ToInt32(CorrectGrop) == GroupSize && CorrectLang == lang)
+                                  { 
                                   //SRAP_START_DT
                                   string UpdateString = "";
+
+                                  ////// OLD WORKING CODE
+
                                   if (objviewmodel.AgeGroup == "CPSE")
                                   {
                                       // string selectString = "UPDATE [Sheet1$] SET Name ='Nameddd' WHERE ID1=8";
@@ -938,6 +1141,26 @@ namespace CSNY_timelog.Controllers
                                   //string selectString = "Update [Sheet1$] set SCIN_ACT_GRP_SIZE = '" + item.GroupSize.Trim() +"' where SRAP_OSIS_ID='" + osis.ToString("D9") + "'";
                                   //string selectString = "Update [Sheet1$] set SCIN_ATTEND_CODE = 'P' where SCIN_INVOICE_DAYS =" + SessDate;
 
+                                  //////////
+
+                                  ////if (objviewmodel.AgeGroup == "CPSE")
+                                  ////{
+                                  ////    // string selectString = "UPDATE [Sheet1$] SET Name ='Nameddd' WHERE ID1=8";
+                                  ////    //CPSE SQL
+                                  ////    UpdateString = "Update [" + SheetName + "$] set SCIN_ATTEND_CODE = 'P',SCIN_ACT_GRP_SIZE ='" + item.GroupSize.Trim() + "',SCIN_START_TIME ='" + StartTime +
+                                  ////         "',SCIN_END_TIME='" + EndTime + "',SCIN_SCHOOL_OTHER ='" + location + "' where RSAP_ACT_PROVIDER='" + npi.ToString("D9") + "' AND RSAP_OSIS_ID='" + osis.ToString("D9") + "' AND SCIN_INVOICE_DAYS=" + SessDate +
+                                  ////         " AND RSAP_SERV_SUBTYPE='" + item.MandGroupType.Trim() + "' AND RSAP_START_DT=" + CorrectStartDate + " AND RSAP_SESSIONS='" + Frequency.ToString("D1") + "' AND  RSAP_GROUP_SIZE='" + GroupSize.ToString("D3") +
+                                  ////         "' AND RSAP_GROUP_SIZE='" + GroupSize.ToString("D2") + "' AND RSAP_LANG_CD='" + lang + "'";
+                                  ////}
+                                  ////else
+                                  ////{
+                                  ////    // CSE SQL
+                                  ////    UpdateString = "Update [" + SheetName + "$] set SCIN_ATTEND_CODE = 'P',SCIN_ACT_GRP_SIZE ='" + item.GroupSize.Trim() + "',SCIN_START_TIME ='" + StartTime +
+                                  ////      "',SCIN_END_TIME='" + EndTime + "' where SRAP_ACT_PROVIDER='" + npi.ToString("D9") + "' AND SRAP_OSIS_ID='" + osis.ToString("D9") + "' AND SCIN_INVOICE_DAYS=" + SessDate +
+                                  ////      " AND SRAP_SERV_SUBTYPE='" + item.MandGroupType.Trim() + "' AND SRAP_START_DT=" + CorrectStartDate + " AND SRAP_SESSIONS='" + Frequency.ToString("D1") + "'"; 
+                                  ////    //AND  SRAP_GROUP_SIZE='" + GroupSize.ToString("D3") +
+                                  ////    //  "' AND SRAP_GROUP_SIZE='" + GroupSize.ToString("D2") + "' AND SRAP_LANG_CD='" + lang + "'";
+                                  ////}
 
                                   /// Updat Atend_code from P to R in Session Detail
                                   MergeList.Add(SrNo);
@@ -949,6 +1172,7 @@ namespace CSNY_timelog.Controllers
 
                                   con.Close();
                                   //myCommand.CommandText = sql;
+                                  }
                               }
 
 
@@ -980,7 +1204,10 @@ namespace CSNY_timelog.Controllers
                
                 //message += ex.Message ;
                 message += ex.InnerException;
+                message += "new error";
                 message += ex.StackTrace;
+                message += "new error";
+                message += ex.Message;
                 Console.WriteLine(ex.Message);
                 con.Dispose();
             }
@@ -1159,7 +1386,8 @@ namespace CSNY_timelog.Controllers
                     var Invoice = (from n in db.InvoiceDetails where n.TID == TID && n.Fiscal == Fiscal && n.month == Month && n.FundingCode == AgeGroup select n).SingleOrDefault();
                     int ID = 0;
                     var InvoiceNo = "0";
-                    if (Invoice != null) { ID = Invoice.ID; InvoiceNo = Invoice.InvoiceNo; }
+                    var Note = "";
+                    if (Invoice != null) { ID = Invoice.ID; InvoiceNo = Invoice.InvoiceNo; Note = Invoice.Note;}
                     SumamryList.Add(new SummaryListViewModel
                     {
                         FirstName = item.FirstName,
@@ -1169,6 +1397,8 @@ namespace CSNY_timelog.Controllers
                         TID = item.TID.ToString(),
                         Invoice = InvoiceNo.Trim(),
                         ID = ID,
+                        Note = Note,
+
                         //SName = list.StudentFirstName + " " + list.StudentLastName,
 
 
@@ -1241,9 +1471,11 @@ namespace CSNY_timelog.Controllers
                 ObjView.Fiscal =Fiscal;
                 ObjView.Month = Month;
                 ObjView.AgeGroup = AgeGroup;
+                
                  if (result1 != null)
             {
                 ObjView.Invoice = (result1.InvoiceNo.Trim() != "0") ? result1.InvoiceNo.Trim() :"0" ;
+                ObjView.Note = result1.Note;
             }
 
             //ObjView.SessionListNotP = SessionNotP;
@@ -1256,16 +1488,17 @@ namespace CSNY_timelog.Controllers
             if (CheckUserLoginStatus() <= 0)
                 return AccessDeniedView();
             var msg = "";
+            var Invoice = !string.IsNullOrEmpty(objviewmodel.Invoice) ? objviewmodel.Invoice : "0";
             if (Convert.ToInt32(objviewmodel.InvoiceID) > 0)
             {
 
-                db.UpdateInvocie(objviewmodel.InvoiceID.ToString(), objviewmodel.Invoice.ToString());
+                db.UpdateInvocie(objviewmodel.InvoiceID.ToString(), Invoice, objviewmodel.Note);
                 msg = "Success";
 
 
             }
             else {
-                db.CreateInvoice(objviewmodel.TID, objviewmodel.AgeGroup, objviewmodel.Fiscal, objviewmodel.Month, objviewmodel.Invoice.ToString());
+                db.CreateInvoice(objviewmodel.TID, objviewmodel.AgeGroup, objviewmodel.Fiscal, objviewmodel.Month, Invoice, objviewmodel.Note);
                 msg = "Success";
             }
 
@@ -1322,6 +1555,7 @@ namespace CSNY_timelog.Controllers
             if (CheckUserLoginStatus() <= 0)
                 return AccessDeniedView();
              BillingViewModel objview = new BillingViewModel();
+             var msg = "";
             try
             {
                
@@ -1343,16 +1577,17 @@ namespace CSNY_timelog.Controllers
                 foreach (var item in therapistList)
                 {
 
-                    var npi = item.NPI.Trim();
+                    msg = item.LastName + "," + item.FirstName;
                     var tid = item.TID.ToString();
                     int CountBilling = 0;
                     int CountBilling1 = 0;
+                    var SessionCount = 0;
                     int Count = 0;
-                    if (item.FirstName.Trim() == "Laurie")
+                    if (!string.IsNullOrEmpty(item.NPI) || item.NPI != "0")
                     {
-                    var i= 0;
-                    }
-                    var SessionCount = db.BillingSession(startDay, endDay, tid.ToString()).Count();
+                        var npi = item.NPI.Trim();
+               
+                     SessionCount = db.BillingSession(startDay,   endDay, tid.ToString()).Count();
                     foreach (var FCode in FundingCode)
                     {
                         if (FCode == "CSE" || FCode == "CPSE" || FCode == "PP" || FCode == "PI" || FCode == "RSA" || FCode == "EI")
@@ -1373,6 +1608,7 @@ namespace CSNY_timelog.Controllers
 
                         }
                     }
+                    }
                     int year1 = Convert.ToInt32(Fiscal);
                     int month1 = Convert.ToInt32(month);
 
@@ -1382,7 +1618,8 @@ namespace CSNY_timelog.Controllers
                     var PCount = !string.IsNullOrEmpty(Ps.ToString()) ? Ps.ToString() : "0";
 
 
-                    MasterList.Add(new MastercheckLsit
+                    MasterList
+                       .Add(new MastercheckLsit
                     {
                         Therapist = item.LastName + "," + item.FirstName,
                         Session = SessionCount,
@@ -1398,6 +1635,7 @@ namespace CSNY_timelog.Controllers
             }
             catch (Exception ex)
             {
+                var val = msg;
                 Console.WriteLine(ex.Message);
 }
             return View(objview);
@@ -1408,6 +1646,7 @@ namespace CSNY_timelog.Controllers
             if (CheckUserLoginStatus() <= 0)
                 return AccessDeniedView();
             BillingViewModel objview = new BillingViewModel();
+            var msg = "";
             try
             {
 
@@ -1416,11 +1655,12 @@ namespace CSNY_timelog.Controllers
                 var Year = dataVal[0];
                 var month = dataVal[1];
                 var FCode = dataVal[2];
-
+               
                 var days = DateTime.DaysInMonth(Convert.ToInt32(Year), Convert.ToInt32(month));
-                var startDay = month + "/" + 1 + "/" + Year;
-                var endDay = month + "/" + days + "/" + Year;
-
+                var startDay = month + "-" + 1 + "-" + Year;
+                var endDay = month + "-" + days + "-" + Year;
+                objview.StartDate = startDay;
+                objview.EndDate = endDay;
                 int Fiscal = Convert.ToInt32(Year);
                 if (Convert.ToInt32(month) > 8) { Fiscal = Fiscal + 1; }
                 List<MastercheckLsit1> MasterList1 = new List<MastercheckLsit1>();
@@ -1429,29 +1669,32 @@ namespace CSNY_timelog.Controllers
                // string[] FundingCode = { "CSE", "CPSE", "PP", "PI", "RSA", "EI", "SAS", "CS", "Other" };
                 foreach (var item in therapistList)
                 {
-
-                    var npi = item.NPI.Trim();
+                    msg = item.LastName + "," + item.FirstName;
                     var tid = item.TID.ToString();
                     int CountBilling = 0;
                     int CountBilling1 = 0;
                     int Count = 0;
-                    
-                  
+                   
+                    if (!string.IsNullOrEmpty(item.NPI) || item.NPI != "0")
+                    {
+                        var npi = item.NPI.Trim();
+
                         if (FCode == "CSE" || FCode == "CPSE" || FCode == "PP" || FCode == "PI" || FCode == "RSA" || FCode == "EI")
                         {
-                           // var BillingFcode = db.SP_SessCountByFuningCode(startDay, endDay, tid, FCode, npi).ToList();
+                            // var BillingFcode = db.SP_SessCountByFuningCode(startDay, endDay, tid, FCode, npi).ToList();
                             var BillingFcode1 = db.SP_BillingNew(Fiscal.ToString(), startDay, endDay, tid, FCode, npi).Count();
                             //Count = BillingFcode ? BillingFcode.ToString() : "0");
                             //CountBilling += BillingFcode;
                             CountBilling1 += BillingFcode1;
-                           
-                                MasterList1.Add(new MastercheckLsit1
-                                {
-                                    TID = item.LastName + ","+item.FirstName,
-                                    Fcode = FCode,
-                                    Group = BillingFcode1.ToString(),
-                                });
-                        
+
+                            MasterList1.Add(new MastercheckLsit1
+                            {
+                                TID = item.TID.ToString(),
+                                TName = item.LastName + "," + item.FirstName,
+                                Fcode = FCode,
+                                Group = BillingFcode1.ToString(),
+                            });
+
                         }
                         else
                         {
@@ -1461,14 +1704,26 @@ namespace CSNY_timelog.Controllers
                             CountBilling1 += billingService;
                             MasterList1.Add(new MastercheckLsit1
                             {
-                                TID = item.LastName + "," + item.FirstName,
+                                TID = item.TID.ToString(),
+                                TName = item.LastName + "," + item.FirstName,
                                 Fcode = FCode,
                                 Group = billingService.ToString(),
                             });
-                           
+
 
                         }
-                    //}
+                    }
+                    else
+                    {
+                       
+                        MasterList1.Add(new MastercheckLsit1
+                        {
+                            TID = item.LastName + "," + item.FirstName + ", NO NPI",
+                            Fcode = FCode,
+                            Group = "0",
+                        });
+
+                    }
                     int year1 = Convert.ToInt32(Fiscal);
                     int month1 = Convert.ToInt32(month);
 
@@ -1485,6 +1740,7 @@ namespace CSNY_timelog.Controllers
             }
             catch (Exception ex)
             {
+                var val = msg;
                 Console.WriteLine(ex.Message);
             }
             return View(objview);
@@ -1776,14 +2032,30 @@ namespace CSNY_timelog.Controllers
 
             BillingViewModel objview = new BillingViewModel();
               List<OtherList> Other = new List<OtherList>();
-              var FCode = id.ToString();
-              //var value = id.Split(',');
-              //objviewmodel.AgeGroup + " " + objviewmodel.Fiscal + " " + objviewmodel.Month;
+              var TherapistID = "";
+              var startDay = "";
+              var endDay = "";
+              var TID = "";
+              var value = id.Split(',');
+              var FCode = value[0];
+              if (value.Count() > 1)
+              {
+                  TID = value[1];
+                  startDay = value[2];
+                  endDay = value[3];
+                  @Session["Half"] = "Full Month";
+              }
+              else {
+                  TID = Session["TID"].ToString();
+                  startDay = Session["StartDate"].ToString();
+                  endDay = Session["EndDate"].ToString();
+              
+              }
             
-             var TID = Session["TID"].ToString();
+              //objviewmodel.AgeGroup + " " + objviewmodel.Fiscal + " " + objviewmodel.Month;
+             
              var NPI = "";
-             var startDay= Session["StartDate"].ToString() ;
-              var endDay =Session["EndDate"].ToString() ;
+            
               DateTime datevalue = Convert.ToDateTime(startDay);
               int Fisacl = datevalue.Year;
               if (datevalue.Month > 8) { Fisacl = Fisacl + 1; }
@@ -1796,6 +2068,7 @@ namespace CSNY_timelog.Controllers
               {
                   var TherResult = db.Sp_get_Therpist_Info(TID).SingleOrDefault();
                   NPI = TherResult.NPI.Trim();
+                  objview.Therepist = TherResult.FirstName + "," + TherResult.LastName;
               }
              // var NPI = TherResult.NPI;
               if (FCode == "CSE" || FCode == "CPSE" || FCode == "PP" || FCode == "PI" || FCode == "RSA" || FCode == "EI")
@@ -1835,13 +2108,23 @@ namespace CSNY_timelog.Controllers
 
               if (result != null)
               {
-
+                  var FirstName = "";
+                  var LastName = "";
                   foreach (var item in result)
                   {
+                      if (FCode == "CS") {
+
+                          var name = db.Sp_get_Therpist_Info(item.SID).SingleOrDefault();
+                          FirstName = name.FirstName.Trim();
+                          LastName = name.LastName.Trim();
+                      
+                      }
 
                       Other.Add(new OtherList
                       {
                           SessionDate = item.Date.Value.Date.ToShortDateString(),
+                          Firstname = FirstName,
+                          Lastname = LastName,
                           StartTime = Convert.ToDateTime(item.StartTime.ToString()).ToShortTimeString(),
                           EndTime = Convert.ToDateTime(item.EndTime.ToString()).ToShortTimeString(),
                           Duration = DateTime.Parse(item.EndTime.ToString()).Subtract(DateTime.Parse(item.StartTime.ToString())).ToString(),

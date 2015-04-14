@@ -35,6 +35,10 @@ namespace GenerateReport.ViewModels
         [Required(ErrorMessage = "Student Field Required.")]
         public int StudentId { get; set; }
 
+        //public string StudentIdList { get; set; }
+
+        public int[] StudentIdList { get; set; }
+
         public List<SelectListItem> StudentList { get; set; }
     }
 }

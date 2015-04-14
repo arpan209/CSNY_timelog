@@ -102,7 +102,7 @@
       columns.Add(c => c.TID).Titled("Action")
           .Encoded(false)
           .Sanitized(false)
-          .RenderValueAs(o => Html.ActionLink("Edit ","EditInvoice", "Report", new { Id = o.ID +","+ @Model.AgeGroup + "," + @Model.Fiscal + ","+ @Model.Month +","+ o.TID },null).ToHtmlString());
+          .RenderValueAs(o => Html.ActionLink("Edit ", "EditInvoice", "Report", new { Id = o.ID + "," + @Model.AgeGroup + "," + @Model.Fiscal + "," + @Model.Month + "," + o.TID }, new { title = o.Note }).ToHtmlString());
       
    //   columns.Add(c => c.TID).Titled("Action")
     //    .Encoded(false)

@@ -50,7 +50,7 @@
         var UserType = $('#UserType').val();
 
         var State = $('#StateName').val();
-        var City = $('#City').val();
+        var City = document.getElementById('City');
 
         
         var x = document.getElementsByName("Services");
@@ -443,7 +443,7 @@
               <strong> SSN:</strong>
             </div>
             <div class="editor-field">
-              @Html.TextBoxFor(m => m.SSN, new { @maxlength = "10" })
+              @Html.TextBoxFor(m => m.SSN, new { @maxlength = "9"})
              
             </div>
 
@@ -604,6 +604,27 @@
 <script type="text/javascript" language="javascript">
 
     $(document).ready(function () {
+
+        $("#SSN").keydown(function (event) {
+            if (event.shiftKey) {
+                event.preventDefault();
+            }
+
+            if (event.keyCode == 46 || event.keyCode == 8) {
+            }
+            else {
+                if (event.keyCode < 95) {
+                    if (event.keyCode < 48 || event.keyCode > 57) {
+                        event.preventDefault();
+                    }
+                }
+                else {
+                    if (event.keyCode < 96 || event.keyCode > 105) {
+                        event.preventDefault();
+                    }
+                }
+            }
+        });
 
 
         var ServiceType= '@Model.ServiceType'; 

@@ -185,25 +185,6 @@
     <FunctionImportMapping FunctionImportName="AddStaging" FunctionName="csnyModel.Store.AddStaging" />
     <FunctionImportMapping FunctionImportName="AddStudent" FunctionName="csnyModel.Store.AddStudent" />
     <FunctionImportMapping FunctionImportName="AddTherapist" FunctionName="csnyModel.Store.AddTherapist" />
-    <FunctionImportMapping FunctionImportName="GetStudentInformation_Pdf" FunctionName="csnyModel.Store.GetStudentInformation_Pdf">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="csnyModel.GetStudentInformation_Pdf_Result">
-          <ScalarProperty Name="BoroughCode" ColumnName="BoroughCode" />
-          <ScalarProperty Name="HomeDistrict" ColumnName="HomeDistrict" />
-          <ScalarProperty Name="SchoolLocationCode" ColumnName="SchoolLocationCode" />
-          <ScalarProperty Name="NYCI" ColumnName="NYCI" />
-          <ScalarProperty Name="StudentFirstName" ColumnName="StudentFirstName" />
-          <ScalarProperty Name="StudentLastName" ColumnName="StudentLastName" />
-          <ScalarProperty Name="DOB" ColumnName="DOB" />
-          <ScalarProperty Name="ServiceStart" ColumnName="ServiceStart" />
-          <ScalarProperty Name="ServiceEnd" ColumnName="ServiceEnd" />
-          <ScalarProperty Name="MandFrequency" ColumnName="MandFrequency" />
-          <ScalarProperty Name="MandDuration" ColumnName="MandDuration" />
-          <ScalarProperty Name="MandGroupSize" ColumnName="MandGroupSize" />
-          <ScalarProperty Name="Language" ColumnName="Language" />
-        </ComplexTypeMapping>
-      </ResultMapping>
-    </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="ResetTherapistLock" FunctionName="csnyModel.Store.ResetTherapistLock" />
     <FunctionImportMapping FunctionImportName="Sp_AddMandate" FunctionName="csnyModel.Store.Sp_AddMandate" />
     <FunctionImportMapping FunctionImportName="SP_AddUserRole" FunctionName="csnyModel.Store.SP_AddUserRole" />
@@ -982,42 +963,10 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="Sp_GetStudentSessionDetail_Pdf" FunctionName="csnyModel.Store.Sp_GetStudentSessionDetail_Pdf">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="csnyModel.Sp_GetStudentSessionDetail_Pdf_Result">
-          <ScalarProperty Name="SrNo" ColumnName="SrNo" />
-          <ScalarProperty Name="SessionID" ColumnName="SessionID" />
-          <ScalarProperty Name="BoroughCode" ColumnName="BoroughCode" />
-          <ScalarProperty Name="HomeDistrict" ColumnName="HomeDistrict" />
-          <ScalarProperty Name="SchoolLocationCode" ColumnName="SchoolLocationCode" />
-          <ScalarProperty Name="LastName" ColumnName="LastName" />
-          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-          <ScalarProperty Name="NPI" ColumnName="NPI" />
-          <ScalarProperty Name="Address1" ColumnName="Address1" />
-          <ScalarProperty Name="address2" ColumnName="address2" />
-          <ScalarProperty Name="Phone" ColumnName="Phone" />
-          <ScalarProperty Name="NYCI" ColumnName="NYCI" />
-          <ScalarProperty Name="StudentFirstName" ColumnName="StudentFirstName" />
-          <ScalarProperty Name="StudentLastName" ColumnName="StudentLastName" />
-          <ScalarProperty Name="DOB" ColumnName="DOB" />
-          <ScalarProperty Name="MandGroupType" ColumnName="MandGroupType" />
-          <ScalarProperty Name="ServiceStart" ColumnName="ServiceStart" />
-          <ScalarProperty Name="ServiceEnd" ColumnName="ServiceEnd" />
-          <ScalarProperty Name="MandFrequency" ColumnName="MandFrequency" />
-          <ScalarProperty Name="MandDuration" ColumnName="MandDuration" />
-          <ScalarProperty Name="MandGroupSize" ColumnName="MandGroupSize" />
-          <ScalarProperty Name="Language" ColumnName="Language" />
-          <ScalarProperty Name="Date" ColumnName="Date" />
-          <ScalarProperty Name="GroupSize" ColumnName="GroupSize" />
-          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
-          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
-          <ScalarProperty Name="Location" ColumnName="Location" />
-        </ComplexTypeMapping>
-      </ResultMapping>
-    </FunctionImportMapping>
     <EntitySetMapping Name="TherapistMasters">
       <EntityTypeMapping TypeName="csnyModel.TherapistMaster">
         <MappingFragment StoreEntitySet="TherapistMaster">
+          <ScalarProperty Name="EndService" ColumnName="EndService" />
           <ScalarProperty Name="Lock" ColumnName="Lock" />
           <ScalarProperty Name="UserType" ColumnName="UserType" />
           <ScalarProperty Name="IsActive" ColumnName="IsActive" />
@@ -1040,5 +989,178 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="InvoiceDetails">
+      <EntityTypeMapping TypeName="csnyModel.InvoiceDetail">
+        <MappingFragment StoreEntitySet="InvoiceDetail">
+          <ScalarProperty Name="Note" ColumnName="Note" />
+          <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+          <ScalarProperty Name="month" ColumnName="month" />
+          <ScalarProperty Name="Fiscal" ColumnName="Fiscal" />
+          <ScalarProperty Name="FundingCode" ColumnName="FundingCode" />
+          <ScalarProperty Name="TID" ColumnName="TID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="AdminList" FunctionName="csnyModel.Store.AdminList">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="csnyModel.AdminList_Result">
+          <ScalarProperty Name="TID" ColumnName="TID" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="Address1" ColumnName="Address1" />
+          <ScalarProperty Name="address2" ColumnName="address2" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="NPI" ColumnName="NPI" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="ServiceType" ColumnName="ServiceType" />
+          <ScalarProperty Name="PayScale" ColumnName="PayScale" />
+          <ScalarProperty Name="DateOfRegistratio" ColumnName="DateOfRegistratio" />
+          <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="EndService" ColumnName="EndService" />
+          <ScalarProperty Name="UserType" ColumnName="UserType" />
+          <ScalarProperty Name="Lock" ColumnName="Lock" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="BillingSession" FunctionName="csnyModel.Store.BillingSession">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="csnyModel.BillingSession_Result">
+          <ScalarProperty Name="SrNo" ColumnName="SrNo" />
+          <ScalarProperty Name="SessionID" ColumnName="SessionID" />
+          <ScalarProperty Name="SID" ColumnName="SID" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="AttnCode" ColumnName="AttnCode" />
+          <ScalarProperty Name="GroupSize" ColumnName="GroupSize" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="Location" ColumnName="Location" />
+          <ScalarProperty Name="TID" ColumnName="TID" />
+          <ScalarProperty Name="ServiceType" ColumnName="ServiceType" />
+          <ScalarProperty Name="GroupType" ColumnName="GroupType" />
+          <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="CreateInvoice" FunctionName="csnyModel.Store.CreateInvoice" />
+    <FunctionImportMapping FunctionImportName="GetStudentInformation_Pdf" FunctionName="csnyModel.Store.GetStudentInformation_Pdf">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="csnyModel.GetStudentInformation_Pdf_Result1">
+          <ScalarProperty Name="BoroughCode" ColumnName="BoroughCode" />
+          <ScalarProperty Name="HomeDistrict" ColumnName="HomeDistrict" />
+          <ScalarProperty Name="SchoolLocationCode" ColumnName="SchoolLocationCode" />
+          <ScalarProperty Name="NYCI" ColumnName="NYCI" />
+          <ScalarProperty Name="StudentFirstName" ColumnName="StudentFirstName" />
+          <ScalarProperty Name="StudentLastName" ColumnName="StudentLastName" />
+          <ScalarProperty Name="DOB" ColumnName="DOB" />
+          <ScalarProperty Name="ServiceStart" ColumnName="ServiceStart" />
+          <ScalarProperty Name="ServiceEnd" ColumnName="ServiceEnd" />
+          <ScalarProperty Name="MandFrequency" ColumnName="MandFrequency" />
+          <ScalarProperty Name="MandDuration" ColumnName="MandDuration" />
+          <ScalarProperty Name="MandGroupSize" ColumnName="MandGroupSize" />
+          <ScalarProperty Name="Language" ColumnName="Language" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="SetServiceEndInMandate" FunctionName="csnyModel.Store.SetServiceEndInMandate" />
+    <FunctionImportMapping FunctionImportName="SP_BillingNew" FunctionName="csnyModel.Store.SP_BillingNew">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="csnyModel.SP_BillingNew_Result">
+          <ScalarProperty Name="SrNo" ColumnName="SrNo" />
+          <ScalarProperty Name="SessionID" ColumnName="SessionID" />
+          <ScalarProperty Name="SID" ColumnName="SID" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="AttnCode" ColumnName="AttnCode" />
+          <ScalarProperty Name="GroupSize" ColumnName="GroupSize" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="Location" ColumnName="Location" />
+          <ScalarProperty Name="TID" ColumnName="TID" />
+          <ScalarProperty Name="ServiceType" ColumnName="ServiceType" />
+          <ScalarProperty Name="GroupType" ColumnName="GroupType" />
+          <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+          <ScalarProperty Name="StudentFirstName" ColumnName="StudentFirstName" />
+          <ScalarProperty Name="StudentLastName" ColumnName="StudentLastName" />
+          <ScalarProperty Name="Language" ColumnName="Language" />
+          <ScalarProperty Name="RowNum" ColumnName="RowNum" />
+          <ScalarProperty Name="FundingCode" ColumnName="FundingCode" />
+          <ScalarProperty Name="ServiceStart" ColumnName="ServiceStart" />
+          <ScalarProperty Name="ServiceEnd" ColumnName="ServiceEnd" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="SP_GetSessionCount" FunctionName="csnyModel.Store.SP_GetSessionCount" />
+    <FunctionImportMapping FunctionImportName="SP_GetTherapistListByFCode" FunctionName="csnyModel.Store.SP_GetTherapistListByFCode">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="csnyModel.SP_GetTherapistListByFCode_Result">
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="TID" ColumnName="TID" />
+          <ScalarProperty Name="NPI" ColumnName="NPI" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="SP_TherapistListByMonthFiscal" FunctionName="csnyModel.Store.SP_TherapistListByMonthFiscal">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="csnyModel.SP_TherapistListByMonthFiscal_Result">
+          <ScalarProperty Name="TID" ColumnName="TID" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="Address1" ColumnName="Address1" />
+          <ScalarProperty Name="address2" ColumnName="address2" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="NPI" ColumnName="NPI" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="ServiceType" ColumnName="ServiceType" />
+          <ScalarProperty Name="PayScale" ColumnName="PayScale" />
+          <ScalarProperty Name="DateOfRegistratio" ColumnName="DateOfRegistratio" />
+          <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="EndService" ColumnName="EndService" />
+          <ScalarProperty Name="UserType" ColumnName="UserType" />
+          <ScalarProperty Name="Lock" ColumnName="Lock" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="SP_Unlock" FunctionName="csnyModel.Store.SP_Unlock" />
+    <FunctionImportMapping FunctionImportName="UpdateInvocie" FunctionName="csnyModel.Store.UpdateInvocie" />
+    <FunctionImportMapping FunctionImportName="Sp_GetStudentSessionDetail_Pdf" FunctionName="csnyModel.Store.Sp_GetStudentSessionDetail_Pdf">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="csnyModel.Sp_GetStudentSessionDetail_Pdf_Result">
+          <ScalarProperty Name="SrNo" ColumnName="SrNo" />
+          <ScalarProperty Name="SessionID" ColumnName="SessionID" />
+          <ScalarProperty Name="SID" ColumnName="SID" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="AttnCode" ColumnName="AttnCode" />
+          <ScalarProperty Name="GroupSize" ColumnName="GroupSize" />
+          <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="Location" ColumnName="Location" />
+          <ScalarProperty Name="TID" ColumnName="TID" />
+          <ScalarProperty Name="ServiceType" ColumnName="ServiceType" />
+          <ScalarProperty Name="GroupType" ColumnName="GroupType" />
+          <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+          <ScalarProperty Name="StudentFirstName" ColumnName="StudentFirstName" />
+          <ScalarProperty Name="StudentLastName" ColumnName="StudentLastName" />
+          <ScalarProperty Name="Language" ColumnName="Language" />
+          <ScalarProperty Name="RowNum" ColumnName="RowNum" />
+          <ScalarProperty Name="FundingCode" ColumnName="FundingCode" />
+          <ScalarProperty Name="ServiceStart" ColumnName="ServiceStart" />
+          <ScalarProperty Name="ServiceEnd" ColumnName="ServiceEnd" />
+          <ScalarProperty Name="MandFrequency" ColumnName="MandFrequency" />
+          <ScalarProperty Name="MandGroupSize" ColumnName="MandGroupSize" />
+          <ScalarProperty Name="MandDuration" ColumnName="MandDuration" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
   </EntityContainerMapping>
 </Mapping>

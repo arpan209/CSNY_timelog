@@ -439,10 +439,12 @@
       <Parameter Name="Year" Mode="In" Type="String" />
       <Parameter Name="Month" Mode="In" Type="String" />
       <Parameter Name="InvoiceNo" Mode="In" Type="String" />
+      <Parameter Name="Note" Mode="In" Type="String" />
     </FunctionImport>
     <FunctionImport Name="UpdateInvocie">
       <Parameter Name="ID" Mode="In" Type="String" />
       <Parameter Name="InvoiceNo" Mode="In" Type="String" />
+      <Parameter Name="Note" Mode="In" Type="String" />
     </FunctionImport>
     <EntitySet Name="InvoiceDetails" EntityType="CSNYModel.InvoiceDetail" />
   </EntityContainer>
@@ -2368,6 +2370,7 @@
     <Property Type="String" Name="FundingCode" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
     <Property Type="String" Name="Fiscal" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
     <Property Type="String" Name="month" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
-    <Property Type="String" Name="InvoiceNo" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Type="String" Name="InvoiceNo" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="Note" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
 </Schema>

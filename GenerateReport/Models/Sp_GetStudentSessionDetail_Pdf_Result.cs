@@ -15,30 +15,26 @@ namespace GenerateReport.Models
     {
         public int SrNo { get; set; }
         public int SessionID { get; set; }
-        public string BoroughCode { get; set; }
-        public string HomeDistrict { get; set; }
-        public string SchoolLocationCode { get; set; }
-        public string LastName { get; set; }
-        public string FirstName { get; set; }
-        public string NPI { get; set; }
-        public string Address1 { get; set; }
-        public string address2 { get; set; }
-        public string Phone { get; set; }
-        public string NYCI { get; set; }
-        public string StudentFirstName { get; set; }
-        public string StudentLastName { get; set; }
-        public string DOB { get; set; }
-        public string MandGroupType { get; set; }
-        public Nullable<System.DateTime> ServiceStart { get; set; }
-        public Nullable<System.DateTime> ServiceEnd { get; set; }
-        public string MandFrequency { get; set; }
-        public string MandDuration { get; set; }
-        public string MandGroupSize { get; set; }
-        public string Language { get; set; }
+        public string SID { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
+        public string AttnCode { get; set; }
         public string GroupSize { get; set; }
         public Nullable<System.TimeSpan> StartTime { get; set; }
         public Nullable<System.TimeSpan> EndTime { get; set; }
         public string Location { get; set; }
+        public string TID { get; set; }
+        public string ServiceType { get; set; }
+        public string GroupType { get; set; }
+        public Nullable<System.DateTime> LastModified { get; set; }
+        public string StudentFirstName { get; set; }
+        public string StudentLastName { get; set; }
+        public string Language { get; set; }
+        public Nullable<int> RowNum { get; set; }
+        public string FundingCode { get; set; }
+        public Nullable<System.DateTime> ServiceStart { get; set; }
+        public Nullable<System.DateTime> ServiceEnd { get; set; }
+        public string MandFrequency { get; set; }
+        public string MandGroupSize { get; set; }
+        public string MandDuration { get; set; }
     }
 }

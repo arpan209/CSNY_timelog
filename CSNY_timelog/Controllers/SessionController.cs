@@ -53,7 +53,7 @@ namespace CSNY_timelog.Controllers
             int TID = Convert.ToInt32(Session["UserID"].ToString());
             var NPI = db.Sp_getTherpist_NPI(TID.ToString()).SingleOrDefault();
                AddSessionViewModel StudentViewModel = new AddSessionViewModel();
-            if (!string.IsNullOrEmpty(NPI.Trim()))
+            if (!string.IsNullOrEmpty(NPI))
             {
                 // Generate Student List
                 Session["NPI"] = NPI;
@@ -115,10 +115,12 @@ namespace CSNY_timelog.Controllers
                         var formattedEndTime = EndTime.ToString("h:mm tt", ci);
                         StudentViewModel.EndAMPM = formattedEndTime;
 
-                        StudentViewModel.StartTime = formattedStartTime.Substring(0, formattedStartTime.Length - 3);
+                       // StudentViewModel.StartTime = formattedStartTime.Substring(0, formattedStartTime.Length - 3);
+                        StudentViewModel.StartTime = formattedStartTime;
                         StudentViewModel.LastModified = item.LastModified.ToString();
                         StudentViewModel.GroupType = (!string.IsNullOrEmpty((string)(item.GroupType))) ? (string)item.GroupType : null;
-                        StudentViewModel.EndTime = formattedEndTime.Substring(0, formattedEndTime.Length - 3);
+                       // StudentViewModel.EndTime = formattedEndTime.Substring(0, formattedEndTime.Length - 3);
+                         StudentViewModel.EndTime = formattedEndTime;
 
                         TempData["formattedStartTime"] = formattedStartTime;
                         TempData["formattedEndTime"] = formattedEndTime;

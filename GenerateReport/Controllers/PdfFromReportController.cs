@@ -22,142 +22,180 @@ namespace GenerateReport.Controllers
 
         #region Method
 
-        private ZipFile FillFormNew(int StduentId, int TherapistId, string reportType, FormGenerateViewModel model)
+        private ZipFile FillFormNew(int StduentId, int TherapistId, string reportType, FormGenerateViewModel model, out string message)
         {
             ZipFile zip = new ZipFile();
+            message = string.Empty;
 
-            //int StduentId = 390;
-            var studentInformation = db.GetStudentInformation_Pdf(StduentId, reportType).SingleOrDefault();
 
-            var therapistMaster = db.TherapistMasters.Where(t => t.TID == TherapistId).SingleOrDefault();
-
-            var studentSessionDetailList = db.Sp_GetStudentSessionDetail_Pdf(therapistMaster.NPI.Trim(), reportType, StduentId, model.FiscalYear, model.FiscalMonth).ToList();
-
-            if (studentSessionDetailList.Count > 0)
+            if (model.StudentIdList.Length > 0)
             {
 
-                var groupsType = new string[] { "S1", "SP" };
+                 var therapistMaster = db.TherapistMasters.Where(t => t.TID == TherapistId).SingleOrDefault();
 
-                foreach (var groupType in groupsType)
+                if (model.StudentIdList.Contains(0))
                 {
-                  var  groupWiseStudentSessionDetailList = studentSessionDetailList.Where(s => s.MandGroupType.Trim() == groupType).ToList();
-                    bool GetStudentMasterDetail = false;
-                    if (groupWiseStudentSessionDetailList.Count > 0)
+                    var StudentListBytherapist = db.Sp_GetStudentListBasedOnFundingCode_Pdf(therapistMaster.NPI.Trim(), model.ReportType).ToList();
+                    model.StudentIdList = StudentListBytherapist.Select(s => s.SID).ToArray<int>();
+                   
+                }
+
+                DateTime dtDate = new DateTime(model.FiscalYear, model.FiscalMonth, 1);
+                var days = DateTime.DaysInMonth(Convert.ToInt32(model.FiscalYear), Convert.ToInt32(model.FiscalMonth));
+                var startDay = model.FiscalMonth + "/1/" + model.FiscalYear;
+                var endDay = model.FiscalMonth + "/" + days + "/" + model.FiscalYear;
+
+                if (model.StudentIdList.Length>1)
+                    zip.Name = model.FiscalYear.ToString() + "-" + dtDate.ToString("MMM") + "-" + reportType + "-" + therapistMaster.FirstName.Trim() + "-" + therapistMaster.LastName.Trim() + "-multiple";
+                else
+                    zip.Name = model.FiscalYear.ToString() + "-" + dtDate.ToString("MMM") + "-" + reportType + "-" + therapistMaster.FirstName.Trim() + "-" + therapistMaster.LastName.Trim();
+
+                foreach (int id in model.StudentIdList)
+                {
+
+
+                    var studentInformation = db.GetStudentInformation_Pdf(id, reportType, therapistMaster.NPI.Trim()).SingleOrDefault();
+//                    var studentSessionDetailList = db.Sp_GetStudentSessionDetail_Pdf(therapistMaster.NPI.Trim(), reportType, id, model.FiscalYear, model.FiscalMonth).ToList();
+                    var studentSessionDetailList = db.Sp_GetStudentSessionDetail_Pdf(id, model.FiscalYear.ToString(), startDay, endDay, TherapistId.ToString(), reportType, therapistMaster.NPI.Trim()).ToList();
+
+
+
+                    if (studentSessionDetailList.Count > 0)
                     {
-                        DateTime dtDate = new DateTime(model.FiscalYear, model.FiscalMonth, 1);
-                        string pdfTemplate = @"D:\PdfGenCSpackage\PdfGenerator_CS\PdfGenerator_CS\PdfGenerator\BILLINGFORM.pdf";
-                        pdfTemplate = Server.MapPath("~/App_Data/RSInvoicing-Template.pdf");
 
-                        //pdfTemplate = @"D:\PdfGenCSpackage\PdfGenerator_CS\PdfGenerator_CS\PdfGenerator\completed_19e15c8d-28da-406e-ba23-17fa84d536af_BILLINGFORM.pdf";
+                        var groupsType = new string[] { "S1", "SP" };
 
-                        string newFile = @"D:\PdfGenCSpackage\PdfGenerator_CS\PdfGenerator_CS\PdfGenerator\completed_" + Guid.NewGuid().ToString() + "_BILLINGFORM.pdf";
-                        newFile = Server.MapPath("~/App_Data/PdfForm/completed_" + reportType + "_" + groupType + "_"+ Guid.NewGuid().ToString() + "_RSInvoicingTemplate.pdf");
-                        newFile = Server.MapPath("~/App_Data/PdfForm/" + model.FiscalYear.ToString() + "-" + dtDate.ToString("MMM") + "-" + reportType + "-" + therapistMaster.FirstName.Trim() + "-" + therapistMaster.LastName.Trim() + "-"+groupType + ".pdf");
-                        zip.Name = model.FiscalYear.ToString() + "-" + dtDate.ToString("MMM") + "-" + reportType + "-" + therapistMaster.FirstName.Trim() + "-" + therapistMaster.LastName.Trim();
-                        
-                        zip.AddFile(newFile,"Pdf");
-
-
-                        PdfReader pdfReader = new PdfReader(pdfTemplate);
-                        PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileStream(newFile, FileMode.Create));
-
-                        AcroFields pdfFormFields = pdfStamper.AcroFields;
-
-                        
-                        pdfFormFields.SetField("Month", dtDate.ToString("MMMM"));
-                        pdfFormFields.SetField("Year", model.FiscalYear.ToString());
-
-
-                        // fill student section information
-                        pdfFormFields.SetField("StudentName", studentInformation.StudentLastName.Trim() + " " + studentInformation.StudentFirstName.Trim());
-                        pdfFormFields.SetField("StudentNYCID", studentInformation.NYCI);
-                        if (!string.IsNullOrEmpty(studentInformation.DOB))
+                        foreach (var groupType in groupsType)
                         {
-                            DateTime DOB;
-                            if (DateTime.TryParse(studentInformation.DOB, out DOB))
+                            var groupWiseStudentSessionDetailList = studentSessionDetailList.Where(s => s.GroupType.Trim() == groupType).ToList();
+                            bool GetStudentMasterDetail = false;
+                            if (groupWiseStudentSessionDetailList.Count > 0)
                             {
-                                pdfFormFields.SetField("DOB_MM", DOB.Month.ToString());
-                                pdfFormFields.SetField("DOB_DD", DOB.Day.ToString());
-                                pdfFormFields.SetField("DOB_YEAR", DOB.Year.ToString());
-                            }
-                        }
+                                
+                                string pdfTemplate = @"D:\PdfGenCSpackage\PdfGenerator_CS\PdfGenerator_CS\PdfGenerator\BILLINGFORM.pdf";
+                                pdfTemplate = Server.MapPath("~/App_Data/RSInvoicing-Template.pdf");
 
-                        pdfFormFields.SetField("Student_District", studentInformation.HomeDistrict);
-                        pdfFormFields.SetField("Student_RelatedService", "Speech");
+                                //pdfTemplate = @"D:\PdfGenCSpackage\PdfGenerator_CS\PdfGenerator_CS\PdfGenerator\completed_19e15c8d-28da-406e-ba23-17fa84d536af_BILLINGFORM.pdf";
 
+                                string newFile = @"D:\PdfGenCSpackage\PdfGenerator_CS\PdfGenerator_CS\PdfGenerator\completed_" + Guid.NewGuid().ToString() + "_BILLINGFORM.pdf";
 
-                        pdfFormFields.SetField("Student_Frequency", studentInformation.MandFrequency);
-                        pdfFormFields.SetField("Student_Duration", studentInformation.MandDuration);
-                        pdfFormFields.SetField("Student_GroupSize", studentInformation.MandGroupSize);
-                        pdfFormFields.SetField("Student_Language", studentInformation.Language);
-
-                        //pdfFormFields.SetField("Student_Location", i.ToString());
-                        //pdfFormFields.SetField("Comments", i.ToString());
+                                newFile = Server.MapPath("~/App_Data/PdfForm/" + model.FiscalYear.ToString() + "-" + dtDate.ToString("MMM") + "-" + reportType +  "-therapist-" + therapistMaster.FirstName.Trim() + "-" + therapistMaster.LastName.Trim() + "-Student-" + studentInformation.StudentFirstName.Trim() + "-" + studentInformation.StudentLastName.Trim() + "-" + groupType + ".pdf");
+                                
+                                zip.AddFile(newFile, "Pdf");
 
 
+                                PdfReader pdfReader = new PdfReader(pdfTemplate);
+                                PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileStream(newFile, FileMode.Create));
 
-                        //// fill Provider section information
-
-                        pdfFormFields.SetField("Provider_Name", therapistMaster.FirstName.Trim() + " " + therapistMaster.LastName.Trim());
-                        pdfFormFields.SetField("Provider__Address1", "134 West 26th Street, Suite # 602");
-                        pdfFormFields.SetField("Provider__Address2", "New York, NY 10001");
-                        pdfFormFields.SetField("Provider_Telephone", "212-604-9360");
-                        pdfFormFields.SetField("Provider_SSID", therapistMaster.NPI);
+                                AcroFields pdfFormFields = pdfStamper.AcroFields;
 
 
-                        // fill Agency section information
 
 
-                        pdfFormFields.SetField("AgencyName", "City Sounds of NY");
-                        pdfFormFields.SetField("Address", "134 West 26th Street, Suite # 602");
-                        pdfFormFields.SetField("Address2", "New York, NY 10001");
-                        pdfFormFields.SetField("Address3", "");
-                        pdfFormFields.SetField("Agency_Phone", "212-604-9360");
-                        pdfFormFields.SetField("Federal Tax ID", "270698698");
+                                pdfFormFields.SetField("Month", dtDate.ToString("MMMM"));
+                                pdfFormFields.SetField("Year", model.FiscalYear.ToString());
 
 
-                        // Fill Session Detail Information
-
-                        foreach (var sessionDetail in groupWiseStudentSessionDetailList)
-                        {
-                            DateTime sessionDate = sessionDetail.Date.HasValue ? (DateTime)sessionDetail.Date : new DateTime(1970, 1, 1);
-
-                            if (sessionDate.Year != 1970)
-                            {
-                                if (GetStudentMasterDetail == false)
+                                // fill student section information
+                                pdfFormFields.SetField("StudentName", studentInformation.StudentLastName.Trim() + " , " + studentInformation.StudentFirstName.Trim());
+                                pdfFormFields.SetField("StudentNYCID", studentInformation.NYCI);
+                                if (!string.IsNullOrEmpty(studentInformation.DOB))
                                 {
-                                    pdfFormFields.SetField("Student_Frequency", sessionDetail.MandFrequency.Contains(",") ? sessionDetail.MandFrequency.Split(',')[groupType=="S1"?0:1] : sessionDetail.MandFrequency);
-                                    pdfFormFields.SetField("Student_Duration", sessionDetail.MandDuration.Contains(",") ? sessionDetail.MandDuration.Split(',')[groupType == "S1" ? 0 : 1] : sessionDetail.MandDuration);
-                                    pdfFormFields.SetField("Student_GroupSize", sessionDetail.MandGroupSize.Contains(",") ? sessionDetail.MandGroupSize.Split(',')[groupType == "S1" ? 0 : 1] : sessionDetail.MandGroupSize);
-                                    pdfFormFields.SetField("Student_Language", studentInformation.Language);
-                                    pdfFormFields.SetField("Student_Location", !string.IsNullOrEmpty(sessionDetail.Location) ? sessionDetail.Location.Trim() : "");
-
-                                    GetStudentMasterDetail = true;
+                                    DateTime DOB;
+                                    if (DateTime.TryParse(studentInformation.DOB, out DOB))
+                                    {
+                                        pdfFormFields.SetField("DOB_MM", DOB.Month.ToString());
+                                        pdfFormFields.SetField("DOB_DD", DOB.Day.ToString());
+                                        pdfFormFields.SetField("DOB_YEAR", DOB.Year.ToString());
+                                    }
                                 }
 
+                                pdfFormFields.SetField("Student_District", studentInformation.HomeDistrict);
+                                pdfFormFields.SetField("Student_RelatedService", "Speech");
 
-                                DateTime StartTime = DateTime.Today.Add((TimeSpan)sessionDetail.StartTime);
-                                DateTime EndTime = DateTime.Today.Add((TimeSpan)sessionDetail.EndTime);
 
-                                pdfFormFields.SetField("FREQUENCY" + sessionDate.Day, "1");
-                                pdfFormFields.SetField("START TIME" + sessionDate.Day, StartTime.ToString("hh:mm tt"));
-                                pdfFormFields.SetField("END TIME" + sessionDate.Day, EndTime.ToString("hh:mm tt"));
-                                pdfFormFields.SetField("GROUP SIZE" + sessionDate.Day, sessionDetail.GroupSize);
+                                //pdfFormFields.SetField("Student_Frequency", studentInformation.MandFrequency);
+                                //pdfFormFields.SetField("Student_Duration", studentInformation.MandDuration);
+                                //pdfFormFields.SetField("Student_GroupSize", studentInformation.MandGroupSize);
+                                //pdfFormFields.SetField("Student_Language", studentInformation.Language);
+
+                                //pdfFormFields.SetField("Student_Location", i.ToString());
+                                //pdfFormFields.SetField("Comments", i.ToString());
+
+
+
+                                //// fill Provider section information
+
+                                pdfFormFields.SetField("Provider_Name", therapistMaster.FirstName.Trim() + " " + therapistMaster.LastName.Trim());
+                                pdfFormFields.SetField("Provider__Address1", "134 West 26th Street, Suite # 602");
+                                pdfFormFields.SetField("Provider__Address2", "New York, NY 10001");
+                                pdfFormFields.SetField("Provider_Telephone", "212-604-9360");
+
+                                string NPI = therapistMaster.NPI.Trim();
+                                NPI = NPI.ToString().PadLeft(9, '0');
+                                pdfFormFields.SetField("Provider_SSID", NPI);
+
+
+                                // fill Agency section information
+
+
+                                pdfFormFields.SetField("AgencyName", "City Sounds of NY");
+                                pdfFormFields.SetField("Address", "134 West 26th Street, Suite # 602");
+                                pdfFormFields.SetField("Address2", "New York, NY 10001");
+                                pdfFormFields.SetField("Address3", "");
+                                pdfFormFields.SetField("Agency_Phone", "212-604-9360");
+                                pdfFormFields.SetField("Federal Tax ID", "270698698");
+
+
+                                // Fill Session Detail Information
+
+                                foreach (var sessionDetail in groupWiseStudentSessionDetailList)
+                                {
+                                    DateTime sessionDate = sessionDetail.Date.HasValue ? (DateTime)sessionDetail.Date : new DateTime(1970, 1, 1);
+
+                                    if (sessionDate.Year != 1970)
+                                    {
+                                        if (GetStudentMasterDetail == false)
+                                        {
+                                            
+                                            pdfFormFields.SetField("Student_Frequency", sessionDetail.MandFrequency.Contains(",") ? sessionDetail.MandFrequency.Split(',')[groupType == "S1" ? 0 : 1] : sessionDetail.MandFrequency);
+                                            pdfFormFields.SetField("Student_Duration", sessionDetail.MandDuration.Contains(",") ? sessionDetail.MandDuration.Split(',')[groupType == "S1" ? 0 : 1] : sessionDetail.MandDuration);
+                                            pdfFormFields.SetField("Student_GroupSize", sessionDetail.MandGroupSize.Contains(",") ? sessionDetail.MandGroupSize.Split(',')[groupType == "S1" ? 0 : 1] : sessionDetail.MandGroupSize);
+                                            pdfFormFields.SetField("Student_Language", studentInformation.Language);
+                                            pdfFormFields.SetField("Student_Location", !string.IsNullOrEmpty(sessionDetail.Location) ? sessionDetail.Location.Trim() : "");
+
+                                            GetStudentMasterDetail = true;
+                                        }
+
+
+                                        DateTime StartTime = DateTime.Today.Add((TimeSpan)sessionDetail.StartTime);
+                                        DateTime EndTime = DateTime.Today.Add((TimeSpan)sessionDetail.EndTime);
+
+                                        pdfFormFields.SetField("FREQUENCY" + sessionDate.Day, "1");
+                                        pdfFormFields.SetField("START TIME" + sessionDate.Day, StartTime.ToString("hh:mm tt"));
+                                        pdfFormFields.SetField("END TIME" + sessionDate.Day, EndTime.ToString("hh:mm tt"));
+                                        pdfFormFields.SetField("GROUP SIZE" + sessionDate.Day, sessionDetail.GroupSize);
+                                    }
+
+                                }
+
+                                if (groupWiseStudentSessionDetailList.Count > 0)
+                                    pdfFormFields.SetField("Total_Sessions", groupWiseStudentSessionDetailList.Count.ToString());
+
+
+
+                                // flatten the form to remove editting options, set it to false
+                                // to leave the form open to subsequent manual edits
+                                pdfStamper.FormFlattening = true;
+
+                                // close the pdf
+                                pdfStamper.Close();
                             }
-
                         }
-
-                        if (groupWiseStudentSessionDetailList.Count>0)
-                            pdfFormFields.SetField("Total_Sessions", groupWiseStudentSessionDetailList.Count.ToString());
-
-                        
-
-                        // flatten the form to remove editting options, set it to false
-                        // to leave the form open to subsequent manual edits
-                        pdfStamper.FormFlattening = true;
-
-                        // close the pdf
-                        pdfStamper.Close();
+                    }
+                    else
+                    {
+                        message = "There are no sessions recorded for this case.";
                     }
                 }
             }
@@ -168,150 +206,181 @@ namespace GenerateReport.Controllers
 
 
 
-        private ZipFile CPSEFormNew(int StduentId, int TherapistId, string reportType, FormGenerateViewModel model)
+        private ZipFile CPSEFormNew(int StduentId, int TherapistId, string reportType, FormGenerateViewModel model, out string message)
         {
             ZipFile zip = new ZipFile();
 
-            
+            message = string.Empty;
 
             //int StduentId = 390;
-            var studentInformation = db.GetStudentInformation_Pdf(StduentId, reportType).SingleOrDefault();
 
-            var therapistMaster = db.TherapistMasters.Where(t => t.TID == TherapistId).SingleOrDefault();
 
-            var studentSessionDetailList = db.Sp_GetStudentSessionDetail_Pdf(therapistMaster.NPI.Trim(), reportType, StduentId, model.FiscalYear, model.FiscalMonth).ToList();
-
-            if (studentSessionDetailList.Count > 0)
+            if (model.StudentIdList.Length > 0)
             {
 
-                var groupsType = new string[] { "S1", "SP" };
+                var therapistMaster = db.TherapistMasters.Where(t => t.TID == TherapistId).SingleOrDefault();
 
-                foreach (var groupType in groupsType)
+                if (model.StudentIdList.Contains(0))
                 {
-                    var groupWiseStudentSessionDetailList = studentSessionDetailList.Where(s => s.MandGroupType.Trim() == groupType).ToList();
-                    bool GetStudentMasterDetail = false;
-                    if (groupWiseStudentSessionDetailList.Count > 0)
+                    var StudentListBytherapist = db.Sp_GetStudentListBasedOnFundingCode_Pdf(therapistMaster.NPI.Trim(), model.ReportType).ToList();
+                    model.StudentIdList = StudentListBytherapist.Select(s => s.SID).ToArray<int>();
+                   
+                }
+
+                DateTime dtDate = new DateTime(model.FiscalYear, model.FiscalMonth, 1);
+                var days = DateTime.DaysInMonth(Convert.ToInt32(model.FiscalYear), Convert.ToInt32(model.FiscalMonth));
+                var startDay = model.FiscalMonth + "/1/" + model.FiscalYear;
+                var endDay = model.FiscalMonth + "/" + days + "/" + model.FiscalYear;
+
+                if (model.StudentIdList.Length>1)
+                    zip.Name = model.FiscalYear.ToString() + "-" + dtDate.ToString("MMM") + "-" + reportType + "-" + therapistMaster.FirstName.Trim() + "-" + therapistMaster.LastName.Trim() + "-multiple";
+                else
+                    zip.Name = model.FiscalYear.ToString() + "-" + dtDate.ToString("MMM") + "-" + reportType + "-" + therapistMaster.FirstName.Trim() + "-" + therapistMaster.LastName.Trim();
+
+                foreach (int id in model.StudentIdList)
+                {
+                    var studentInformation = db.GetStudentInformation_Pdf(id, reportType, therapistMaster.NPI.Trim()).SingleOrDefault();
+                   // var studentSessionDetailList = db.Sp_GetStudentSessionDetail_Pdf(therapistMaster.NPI.Trim(), reportType, id, model.FiscalYear, model.FiscalMonth).ToList();
+                    var studentSessionDetailList = db.Sp_GetStudentSessionDetail_Pdf(id, model.FiscalYear.ToString(), startDay, endDay, TherapistId.ToString(), reportType, therapistMaster.NPI.Trim()).ToList();
+
+                    if (studentSessionDetailList.Count > 0)
                     {
-                        DateTime dtDate = new DateTime(model.FiscalYear, model.FiscalMonth, 1);
 
-                        string pdfTemplate = @"D:\PdfGenCSpackage\PdfGenerator_CS\PdfGenerator_CS\PdfGenerator\BILLINGFORM.pdf";
-                        pdfTemplate = Server.MapPath("~/App_Data/BILLINGFORM-Templeate.pdf");
+                        var groupsType = new string[] { "S1", "SP" };
 
-                        //pdfTemplate = @"D:\PdfGenCSpackage\PdfGenerator_CS\PdfGenerator_CS\PdfGenerator\completed_19e15c8d-28da-406e-ba23-17fa84d536af_BILLINGFORM.pdf";
-
-                        string newFile = @"D:\PdfGenCSpackage\PdfGenerator_CS\PdfGenerator_CS\PdfGenerator\completed_" + Guid.NewGuid().ToString() + "_BILLINGFORM.pdf";
-                        
-                        newFile = Server.MapPath("~/App_Data/PdfForm/" + model.FiscalYear.ToString() + "-" + dtDate.ToString("MMM") + "-" + reportType + "-" + therapistMaster.FirstName.Trim() + "-" + therapistMaster.LastName.Trim() +"-"+ groupType + ".pdf");
-                        zip.Name = model.FiscalYear.ToString() +"-"+dtDate.ToString("MMM") + "-" + reportType + "-" + therapistMaster.FirstName.Trim() + "-" + therapistMaster.LastName.Trim();
-                        
-                        zip.AddFile(newFile, "Pdf");
-
-
-                        PdfReader pdfReader = new PdfReader(pdfTemplate);
-                        PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileStream(newFile, FileMode.Create));
-
-                        AcroFields pdfFormFields = pdfStamper.AcroFields;
-
-
-
-                       
-                        pdfFormFields.SetField("Month", dtDate.ToString("MMMM"));
-                        pdfFormFields.SetField("Year", model.FiscalYear.ToString());
-
-                        // set zipfileName
-
-                        // fill student section information
-                        pdfFormFields.SetField("StudentName", studentInformation.StudentLastName.Trim() + " " + studentInformation.StudentFirstName.Trim());
-                        pdfFormFields.SetField("StudentNYCID", studentInformation.NYCI);
-                        if (!string.IsNullOrEmpty(studentInformation.DOB))
+                        foreach (var groupType in groupsType)
                         {
-                            DateTime DOB;
-                            if (DateTime.TryParse(studentInformation.DOB, out DOB))
+                            var groupWiseStudentSessionDetailList = studentSessionDetailList.Where(s => s.GroupType.Trim() == groupType).ToList();
+                            bool GetStudentMasterDetail = false;
+                            if (groupWiseStudentSessionDetailList.Count > 0)
                             {
-                                pdfFormFields.SetField("DOB_MM", DOB.Month.ToString());
-                                pdfFormFields.SetField("DOB_DD", DOB.Day.ToString());
-                                pdfFormFields.SetField("DOB_YEAR", DOB.Year.ToString());
-                            }
-                        }
+                                
 
-                        pdfFormFields.SetField("Student_District", studentInformation.HomeDistrict);
-                        pdfFormFields.SetField("Student_RelatedService", "Speech");
+                                string pdfTemplate = @"D:\PdfGenCSpackage\PdfGenerator_CS\PdfGenerator_CS\PdfGenerator\BILLINGFORM.pdf";
+                                pdfTemplate = Server.MapPath("~/App_Data/BILLINGFORM-Templeate.pdf");
 
+                                //pdfTemplate = @"D:\PdfGenCSpackage\PdfGenerator_CS\PdfGenerator_CS\PdfGenerator\completed_19e15c8d-28da-406e-ba23-17fa84d536af_BILLINGFORM.pdf";
 
-                        pdfFormFields.SetField("Student_Frequency", studentInformation.MandFrequency);
-                        pdfFormFields.SetField("Student_Duration", studentInformation.MandDuration);
-                        pdfFormFields.SetField("Student_GroupSize", studentInformation.MandGroupSize);
-                        pdfFormFields.SetField("Student_Language", studentInformation.Language);
+                                string newFile = @"D:\PdfGenCSpackage\PdfGenerator_CS\PdfGenerator_CS\PdfGenerator\completed_" + Guid.NewGuid().ToString() + "_BILLINGFORM.pdf";
 
-                        //pdfFormFields.SetField("Student_Location", i.ToString());
-                        //pdfFormFields.SetField("Comments", i.ToString());
+                                newFile = Server.MapPath("~/App_Data/PdfForm/" + model.FiscalYear.ToString() + "-" + dtDate.ToString("MMM") + "-" + reportType + "-therapist-" + therapistMaster.FirstName.Trim() + "-" + therapistMaster.LastName.Trim() + "-Student-" + studentInformation.StudentFirstName.Trim() + "-" + studentInformation.StudentLastName.Trim() + "-" + groupType + ".pdf");
+                                //zip.Name = model.FiscalYear.ToString() + "-" + dtDate.ToString("MMM") + "-" + reportType + "-" + therapistMaster.FirstName.Trim() + "-" + therapistMaster.LastName.Trim();
+
+                                zip.AddFile(newFile, "Pdf");
 
 
-
-                        //// fill Provider section information
-
-                        pdfFormFields.SetField("Provider_Name", therapistMaster.FirstName.Trim() + " " + therapistMaster.LastName.Trim());
-                        pdfFormFields.SetField("Provider__Address1", "134 West 26th Street, Suite # 602");
-                        pdfFormFields.SetField("Provider__Address2", "New York, NY 10001");
-                        pdfFormFields.SetField("Provider_Telephone", "212-604-9360");
-                        pdfFormFields.SetField("Provider_SSID", therapistMaster.NPI);
-
-                       
-                        // fill Agency section information
+                                PdfReader pdfReader = new PdfReader(pdfTemplate);
+                                PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileStream(newFile, FileMode.Create));
+                                AcroFields pdfFormFields = pdfStamper.AcroFields;
 
 
-                        pdfFormFields.SetField("AgencyName", "City Sounds of NY");
-                        pdfFormFields.SetField("Address", "134 West 26th Street, Suite # 602");
-                        pdfFormFields.SetField("Address2", "New York, NY 10001");
-                        pdfFormFields.SetField("Address3", "");
-                        pdfFormFields.SetField("Agency_Phone", "212-604-9360");
-                        pdfFormFields.SetField("Federal Tax ID", "270698698");
-
-                        pdfFormFields.SetField("Agency_Rep_print_name", "Amy Grillo");
 
 
-                        // Fill Session Detail Information
+                                pdfFormFields.SetField("Month", dtDate.ToString("MMMM"));
+                                pdfFormFields.SetField("Year", model.FiscalYear.ToString());
 
-                        foreach (var sessionDetail in groupWiseStudentSessionDetailList)
-                        {
-                            DateTime sessionDate = sessionDetail.Date.HasValue ? (DateTime)sessionDetail.Date : new DateTime(1970, 1, 1);
+                                // set zipfileName
 
-                            if (sessionDate.Year != 1970)
-                            {
-                                if (GetStudentMasterDetail == false)
+                                // fill student section information
+                                pdfFormFields.SetField("StudentName", studentInformation.StudentLastName.Trim() + " , " + studentInformation.StudentFirstName.Trim());
+                                pdfFormFields.SetField("StudentNYCID", studentInformation.NYCI);
+                                if (!string.IsNullOrEmpty(studentInformation.DOB))
                                 {
-                                    pdfFormFields.SetField("Student_Frequency", sessionDetail.MandFrequency.Contains(",") ? sessionDetail.MandFrequency.Split(',')[groupType == "S1" ? 0 : 1] : sessionDetail.MandFrequency);
-                                    pdfFormFields.SetField("Student_Duration", sessionDetail.MandDuration.Contains(",") ? sessionDetail.MandDuration.Split(',')[groupType == "S1" ? 0 : 1] : sessionDetail.MandDuration);
-                                    pdfFormFields.SetField("Student_GroupSize", sessionDetail.MandGroupSize.Contains(",") ? sessionDetail.MandGroupSize.Split(',')[groupType == "S1" ? 0 : 1] : sessionDetail.MandGroupSize);
-                                    pdfFormFields.SetField("Student_Language", studentInformation.Language);
-                                    pdfFormFields.SetField("Student_Location", !string.IsNullOrEmpty(sessionDetail.Location) ? sessionDetail.Location.Trim() : "");
-
-                                    GetStudentMasterDetail = true;
+                                    DateTime DOB;
+                                    if (DateTime.TryParse(studentInformation.DOB, out DOB))
+                                    {
+                                        pdfFormFields.SetField("DOB_MM", DOB.Month.ToString());
+                                        pdfFormFields.SetField("DOB_DD", DOB.Day.ToString());
+                                        pdfFormFields.SetField("DOB_YEAR", DOB.Year.ToString());
+                                    }
                                 }
 
+                                pdfFormFields.SetField("Student_District", studentInformation.HomeDistrict);
+                                pdfFormFields.SetField("Student_RelatedService", "Speech");
 
-                                DateTime StartTime = DateTime.Today.Add((TimeSpan)sessionDetail.StartTime);
-                                DateTime EndTime = DateTime.Today.Add((TimeSpan)sessionDetail.EndTime);
 
-                                pdfFormFields.SetField("FREQUENCY" + sessionDate.Day, "1");
-                                pdfFormFields.SetField("START TIME" + sessionDate.Day, StartTime.ToString("hh:mm tt"));
-                                pdfFormFields.SetField("END TIME" + sessionDate.Day, EndTime.ToString("hh:mm tt"));
-                                pdfFormFields.SetField("GROUP SIZE" + sessionDate.Day, sessionDetail.GroupSize);
+                                //pdfFormFields.SetField("Student_Frequency", studentInformation.MandFrequency);
+                                //pdfFormFields.SetField("Student_Duration", studentInformation.MandDuration);
+                                //pdfFormFields.SetField("Student_GroupSize", studentInformation.MandGroupSize);
+                                //pdfFormFields.SetField("Student_Language", studentInformation.Language);
+
+                                //pdfFormFields.SetField("Student_Location", i.ToString());
+                                //pdfFormFields.SetField("Comments", i.ToString());
+
+
+
+                                //// fill Provider section information
+
+                                pdfFormFields.SetField("Provider_Name", therapistMaster.FirstName.Trim() + " " + therapistMaster.LastName.Trim());
+                                pdfFormFields.SetField("Provider__Address1", "134 West 26th Street, Suite # 602");
+                                pdfFormFields.SetField("Provider__Address2", "New York, NY 10001");
+                                pdfFormFields.SetField("Provider_Telephone", "212-604-9360");
+                                string NPI = therapistMaster.NPI.Trim();
+                                NPI = NPI.ToString().PadLeft(9, '0');
+                                pdfFormFields.SetField("Provider_SSID", NPI);
+
+
+                                // fill Agency section information
+
+
+                                pdfFormFields.SetField("AgencyName", "City Sounds of NY");
+                                pdfFormFields.SetField("Address", "134 West 26th Street, Suite # 602");
+                                pdfFormFields.SetField("Address2", "New York, NY 10001");
+                                pdfFormFields.SetField("Address3", "");
+                                pdfFormFields.SetField("Agency_Phone", "212-604-9360");
+                                pdfFormFields.SetField("Federal Tax ID", "270698698");
+
+                                pdfFormFields.SetField("Agency_Rep_print_name", "Amy Grillo");
+
+
+                                // Fill Session Detail Information
+
+                                foreach (var sessionDetail in groupWiseStudentSessionDetailList)
+                                {
+                                    DateTime sessionDate = sessionDetail.Date.HasValue ? (DateTime)sessionDetail.Date : new DateTime(1970, 1, 1);
+
+                                    if (sessionDate.Year != 1970)
+                                    {
+                                        if (GetStudentMasterDetail == false)
+                                        {
+                                            pdfFormFields.SetField("Student_Frequency", sessionDetail.MandFrequency.Contains(",") ? sessionDetail.MandFrequency.Split(',')[groupType == "S1" ? 0 : 1] : sessionDetail.MandFrequency);
+                                            pdfFormFields.SetField("Student_Duration", sessionDetail.MandDuration.Contains(",") ? sessionDetail.MandDuration.Split(',')[groupType == "S1" ? 0 : 1] : sessionDetail.MandDuration);
+                                            pdfFormFields.SetField("Student_GroupSize", sessionDetail.MandGroupSize.Contains(",") ? sessionDetail.MandGroupSize.Split(',')[groupType == "S1" ? 0 : 1] : sessionDetail.MandGroupSize);
+                                            pdfFormFields.SetField("Student_Language", studentInformation.Language);
+                                            pdfFormFields.SetField("Student_Location", !string.IsNullOrEmpty(sessionDetail.Location) ? sessionDetail.Location.Trim() : "");
+
+                                            GetStudentMasterDetail = true;
+                                        }
+
+
+                                        DateTime StartTime = DateTime.Today.Add((TimeSpan)sessionDetail.StartTime);
+                                        DateTime EndTime = DateTime.Today.Add((TimeSpan)sessionDetail.EndTime);
+
+                                        pdfFormFields.SetField("FREQUENCY" + sessionDate.Day, "1");
+                                        pdfFormFields.SetField("START TIME" + sessionDate.Day, StartTime.ToString("hh:mm tt"));
+                                        pdfFormFields.SetField("END TIME" + sessionDate.Day, EndTime.ToString("hh:mm tt"));
+                                        pdfFormFields.SetField("GROUP SIZE" + sessionDate.Day, sessionDetail.GroupSize);
+                                    }
+
+                                }
+
+                                if (groupWiseStudentSessionDetailList.Count > 0)
+                                    pdfFormFields.SetField("Total_Sessions", groupWiseStudentSessionDetailList.Count.ToString());
+
+
+
+                                // flatten the form to remove editting options, set it to false
+                                // to leave the form open to subsequent manual edits
+                                pdfStamper.FormFlattening = true;
+
+                                // close the pdf
+                                pdfStamper.Close();
                             }
-
                         }
-
-                        if (groupWiseStudentSessionDetailList.Count > 0)
-                            pdfFormFields.SetField("Total_Sessions", groupWiseStudentSessionDetailList.Count.ToString());
-
-
-
-                        // flatten the form to remove editting options, set it to false
-                        // to leave the form open to subsequent manual edits
-                        pdfStamper.FormFlattening = true;
-
-                        // close the pdf
-                        pdfStamper.Close();
+                    }
+                    else
+                    {
+                        message = "There are no sessions recorded for this case.";
                     }
                 }
             }
@@ -319,6 +388,561 @@ namespace GenerateReport.Controllers
             return zip;
 
         }
+
+
+
+        private ZipFile PPGFormNew(int StduentId, int TherapistId, string reportType, FormGenerateViewModel model,  out string message)
+        {
+            ZipFile zip = new ZipFile();
+            message = string.Empty;
+
+            if (model.StudentIdList.Length > 0)
+            {
+
+                var therapistMaster = db.TherapistMasters.Where(t => t.TID == TherapistId).SingleOrDefault();
+
+                if (model.StudentIdList.Contains(0))
+                {
+                    var StudentListBytherapist = db.Sp_GetStudentListBasedOnFundingCode_Pdf(therapistMaster.NPI.Trim(), model.ReportType).ToList();
+                    model.StudentIdList = StudentListBytherapist.Select(s => s.SID).ToArray<int>();
+
+                }
+
+                DateTime dtDate = new DateTime(model.FiscalYear, model.FiscalMonth, 1);
+                var days = DateTime.DaysInMonth(Convert.ToInt32(model.FiscalYear), Convert.ToInt32(model.FiscalMonth));
+                var startDay = model.FiscalMonth + "/1/" + model.FiscalYear;
+                var endDay = model.FiscalMonth + "/" + days + "/" + model.FiscalYear;
+
+                if (model.StudentIdList.Length > 1)
+                    zip.Name = model.FiscalYear.ToString() + "-" + dtDate.ToString("MMM") + "-" + reportType + "-" + therapistMaster.FirstName.Trim() + "-" + therapistMaster.LastName.Trim() + "-multiple";
+                else
+                    zip.Name = model.FiscalYear.ToString() + "-" + dtDate.ToString("MMM") + "-" + reportType + "-" + therapistMaster.FirstName.Trim() + "-" + therapistMaster.LastName.Trim();
+
+                foreach (int id in model.StudentIdList)
+                {
+
+                    var studentInformation = db.GetStudentInformation_Pdf(id, reportType, therapistMaster.NPI.Trim()).SingleOrDefault();
+
+
+
+                   // var studentSessionDetailList = db.Sp_GetStudentSessionDetail_Pdf(therapistMaster.NPI.Trim(), reportType, id, model.FiscalYear, model.FiscalMonth).ToList();
+                    var studentSessionDetailList = db.Sp_GetStudentSessionDetail_Pdf(id, model.FiscalYear.ToString(), startDay, endDay, TherapistId.ToString(), reportType, therapistMaster.NPI.Trim()).ToList();
+
+                    if (studentSessionDetailList.Count > 0)
+                    {
+
+                        var groupsType = new string[] { "S1", "SP" };
+
+                        foreach (var groupType in groupsType)
+                        {
+                            var groupWiseStudentSessionDetailList = studentSessionDetailList.Where(s => s.GroupType.Trim() == groupType).ToList();
+                            bool GetStudentMasterDetail = false;
+                            if (groupWiseStudentSessionDetailList.Count > 0)
+                            {
+                               
+
+                                string pdfTemplate = @"D:\PdfGenCSpackage\PdfGenerator_CS\PdfGenerator_CS\PdfGenerator\BILLINGFORM.pdf";
+                                pdfTemplate = Server.MapPath("~/App_Data/PPG-BillingForm-Template.pdf");
+
+                                //pdfTemplate = @"D:\PdfGenCSpackage\PdfGenerator_CS\PdfGenerator_CS\PdfGenerator\completed_19e15c8d-28da-406e-ba23-17fa84d536af_BILLINGFORM.pdf";
+
+                                string newFile = @"D:\PdfGenCSpackage\PdfGenerator_CS\PdfGenerator_CS\PdfGenerator\completed_" + Guid.NewGuid().ToString() + "_BILLINGFORM.pdf";
+
+                                newFile = Server.MapPath("~/App_Data/PdfForm/" + model.FiscalYear.ToString() + "-" + dtDate.ToString("MMM") + "-" + reportType + "-therapist-" + therapistMaster.FirstName.Trim() + "-" + therapistMaster.LastName.Trim() + "-Student-" + studentInformation.StudentFirstName.Trim() + "-" + studentInformation.StudentLastName.Trim() + "-" + groupType + ".pdf");
+                                
+                                zip.AddFile(newFile, "Pdf");
+
+
+                                PdfReader pdfReader = new PdfReader(pdfTemplate);
+                                PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileStream(newFile, FileMode.Create));
+
+                                AcroFields pdfFormFields = pdfStamper.AcroFields;
+
+
+
+
+                                pdfFormFields.SetField("Month", dtDate.ToString("MMMM"));
+                                pdfFormFields.SetField("Year", model.FiscalYear.ToString());
+
+                                // set zipfileName
+
+                                // fill student section information
+                                pdfFormFields.SetField("StudentName", studentInformation.StudentLastName.Trim() + " , " + studentInformation.StudentFirstName.Trim());
+                                pdfFormFields.SetField("StudentNYCID", studentInformation.NYCI);
+                                if (!string.IsNullOrEmpty(studentInformation.DOB))
+                                {
+                                    DateTime DOB;
+                                    if (DateTime.TryParse(studentInformation.DOB, out DOB))
+                                    {
+                                        pdfFormFields.SetField("DOB_MM", DOB.Month.ToString());
+                                        pdfFormFields.SetField("DOB_DD", DOB.Day.ToString());
+                                        pdfFormFields.SetField("DOB_YEAR", DOB.Year.ToString());
+                                    }
+                                }
+
+                                pdfFormFields.SetField("Student_District", studentInformation.HomeDistrict);
+                                pdfFormFields.SetField("Student_RelatedService", "Speech");
+
+
+                                //pdfFormFields.SetField("Student_Frequency", studentInformation.MandFrequency);
+                                //pdfFormFields.SetField("Student_Duration", studentInformation.MandDuration);
+                                //pdfFormFields.SetField("Student_GroupSize", studentInformation.MandGroupSize);
+                                //pdfFormFields.SetField("Student_Language", studentInformation.Language);
+
+                                //pdfFormFields.SetField("Student_Location", i.ToString());
+                                //pdfFormFields.SetField("Comments", i.ToString());
+
+
+
+                                //// fill Provider section information
+
+                                pdfFormFields.SetField("Provider_Name", therapistMaster.FirstName.Trim() + " " + therapistMaster.LastName.Trim());
+                                pdfFormFields.SetField("Provider__Address1", "134 West 26th Street, Suite # 602");
+                                pdfFormFields.SetField("Provider__Address2", "New York, NY 10001");
+                                pdfFormFields.SetField("Provider_Telephone", "212-604-9360");
+                                string NPI = therapistMaster.NPI.Trim();
+                                NPI = NPI.ToString().PadLeft(9, '0');
+                                pdfFormFields.SetField("Provider_SSID", NPI);
+
+
+                                // fill Agency section information
+
+
+                                pdfFormFields.SetField("AgencyName", "City Sounds of NY");
+                                pdfFormFields.SetField("Address", "134 West 26th Street, Suite # 602");
+                                pdfFormFields.SetField("Address2", "New York, NY 10001");
+                                pdfFormFields.SetField("Address3", "");
+                                pdfFormFields.SetField("Agency_Phone", "212-604-9360");
+                                pdfFormFields.SetField("Federal Tax ID", "270698698");
+
+                                pdfFormFields.SetField("Agency_Rep_print_name", "Amy Grillo");
+
+
+                                // Fill Session Detail Information
+
+                                foreach (var sessionDetail in groupWiseStudentSessionDetailList)
+                                {
+                                    DateTime sessionDate = sessionDetail.Date.HasValue ? (DateTime)sessionDetail.Date : new DateTime(1970, 1, 1);
+
+                                    if (sessionDate.Year != 1970)
+                                    {
+                                        if (GetStudentMasterDetail == false)
+                                        {
+                                            pdfFormFields.SetField("Student_Frequency", sessionDetail.MandFrequency.Contains(",") ? sessionDetail.MandFrequency.Split(',')[groupType == "S1" ? 0 : 1] : sessionDetail.MandFrequency);
+                                            pdfFormFields.SetField("Student_Duration", sessionDetail.MandDuration.Contains(",") ? sessionDetail.MandDuration.Split(',')[groupType == "S1" ? 0 : 1] : sessionDetail.MandDuration);
+                                            pdfFormFields.SetField("Student_GroupSize", sessionDetail.MandGroupSize.Contains(",") ? sessionDetail.MandGroupSize.Split(',')[groupType == "S1" ? 0 : 1] : sessionDetail.MandGroupSize);
+                                            pdfFormFields.SetField("Student_Language", studentInformation.Language);
+                                            pdfFormFields.SetField("Student_Location", !string.IsNullOrEmpty(sessionDetail.Location) ? sessionDetail.Location.Trim() : "");
+
+                                            GetStudentMasterDetail = true;
+                                        }
+
+
+                                        DateTime StartTime = DateTime.Today.Add((TimeSpan)sessionDetail.StartTime);
+                                        DateTime EndTime = DateTime.Today.Add((TimeSpan)sessionDetail.EndTime);
+
+                                        pdfFormFields.SetField("FREQUENCY" + sessionDate.Day, "1");
+                                        pdfFormFields.SetField("START TIME" + sessionDate.Day, StartTime.ToString("hh:mm tt"));
+                                        pdfFormFields.SetField("END TIME" + sessionDate.Day, EndTime.ToString("hh:mm tt"));
+                                        pdfFormFields.SetField("GROUP SIZE" + sessionDate.Day, sessionDetail.GroupSize);
+                                    }
+
+                                }
+
+                                if (groupWiseStudentSessionDetailList.Count > 0)
+                                    pdfFormFields.SetField("Total_Sessions", groupWiseStudentSessionDetailList.Count.ToString());
+
+
+
+                                // flatten the form to remove editting options, set it to false
+                                // to leave the form open to subsequent manual edits
+                                pdfStamper.FormFlattening = true;
+
+                                // close the pdf
+                                pdfStamper.Close();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        message = "There are no sessions recorded for this case.";
+                    }
+                }
+            }
+
+            return zip;
+
+        }
+
+
+        private ZipFile PPIFormNew(int StduentId, int TherapistId, string reportType, FormGenerateViewModel model, out string message)
+        {
+            ZipFile zip = new ZipFile();
+            message = string.Empty;
+
+
+            if (model.StudentIdList.Length > 0)
+            {
+
+                var therapistMaster = db.TherapistMasters.Where(t => t.TID == TherapistId).SingleOrDefault();
+
+                if (model.StudentIdList.Contains(0))
+                {
+                    var StudentListBytherapist = db.Sp_GetStudentListBasedOnFundingCode_Pdf(therapistMaster.NPI.Trim(), model.ReportType).ToList();
+                    model.StudentIdList = StudentListBytherapist.Select(s => s.SID).ToArray<int>();
+
+                }
+
+                DateTime dtDate = new DateTime(model.FiscalYear, model.FiscalMonth, 1);
+                var days = DateTime.DaysInMonth(Convert.ToInt32(model.FiscalYear), Convert.ToInt32(model.FiscalMonth));
+                var startDay = model.FiscalMonth + "/1/" + model.FiscalYear;
+                var endDay = model.FiscalMonth + "/" + days + "/" + model.FiscalYear;
+
+                if (model.StudentIdList.Length > 1)
+                    zip.Name = model.FiscalYear.ToString() + "-" + dtDate.ToString("MMM") + "-" + reportType + "-" + therapistMaster.FirstName.Trim() + "-" + therapistMaster.LastName.Trim() + "-multiple";
+                else
+                    zip.Name = model.FiscalYear.ToString() + "-" + dtDate.ToString("MMM") + "-" + reportType + "-" + therapistMaster.FirstName.Trim() + "-" + therapistMaster.LastName.Trim();
+
+                foreach (int id in model.StudentIdList)
+                {
+
+                    var studentInformation = db.GetStudentInformation_Pdf(id, reportType, therapistMaster.NPI.Trim()).SingleOrDefault();
+
+
+
+                   // var studentSessionDetailList = db.Sp_GetStudentSessionDetail_Pdf(therapistMaster.NPI.Trim(), reportType, id, model.FiscalYear, model.FiscalMonth).ToList();
+                    var studentSessionDetailList = db.Sp_GetStudentSessionDetail_Pdf(id, model.FiscalYear.ToString(), startDay, endDay, TherapistId.ToString(), reportType, therapistMaster.NPI.Trim()).ToList();
+
+
+                    if (studentSessionDetailList.Count > 0)
+                    {
+
+                        var groupsType = new string[] { "S1", "SP" };
+
+                        foreach (var groupType in groupsType)
+                        {
+                            var groupWiseStudentSessionDetailList = studentSessionDetailList.Where(s => s.GroupType.Trim() == groupType).ToList();
+                            bool GetStudentMasterDetail = false;
+                            if (groupWiseStudentSessionDetailList.Count > 0)
+                            {
+                               
+
+                                string pdfTemplate = @"D:\PdfGenCSpackage\PdfGenerator_CS\PdfGenerator_CS\PdfGenerator\BILLINGFORM.pdf";
+                                pdfTemplate = Server.MapPath("~/App_Data/PPI-BillingForm-Template.pdf");
+
+                                //pdfTemplate = @"D:\PdfGenCSpackage\PdfGenerator_CS\PdfGenerator_CS\PdfGenerator\completed_19e15c8d-28da-406e-ba23-17fa84d536af_BILLINGFORM.pdf";
+
+                                string newFile = @"D:\PdfGenCSpackage\PdfGenerator_CS\PdfGenerator_CS\PdfGenerator\completed_" + Guid.NewGuid().ToString() + "_BILLINGFORM.pdf";
+
+                                newFile = Server.MapPath("~/App_Data/PdfForm/" + model.FiscalYear.ToString() + "-" + dtDate.ToString("MMM") + "-" + reportType + "-therapist-" + therapistMaster.FirstName.Trim() + "-" + therapistMaster.LastName.Trim() + "-Student-" + studentInformation.StudentFirstName.Trim() + "-" + studentInformation.StudentLastName.Trim() + "-" + groupType + ".pdf");
+                                
+                                zip.AddFile(newFile, "Pdf");
+
+
+                                PdfReader pdfReader = new PdfReader(pdfTemplate);
+                                PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileStream(newFile, FileMode.Create));
+
+                                AcroFields pdfFormFields = pdfStamper.AcroFields;
+
+
+
+
+                                pdfFormFields.SetField("Month", dtDate.ToString("MMMM"));
+                                pdfFormFields.SetField("Year", model.FiscalYear.ToString());
+
+                                // set zipfileName
+
+                                // fill student section information
+                                pdfFormFields.SetField("StudentName", studentInformation.StudentLastName.Trim() + " , " + studentInformation.StudentFirstName.Trim());
+                                pdfFormFields.SetField("StudentNYCID", studentInformation.NYCI);
+                                if (!string.IsNullOrEmpty(studentInformation.DOB))
+                                {
+                                    DateTime DOB;
+                                    if (DateTime.TryParse(studentInformation.DOB, out DOB))
+                                    {
+                                        pdfFormFields.SetField("DOB_MM", DOB.Month.ToString());
+                                        pdfFormFields.SetField("DOB_DD", DOB.Day.ToString());
+                                        pdfFormFields.SetField("DOB_YEAR", DOB.Year.ToString());
+                                    }
+                                }
+
+                                pdfFormFields.SetField("Student_District", studentInformation.HomeDistrict);
+                                pdfFormFields.SetField("Student_RelatedService", "Speech");
+
+
+                                //pdfFormFields.SetField("Student_Frequency", studentInformation.MandFrequency);
+                                //pdfFormFields.SetField("Student_Duration", studentInformation.MandDuration);
+                                //pdfFormFields.SetField("Student_GroupSize", studentInformation.MandGroupSize);
+                                //pdfFormFields.SetField("Student_Language", studentInformation.Language);
+
+                                //pdfFormFields.SetField("Student_Location", i.ToString());
+                                //pdfFormFields.SetField("Comments", i.ToString());
+
+
+
+                                //// fill Provider section information
+
+                                pdfFormFields.SetField("Provider_Name", therapistMaster.FirstName.Trim() + " " + therapistMaster.LastName.Trim());
+                                pdfFormFields.SetField("Provider__Address1", "134 West 26th Street, Suite # 602");
+                                pdfFormFields.SetField("Provider__Address2", "New York, NY 10001");
+                                pdfFormFields.SetField("Provider_Telephone", "212-604-9360");
+                                string NPI = therapistMaster.NPI.Trim();
+                                NPI = NPI.ToString().PadLeft(9, '0');
+                                pdfFormFields.SetField("Provider_SSID", NPI);
+
+
+                                // fill Agency section information
+
+
+                                pdfFormFields.SetField("AgencyName", "City Sounds of NY");
+                                pdfFormFields.SetField("Address", "134 West 26th Street, Suite # 602");
+                                pdfFormFields.SetField("Address2", "New York, NY 10001");
+                                pdfFormFields.SetField("Address3", "");
+                                pdfFormFields.SetField("Agency_Phone", "212-604-9360");
+                                pdfFormFields.SetField("Federal Tax ID", "270698698");
+
+                                pdfFormFields.SetField("Agency_Rep_print_name", "Amy Grillo");
+
+
+                                // Fill Session Detail Information
+
+                                foreach (var sessionDetail in groupWiseStudentSessionDetailList)
+                                {
+                                    DateTime sessionDate = sessionDetail.Date.HasValue ? (DateTime)sessionDetail.Date : new DateTime(1970, 1, 1);
+
+                                    if (sessionDate.Year != 1970)
+                                    {
+                                        if (GetStudentMasterDetail == false)
+                                        {
+                                            pdfFormFields.SetField("Student_Frequency", sessionDetail.MandFrequency.Contains(",") ? sessionDetail.MandFrequency.Split(',')[groupType == "S1" ? 0 : 1] : sessionDetail.MandFrequency);
+                                            pdfFormFields.SetField("Student_Duration", sessionDetail.MandDuration.Contains(",") ? sessionDetail.MandDuration.Split(',')[groupType == "S1" ? 0 : 1] : sessionDetail.MandDuration);
+                                            pdfFormFields.SetField("Student_GroupSize", sessionDetail.MandGroupSize.Contains(",") ? sessionDetail.MandGroupSize.Split(',')[groupType == "S1" ? 0 : 1] : sessionDetail.MandGroupSize);
+                                            pdfFormFields.SetField("Student_Language", studentInformation.Language);
+                                            pdfFormFields.SetField("Student_Location", !string.IsNullOrEmpty(sessionDetail.Location) ? sessionDetail.Location.Trim() : "");
+
+                                            GetStudentMasterDetail = true;
+                                        }
+
+
+                                        DateTime StartTime = DateTime.Today.Add((TimeSpan)sessionDetail.StartTime);
+                                        DateTime EndTime = DateTime.Today.Add((TimeSpan)sessionDetail.EndTime);
+
+                                        pdfFormFields.SetField("FREQUENCY" + sessionDate.Day, "1");
+                                        pdfFormFields.SetField("START TIME" + sessionDate.Day, StartTime.ToString("hh:mm tt"));
+                                        pdfFormFields.SetField("END TIME" + sessionDate.Day, EndTime.ToString("hh:mm tt"));
+                                        pdfFormFields.SetField("GROUP SIZE" + sessionDate.Day, sessionDetail.GroupSize);
+                                    }
+
+                                }
+
+                                if (groupWiseStudentSessionDetailList.Count > 0)
+                                    pdfFormFields.SetField("Total_Sessions", groupWiseStudentSessionDetailList.Count.ToString());
+
+
+
+                                // flatten the form to remove editting options, set it to false
+                                // to leave the form open to subsequent manual edits
+                                pdfStamper.FormFlattening = true;
+
+                                // close the pdf
+                                pdfStamper.Close();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        message = "There are no sessions recorded for this case.";
+                    }
+                }
+            }
+
+            return zip;
+
+        }
+
+        private ZipFile RSAFormNew(int StduentId, int TherapistId, string reportType, FormGenerateViewModel model, out string message)
+        {
+            ZipFile zip = new ZipFile();
+            message = string.Empty;
+
+
+            if (model.StudentIdList.Length > 0)
+            {
+
+                var therapistMaster = db.TherapistMasters.Where(t => t.TID == TherapistId).SingleOrDefault();
+
+                if (model.StudentIdList.Contains(0))
+                {
+                    var StudentListBytherapist = db.Sp_GetStudentListBasedOnFundingCode_Pdf(therapistMaster.NPI.Trim(), model.ReportType).ToList();
+                    model.StudentIdList = StudentListBytherapist.Select(s => s.SID).ToArray<int>();
+
+                }
+
+                DateTime dtDate = new DateTime(model.FiscalYear, model.FiscalMonth, 1);
+                var days = DateTime.DaysInMonth(Convert.ToInt32(model.FiscalYear), Convert.ToInt32(model.FiscalMonth));
+                var startDay = model.FiscalMonth + "/1/" + model.FiscalYear;
+                var endDay = model.FiscalMonth + "/" + days + "/" + model.FiscalYear;
+
+                if (model.StudentIdList.Length > 1)
+                    zip.Name = model.FiscalYear.ToString() + "-" + dtDate.ToString("MMM") + "-" + reportType + "-" + therapistMaster.FirstName.Trim() + "-" + therapistMaster.LastName.Trim() + "-multiple";
+                else
+                    zip.Name = model.FiscalYear.ToString() + "-" + dtDate.ToString("MMM") + "-" + reportType + "-" + therapistMaster.FirstName.Trim() + "-" + therapistMaster.LastName.Trim();
+
+                foreach (int id in model.StudentIdList)
+                {
+
+
+                    var studentInformation = db.GetStudentInformation_Pdf(id, reportType, therapistMaster.NPI.Trim()).SingleOrDefault();
+                    //                    var studentSessionDetailList = db.Sp_GetStudentSessionDetail_Pdf(therapistMaster.NPI.Trim(), reportType, id, model.FiscalYear, model.FiscalMonth).ToList();
+                    var studentSessionDetailList = db.Sp_GetStudentSessionDetail_Pdf(id, model.FiscalYear.ToString(), startDay, endDay, TherapistId.ToString(), reportType, therapistMaster.NPI.Trim()).ToList();
+
+
+
+                    if (studentSessionDetailList.Count > 0)
+                    {
+
+                        var groupsType = new string[] { "S1", "SP" };
+
+                        foreach (var groupType in groupsType)
+                        {
+                            var groupWiseStudentSessionDetailList = studentSessionDetailList.Where(s => s.GroupType.Trim() == groupType).ToList();
+                            bool GetStudentMasterDetail = false;
+                            if (groupWiseStudentSessionDetailList.Count > 0)
+                            {
+
+                                string pdfTemplate = @"D:\PdfGenCSpackage\PdfGenerator_CS\PdfGenerator_CS\PdfGenerator\BILLINGFORM.pdf";
+                                pdfTemplate = Server.MapPath("~/App_Data/RSA-Invoicing-Template.pdf");
+
+                                //pdfTemplate = @"D:\PdfGenCSpackage\PdfGenerator_CS\PdfGenerator_CS\PdfGenerator\completed_19e15c8d-28da-406e-ba23-17fa84d536af_BILLINGFORM.pdf";
+
+                                string newFile = @"D:\PdfGenCSpackage\PdfGenerator_CS\PdfGenerator_CS\PdfGenerator\completed_" + Guid.NewGuid().ToString() + "_BILLINGFORM.pdf";
+
+                                newFile = Server.MapPath("~/App_Data/PdfForm/" + model.FiscalYear.ToString() + "-" + dtDate.ToString("MMM") + "-" + reportType + "-therapist-" + therapistMaster.FirstName.Trim() + "-" + therapistMaster.LastName.Trim() + "-Student-" + studentInformation.StudentFirstName.Trim() + "-" + studentInformation.StudentLastName.Trim() + "-" + groupType + ".pdf");
+
+                                zip.AddFile(newFile, "Pdf");
+
+
+                                PdfReader pdfReader = new PdfReader(pdfTemplate);
+                                PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileStream(newFile, FileMode.Create));
+
+                                AcroFields pdfFormFields = pdfStamper.AcroFields;
+
+
+
+
+                                pdfFormFields.SetField("Month", dtDate.ToString("MMMM"));
+                                pdfFormFields.SetField("Year", model.FiscalYear.ToString());
+
+
+                                // fill student section information
+                                pdfFormFields.SetField("StudentName", studentInformation.StudentLastName.Trim() + " , " + studentInformation.StudentFirstName.Trim());
+                                pdfFormFields.SetField("StudentNYCID", studentInformation.NYCI);
+                                if (!string.IsNullOrEmpty(studentInformation.DOB))
+                                {
+                                    DateTime DOB;
+                                    if (DateTime.TryParse(studentInformation.DOB, out DOB))
+                                    {
+                                        pdfFormFields.SetField("DOB_MM", DOB.Month.ToString());
+                                        pdfFormFields.SetField("DOB_DD", DOB.Day.ToString());
+                                        pdfFormFields.SetField("DOB_YEAR", DOB.Year.ToString());
+                                    }
+                                }
+
+                                pdfFormFields.SetField("Student_District", studentInformation.HomeDistrict);
+                                pdfFormFields.SetField("Student_RelatedService", "Speech");
+
+
+                                //pdfFormFields.SetField("Student_Frequency", studentInformation.MandFrequency);
+                                //pdfFormFields.SetField("Student_Duration", studentInformation.MandDuration);
+                                //pdfFormFields.SetField("Student_GroupSize", studentInformation.MandGroupSize);
+                                //pdfFormFields.SetField("Student_Language", studentInformation.Language);
+
+                                //pdfFormFields.SetField("Student_Location", i.ToString());
+                                //pdfFormFields.SetField("Comments", i.ToString());
+
+
+
+                                //// fill Provider section information
+
+                                pdfFormFields.SetField("Provider_Name", therapistMaster.FirstName.Trim() + " " + therapistMaster.LastName.Trim());
+                                pdfFormFields.SetField("Provider__Address1", "134 West 26th Street, Suite # 602");
+                                pdfFormFields.SetField("Provider__Address2", "New York, NY 10001");
+                                pdfFormFields.SetField("Provider_Telephone", "212-604-9360");
+
+                                string NPI = therapistMaster.NPI.Trim();
+                                NPI = NPI.ToString().PadLeft(9, '0');
+                                pdfFormFields.SetField("Provider_SSID", NPI);
+
+
+                                // fill Agency section information
+
+
+                                pdfFormFields.SetField("AgencyName", "City Sounds of NY");
+                                pdfFormFields.SetField("Address", "134 West 26th Street, Suite # 602");
+                                pdfFormFields.SetField("Address2", "New York, NY 10001");
+                                pdfFormFields.SetField("Address3", "");
+                                pdfFormFields.SetField("Agency_Phone", "212-604-9360");
+                                pdfFormFields.SetField("Federal Tax ID", "270698698");
+
+
+                                // Fill Session Detail Information
+
+                                foreach (var sessionDetail in groupWiseStudentSessionDetailList)
+                                {
+                                    DateTime sessionDate = sessionDetail.Date.HasValue ? (DateTime)sessionDetail.Date : new DateTime(1970, 1, 1);
+
+                                    if (sessionDate.Year != 1970)
+                                    {
+                                        if (GetStudentMasterDetail == false)
+                                        {
+
+                                            pdfFormFields.SetField("Student_Frequency", sessionDetail.MandFrequency.Contains(",") ? sessionDetail.MandFrequency.Split(',')[groupType == "S1" ? 0 : 1] : sessionDetail.MandFrequency);
+                                            pdfFormFields.SetField("Student_Duration", sessionDetail.MandDuration.Contains(",") ? sessionDetail.MandDuration.Split(',')[groupType == "S1" ? 0 : 1] : sessionDetail.MandDuration);
+                                            pdfFormFields.SetField("Student_GroupSize", sessionDetail.MandGroupSize.Contains(",") ? sessionDetail.MandGroupSize.Split(',')[groupType == "S1" ? 0 : 1] : sessionDetail.MandGroupSize);
+                                            pdfFormFields.SetField("Student_Language", studentInformation.Language);
+                                            pdfFormFields.SetField("Student_Location", !string.IsNullOrEmpty(sessionDetail.Location) ? sessionDetail.Location.Trim() : "");
+
+                                            GetStudentMasterDetail = true;
+                                        }
+
+
+                                        DateTime StartTime = DateTime.Today.Add((TimeSpan)sessionDetail.StartTime);
+                                        DateTime EndTime = DateTime.Today.Add((TimeSpan)sessionDetail.EndTime);
+
+                                        pdfFormFields.SetField("FREQUENCY" + sessionDate.Day, "1");
+                                        pdfFormFields.SetField("START TIME" + sessionDate.Day, StartTime.ToString("hh:mm tt"));
+                                        pdfFormFields.SetField("END TIME" + sessionDate.Day, EndTime.ToString("hh:mm tt"));
+                                        pdfFormFields.SetField("GROUP SIZE" + sessionDate.Day, sessionDetail.GroupSize);
+                                    }
+
+                                }
+
+                                if (groupWiseStudentSessionDetailList.Count > 0)
+                                    pdfFormFields.SetField("Total_Sessions", groupWiseStudentSessionDetailList.Count.ToString());
+
+
+
+                                // flatten the form to remove editting options, set it to false
+                                // to leave the form open to subsequent manual edits
+                                pdfStamper.FormFlattening = true;
+
+                                // close the pdf
+                                pdfStamper.Close();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        message = "There are no sessions recorded for this case.";
+                    }
+                }
+            }
+
+            return zip;
+
+        }
+
+
 
 
         #endregion
@@ -342,16 +966,21 @@ namespace GenerateReport.Controllers
                 return AccessDeniedView();
 
             int TID = CheckUserLoginStatus();
+            string Message = string.Empty;
 
             if (ModelState.IsValid)
             {
 
-                ZipFile zip = FillFormNew(model.StudentId, TID, model.ReportType, model);
+                ZipFile zip = FillFormNew(model.StudentId, TID, model.ReportType, model, out Message);
 
-                string ReadmeText = "This is a zip file dynamically generated at " + System.DateTime.Now.ToString("G");
-                string filename = model.StudentId + "_" + model.ReportType + "_" + model.FiscalMonth + "_" + model.FiscalYear + "_" + TID + ".zip";
+                //if (string.IsNullOrEmpty(Message))
+                //{
+                    string ReadmeText = "This is a zip file dynamically generated at " + System.DateTime.Now.ToString("G");
+                    string filename = model.StudentId + "_" + model.ReportType + "_" + model.FiscalMonth + "_" + model.FiscalYear + "_" + TID + ".zip";
 
-                return new ZipFileResult(zip, zip.Name+".zip");
+                    return new ZipFileResult(zip, zip.Name + ".zip");
+                //}
+
                 //return new ZipFileResult(zip, filename);
             }
 
@@ -365,7 +994,7 @@ namespace GenerateReport.Controllers
                     model.StudentList.Add(new SelectListItem() { Text = student.StudentName, Value = student.SID.ToString(), Selected = model.StudentId==student.SID?true:false });
                 }
             }
-
+            ViewData["errormessage"] = Message;
             return View(model);
         }
 
@@ -378,16 +1007,20 @@ namespace GenerateReport.Controllers
                 return AccessDeniedView();
 
             int TID = CheckUserLoginStatus();
+            string Message = string.Empty;
 
             if (ModelState.IsValid)
             {
 
-                ZipFile zip = CPSEFormNew(model.StudentId, TID, model.ReportType, model);
+                ZipFile zip = CPSEFormNew(model.StudentId, TID, model.ReportType, model, out Message);
 
-                string ReadmeText = "This is a zip file dynamically generated at " + System.DateTime.Now.ToString("G");
-                string filename = model.StudentId + "_" + model.ReportType + "_" + model.FiscalMonth + "_" + model.FiscalYear + ".zip";
+                //if (string.IsNullOrEmpty(Message))
+                //{
+                    string ReadmeText = "This is a zip file dynamically generated at " + System.DateTime.Now.ToString("G");
+                    string filename = model.StudentId + "_" + model.ReportType + "_" + model.FiscalMonth + "_" + model.FiscalYear + ".zip";
 
-                return new ZipFileResult(zip, zip.Name+".zip");
+                    return new ZipFileResult(zip, zip.Name + ".zip");
+                //}
             }
 
             var therapistMaster = db.TherapistMasters.Where(t => t.TID == TID).SingleOrDefault();
@@ -401,6 +1034,128 @@ namespace GenerateReport.Controllers
                 }
             }
 
+            ViewData["errormessage"] = Message;
+            return View(model);
+        }
+
+        [ActionName("fillForm")]
+        [HttpPost]
+        [FormNameValueRequired("PP", "ReportType")]
+        public ActionResult fillFormPPG(FormGenerateViewModel model)
+        {
+            if (CheckUserLoginStatus() <= 0)
+                return AccessDeniedView();
+
+            int TID = CheckUserLoginStatus();
+            string Message = string.Empty;
+
+            if (ModelState.IsValid)
+            {
+
+                ZipFile zip = PPGFormNew(model.StudentId, TID, model.ReportType, model,out Message);
+
+                //if (string.IsNullOrEmpty(Message))
+                //{
+                    string ReadmeText = "This is a zip file dynamically generated at " + System.DateTime.Now.ToString("G");
+                    string filename = model.StudentId + "_" + model.ReportType + "_" + model.FiscalMonth + "_" + model.FiscalYear + ".zip";
+
+                    return new ZipFileResult(zip, zip.Name + ".zip");
+                //}
+            }
+
+            var therapistMaster = db.TherapistMasters.Where(t => t.TID == TID).SingleOrDefault();
+            var StudentList = db.Sp_GetStudentListBasedOnFundingCode_Pdf(therapistMaster.NPI.Trim(), model.ReportType).ToList();
+            if (StudentList.Count > 0)
+            {
+                model.StudentList = new List<SelectListItem>();
+                foreach (var student in StudentList)
+                {
+                    model.StudentList.Add(new SelectListItem() { Text = student.StudentName, Value = student.SID.ToString(), Selected = model.StudentId == student.SID ? true : false });
+                }
+            }
+
+            ViewData["errormessage"] = Message;
+            return View(model);
+        }
+
+        [ActionName("fillForm")]
+        [HttpPost]
+        [FormNameValueRequired("PI", "ReportType")]
+        public ActionResult fillFormPPI(FormGenerateViewModel model)
+        {
+            if (CheckUserLoginStatus() <= 0)
+                return AccessDeniedView();
+
+            int TID = CheckUserLoginStatus();
+            string Message = string.Empty;
+
+            if (ModelState.IsValid)
+            {
+
+                ZipFile zip = PPIFormNew(model.StudentId, TID, model.ReportType, model, out Message);
+
+                //if (string.IsNullOrEmpty(Message))
+                //{
+                    string ReadmeText = "This is a zip file dynamically generated at " + System.DateTime.Now.ToString("G");
+                    string filename = model.StudentId + "_" + model.ReportType + "_" + model.FiscalMonth + "_" + model.FiscalYear + ".zip";
+
+                    return new ZipFileResult(zip, zip.Name + ".zip");
+                //}
+            }
+
+            var therapistMaster = db.TherapistMasters.Where(t => t.TID == TID).SingleOrDefault();
+            var StudentList = db.Sp_GetStudentListBasedOnFundingCode_Pdf(therapistMaster.NPI.Trim(), model.ReportType).ToList();
+            if (StudentList.Count > 0)
+            {
+                model.StudentList = new List<SelectListItem>();
+                foreach (var student in StudentList)
+                {
+                    model.StudentList.Add(new SelectListItem() { Text = student.StudentName, Value = student.SID.ToString(), Selected = model.StudentId == student.SID ? true : false });
+                }
+            }
+
+            ViewData["errormessage"] = Message;
+            return View(model);
+        }
+
+
+        [ActionName("fillForm")]
+        [HttpPost]
+        [FormNameValueRequired("RSA", "ReportType")]
+        public ActionResult fillFormRSA(FormGenerateViewModel model)
+        {
+            if (CheckUserLoginStatus() <= 0)
+                return AccessDeniedView();
+
+            int TID = CheckUserLoginStatus();
+            string Message = string.Empty;
+
+            if (ModelState.IsValid)
+            {
+
+                ZipFile zip = RSAFormNew(model.StudentId, TID, model.ReportType, model, out Message);
+
+                //if (string.IsNullOrEmpty(Message))
+                //{
+                string ReadmeText = "This is a zip file dynamically generated at " + System.DateTime.Now.ToString("G");
+                string filename = model.StudentId + "_" + model.ReportType + "_" + model.FiscalMonth + "_" + model.FiscalYear + ".zip";
+
+                return new ZipFileResult(zip, zip.Name + ".zip");
+                //}
+            }
+
+            var therapistMaster = db.TherapistMasters.Where(t => t.TID == TID).SingleOrDefault();
+            var StudentList = db.Sp_GetStudentListBasedOnFundingCode_Pdf(therapistMaster.NPI.Trim(), model.ReportType).ToList();
+            if (StudentList.Count > 0)
+            {
+                model.StudentList = new List<SelectListItem>();
+                foreach (var student in StudentList)
+                {
+                    model.StudentList.Add(new SelectListItem() { Text = student.StudentName, Value = student.SID.ToString(), Selected = model.StudentId == student.SID ? true : false });
+                }
+            }
+
+            ViewData["errormessage"] = Message;
             return View(model);
         }
 

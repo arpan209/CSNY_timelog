@@ -33,6 +33,9 @@ namespace CSNY_timelog.ViewModel
         [Display(Name = "Invoice")]
         public string Invoice { get; set; }
 
+        [Display(Name = "Note")]
+        public string Note { get; set; }
+
         [Required]
         [Display(Name = "Filename")]
         public string Filename { get; set; }
@@ -86,7 +89,7 @@ namespace CSNY_timelog.ViewModel
         public string Invoice { get; set; }
         public string TID { get; set; }
         public int ID { get; set; }
-        //public string ServiceType { get; set; }
+        public string Note { get; set; }
 
 
     }

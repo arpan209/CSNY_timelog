@@ -3980,7 +3980,8 @@ namespace CSNY_timelog.Models
         /// <param name="year">No Metadata Documentation available.</param>
         /// <param name="month">No Metadata Documentation available.</param>
         /// <param name="invoiceNo">No Metadata Documentation available.</param>
-        public int CreateInvoice(global::System.String tID, global::System.String ageGroup, global::System.String year, global::System.String month, global::System.String invoiceNo)
+        /// <param name="note">No Metadata Documentation available.</param>
+        public int CreateInvoice(global::System.String tID, global::System.String ageGroup, global::System.String year, global::System.String month, global::System.String invoiceNo, global::System.String note)
         {
             ObjectParameter tIDParameter;
             if (tID != null)
@@ -4032,7 +4033,17 @@ namespace CSNY_timelog.Models
                 invoiceNoParameter = new ObjectParameter("InvoiceNo", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction("CreateInvoice", tIDParameter, ageGroupParameter, yearParameter, monthParameter, invoiceNoParameter);
+            ObjectParameter noteParameter;
+            if (note != null)
+            {
+                noteParameter = new ObjectParameter("Note", note);
+            }
+            else
+            {
+                noteParameter = new ObjectParameter("Note", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction("CreateInvoice", tIDParameter, ageGroupParameter, yearParameter, monthParameter, invoiceNoParameter, noteParameter);
         }
     
         /// <summary>
@@ -4040,7 +4051,8 @@ namespace CSNY_timelog.Models
         /// </summary>
         /// <param name="iD">No Metadata Documentation available.</param>
         /// <param name="invoiceNo">No Metadata Documentation available.</param>
-        public int UpdateInvocie(global::System.String iD, global::System.String invoiceNo)
+        /// <param name="note">No Metadata Documentation available.</param>
+        public int UpdateInvocie(global::System.String iD, global::System.String invoiceNo, global::System.String note)
         {
             ObjectParameter iDParameter;
             if (iD != null)
@@ -4062,7 +4074,17 @@ namespace CSNY_timelog.Models
                 invoiceNoParameter = new ObjectParameter("InvoiceNo", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction("UpdateInvocie", iDParameter, invoiceNoParameter);
+            ObjectParameter noteParameter;
+            if (note != null)
+            {
+                noteParameter = new ObjectParameter("Note", note);
+            }
+            else
+            {
+                noteParameter = new ObjectParameter("Note", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction("UpdateInvocie", iDParameter, invoiceNoParameter, noteParameter);
         }
 
         #endregion
@@ -4556,6 +4578,30 @@ namespace CSNY_timelog.Models
         private global::System.String _InvoiceNo;
         partial void OnInvoiceNoChanging(global::System.String value);
         partial void OnInvoiceNoChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Note
+        {
+            get
+            {
+                return _Note;
+            }
+            set
+            {
+                OnNoteChanging(value);
+                ReportPropertyChanging("Note");
+                _Note = StructuralObject.SetValidValue(value, true, "Note");
+                ReportPropertyChanged("Note");
+                OnNoteChanged();
+            }
+        }
+        private global::System.String _Note;
+        partial void OnNoteChanging(global::System.String value);
+        partial void OnNoteChanged();
 
         #endregion
 

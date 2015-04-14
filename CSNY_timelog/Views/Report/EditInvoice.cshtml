@@ -1,6 +1,6 @@
 ﻿@model CSNY_timelog.ViewModel.ReportViewModel
 @{
-    ViewBag.Title = "Edit Invoice 123";
+    ViewBag.Title = "Edit Invoice";
     Layout = "~/Views/Shared/_LayoutPage1.cshtml";
 }
 
@@ -16,14 +16,18 @@
     function Generate() {
         var error = "";
         var Invoice = document.getElementById("Invoice").value;
-        if (Invoice == "") {
-            error += "Enter Envoice No.\n";
-        }
+        //if (Invoice == "") {
+        //    error += "Enter Envoice No.\n";
+        //}
+        var Note = "";
+          Note = document.getElementById("Note").value;
+       
         var TID = '@Model.TID';
         var InvoiceId = '@Model.InvoiceID';
         var AgeGroup = '@Model.AgeGroup';
         var Fiscal = '@Model.Fiscal';
         var Month = '@Model.Month';
+     
         var ID = "0";
         if (error != "") {
             alert(error);
@@ -40,7 +44,7 @@
         else {
             var OrderViewModel =
                   {
-                      AgeGroup: AgeGroup, Fiscal: Fiscal, Month: Month, Invoice: Invoice, InvoiceID: InvoiceId, TID: TID
+                      AgeGroup: AgeGroup, Fiscal: Fiscal, Month: Month, Invoice: Invoice, InvoiceID: InvoiceId, TID: TID,Note: Note
                      
                       };
 
@@ -138,7 +142,14 @@
 
     </div>
     
+                  <div class="editor-label">
+            <span style="color:red;">*</span>   <b>Note: </b> 
+     </div>
+     <div class="editor-field">
 
+         @Html.TextAreaFor(m=>m.Note, new { style = "width:350px; height: 100px; max-height:200px;max-width:350px;",@maxlength="500" })
+                
+     </div>
                  
           <div style="clear:both;">
             <br />

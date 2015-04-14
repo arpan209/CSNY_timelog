@@ -140,7 +140,8 @@
     <Property Name="FundingCode" Type="nchar" Nullable="false" MaxLength="10" />
     <Property Name="Fiscal" Type="nchar" Nullable="false" MaxLength="10" />
     <Property Name="month" Type="nchar" Nullable="false" MaxLength="10" />
-    <Property Name="InvoiceNo" Type="nchar" MaxLength="10" />
+    <Property Name="InvoiceNo" Type="nvarchar" MaxLength="50" />
+    <Property Name="Note" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="MandateMaster">
     <Key>
@@ -415,6 +416,7 @@
     <Parameter Name="Year" Type="nvarchar" Mode="In" />
     <Parameter Name="Month" Type="nvarchar" Mode="In" />
     <Parameter Name="InvoiceNo" Type="nvarchar" Mode="In" />
+    <Parameter Name="Note" Type="nvarchar(max)" Mode="In" />
   </Function>
   <Function Name="fn_diagramobjects" ReturnType="int" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="GetStudentInformation_Pdf" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -765,6 +767,7 @@
   <Function Name="UpdateInvocie" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="ID" Type="nvarchar" Mode="In" />
     <Parameter Name="InvoiceNo" Type="nvarchar" Mode="In" />
+    <Parameter Name="Note" Type="nvarchar(max)" Mode="In" />
   </Function>
   <Function Name="UpdateTherapistLock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="TID" Type="nvarchar" Mode="In" />

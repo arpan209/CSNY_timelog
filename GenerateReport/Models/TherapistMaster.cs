@@ -33,5 +33,6 @@ namespace GenerateReport.Models
         public Nullable<bool> IsActive { get; set; }
         public string UserType { get; set; }
         public string Lock { get; set; }
+        public Nullable<System.DateTime> EndService { get; set; }
     }
 }

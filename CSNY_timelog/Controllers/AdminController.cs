@@ -1313,7 +1313,7 @@ namespace CSNY_timelog.Controllers
                         reg.StateName = (!string.IsNullOrEmpty((string)(objviewmodel.StateName))) ? (string)objviewmodel.StateName.Trim() : "";
                         reg.Email = (!string.IsNullOrEmpty((string)(objviewmodel.Email))) ? (string)objviewmodel.Email.Trim() : "";
                         reg.Phone = (!string.IsNullOrEmpty((string)(objviewmodel.Phone))) ? (string)objviewmodel.Phone.Trim() : "";
-                        reg.SSN = (!string.IsNullOrEmpty((string)(objviewmodel.SSN))) ? (string)objviewmodel.SSN.Trim() : "";
+                        reg.SSN = (!string.IsNullOrEmpty((string)(objviewmodel.SSN))) ? (string)objviewmodel.SSN.TrimStart(new Char[] { '0' }) : "";
                         reg.ServiceType = (!string.IsNullOrEmpty((string)(objviewmodel.ServiceType))) ? (string)objviewmodel.ServiceType.Trim() : "";
                         reg.UserType = (!string.IsNullOrEmpty((string)(objviewmodel.UserType))) ? (string)objviewmodel.UserType.Trim() : "";
                         //reg.IsActive = "true";
@@ -1395,6 +1395,7 @@ namespace CSNY_timelog.Controllers
                   Session["UserId"] = UserId;
                   Session["Username"] = result.UserName;
                   username = result.UserName;
+                  Session["Fullname"] = result.FirstName;
                   Session["SName"] = "";
                   Session["OSIS"] = "";
               }

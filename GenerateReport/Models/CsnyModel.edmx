@@ -4,14 +4,123 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="csnyModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="csnyModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="csnyModelStoreContainer">
+          <EntitySet Name="AgencyMaster" EntityType="csnyModel.Store.AgencyMaster" store:Type="Tables" store:Schema="dbo" store:Name="AgencyMaster">
+            <DefiningQuery>SELECT 
+      [AgencyMaster].[AID] AS [AID], 
+      [AgencyMaster].[NameOfAgency] AS [NameOfAgency], 
+      [AgencyMaster].[Address1] AS [Address1], 
+      [AgencyMaster].[Address2] AS [Address2], 
+      [AgencyMaster].[Phone] AS [Phone], 
+      [AgencyMaster].[RepFirstName] AS [RepFirstName], 
+      [AgencyMaster].[RepLastName] AS [RepLastName], 
+      [AgencyMaster].[TIN] AS [TIN]
+      FROM [dbo].[AgencyMaster] AS [AgencyMaster]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="FundingCodeMaster" EntityType="csnyModel.Store.FundingCodeMaster" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="InvoiceDetail" EntityType="csnyModel.Store.InvoiceDetail" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="MandateMaster" EntityType="csnyModel.Store.MandateMaster" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SessionDetail" EntityType="csnyModel.Store.SessionDetail" store:Type="Tables" store:Schema="dbo" store:Name="SessionDetail">
+            <DefiningQuery>SELECT 
+      [SessionDetail].[SrNo] AS [SrNo], 
+      [SessionDetail].[SessionID] AS [SessionID], 
+      [SessionDetail].[SID] AS [SID], 
+      [SessionDetail].[Date] AS [Date], 
+      [SessionDetail].[AttnCode] AS [AttnCode], 
+      [SessionDetail].[GroupSize] AS [GroupSize], 
+      [SessionDetail].[StartTime] AS [StartTime], 
+      [SessionDetail].[EndTime] AS [EndTime], 
+      [SessionDetail].[Location] AS [Location], 
+      [SessionDetail].[TID] AS [TID], 
+      [SessionDetail].[ServiceType] AS [ServiceType], 
+      [SessionDetail].[GroupType] AS [GroupType], 
+      [SessionDetail].[LastModified] AS [LastModified]
+      FROM [dbo].[SessionDetail] AS [SessionDetail]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="SessionNotPDetail" EntityType="csnyModel.Store.SessionNotPDetail" store:Type="Tables" store:Schema="dbo" store:Name="SessionNotPDetail">
+            <DefiningQuery>SELECT 
+      [SessionNotPDetail].[SrNo] AS [SrNo], 
+      [SessionNotPDetail].[SessionID] AS [SessionID], 
+      [SessionNotPDetail].[SID] AS [SID], 
+      [SessionNotPDetail].[Date] AS [Date], 
+      [SessionNotPDetail].[AttnCode] AS [AttnCode], 
+      [SessionNotPDetail].[GroupSize] AS [GroupSize], 
+      [SessionNotPDetail].[StartTime] AS [StartTime], 
+      [SessionNotPDetail].[EndTime] AS [EndTime], 
+      [SessionNotPDetail].[Location] AS [Location], 
+      [SessionNotPDetail].[TID] AS [TID], 
+      [SessionNotPDetail].[ServiceType] AS [ServiceType], 
+      [SessionNotPDetail].[GroupType] AS [GroupType]
+      FROM [dbo].[SessionNotPDetail] AS [SessionNotPDetail]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="StagingTable" EntityType="csnyModel.Store.StagingTable" store:Type="Tables" store:Schema="dbo" store:Name="StagingTable">
+            <DefiningQuery>SELECT 
+      [StagingTable].[SID] AS [SID], 
+      [StagingTable].[FiscalYear] AS [FiscalYear], 
+      [StagingTable].[NPI] AS [NPI], 
+      [StagingTable].[NYCI] AS [NYCI], 
+      [StagingTable].[StudentLastName] AS [StudentLastName], 
+      [StagingTable].[StudentFirstName] AS [StudentFirstName], 
+      [StagingTable].[Frequency] AS [Frequency], 
+      [StagingTable].[GroupSize] AS [GroupSize], 
+      [StagingTable].[Duration] AS [Duration], 
+      [StagingTable].[Language] AS [Language], 
+      [StagingTable].[ServiceStartDate] AS [ServiceStartDate], 
+      [StagingTable].[ServiceEndDate] AS [ServiceEndDate], 
+      [StagingTable].[FundingCode] AS [FundingCode]
+      FROM [dbo].[StagingTable] AS [StagingTable]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="StudentMaster" EntityType="csnyModel.Store.StudentMaster" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="sysdiagrams" EntityType="csnyModel.Store.sysdiagrams" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="TherapistMaster" EntityType="csnyModel.Store.TherapistMaster" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ZipCodes" EntityType="csnyModel.Store.ZipCodes" store:Type="Tables" store:Schema="dbo" store:Name="ZipCodes">
+            <DefiningQuery>SELECT 
+      [ZipCodes].[ZIPCode] AS [ZIPCode], 
+      [ZipCodes].[ZIPType] AS [ZIPType], 
+      [ZipCodes].[CityName] AS [CityName], 
+      [ZipCodes].[CityType] AS [CityType], 
+      [ZipCodes].[CountyName] AS [CountyName], 
+      [ZipCodes].[CountyFIPS] AS [CountyFIPS], 
+      [ZipCodes].[StateName] AS [StateName], 
+      [ZipCodes].[StateAbbr] AS [StateAbbr], 
+      [ZipCodes].[StateFIPS] AS [StateFIPS], 
+      [ZipCodes].[MSACode] AS [MSACode], 
+      [ZipCodes].[AreaCode] AS [AreaCode], 
+      [ZipCodes].[TimeZone] AS [TimeZone], 
+      [ZipCodes].[UTC] AS [UTC], 
+      [ZipCodes].[DST] AS [DST], 
+      [ZipCodes].[Latitude] AS [Latitude], 
+      [ZipCodes].[Longitude] AS [Longitude]
+      FROM [dbo].[ZipCodes] AS [ZipCodes]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vw_CurrentTherapists" EntityType="csnyModel.Store.vw_CurrentTherapists" store:Type="Views" store:Schema="dbo" store:Name="vw_CurrentTherapists">
+            <DefiningQuery>SELECT 
+      [vw_CurrentTherapists].[SID] AS [SID], 
+      [vw_CurrentTherapists].[FundingCode] AS [FundingCode], 
+      [vw_CurrentTherapists].[BoroughCode] AS [BoroughCode], 
+      [vw_CurrentTherapists].[SchoolLocationCode] AS [SchoolLocationCode], 
+      [vw_CurrentTherapists].[HomeDistrict] AS [HomeDistrict], 
+      [vw_CurrentTherapists].[ServiceStart] AS [ServiceStart], 
+      [vw_CurrentTherapists].[ServiceEnd] AS [ServiceEnd], 
+      [vw_CurrentTherapists].[Frequency] AS [Frequency], 
+      [vw_CurrentTherapists].[GroupSize] AS [GroupSize], 
+      [vw_CurrentTherapists].[Duration] AS [Duration], 
+      [vw_CurrentTherapists].[Language] AS [Language], 
+      [vw_CurrentTherapists].[RowNum] AS [RowNum], 
+      [vw_CurrentTherapists].[NPI] AS [NPI], 
+      [vw_CurrentTherapists].[FiscalYear] AS [FiscalYear]
+      FROM [dbo].[vw_CurrentTherapists] AS [vw_CurrentTherapists]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'csny.dbo.AgencyMaster' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+      warning 6002: The table/view 'CSNY_New.dbo.AgencyMaster' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
         <EntityType Name="AgencyMaster">
           <Key>
             <PropertyRef Name="AID" />
           </Key>
-          <Property Name="AID" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="AID" Type="nchar" Nullable="false" MaxLength="10" />
           <Property Name="NameOfAgency" Type="nchar" MaxLength="100" />
           <Property Name="Address1" Type="nchar" MaxLength="100" />
           <Property Name="Address2" Type="nchar" MaxLength="100" />
@@ -24,16 +133,28 @@ warning 6002: The table/view 'csny.dbo.AgencyMaster' does not have a primary key
           <Key>
             <PropertyRef Name="FundingCodeId" />
           </Key>
-          <Property Name="FundingCodeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FundingCodeId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="FundingCodeType" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="InvoiceDetail">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="TID" Type="nchar" Nullable="false" MaxLength="10" />
+          <Property Name="FundingCode" Type="nchar" Nullable="false" MaxLength="10" />
+          <Property Name="Fiscal" Type="nchar" Nullable="false" MaxLength="10" />
+          <Property Name="month" Type="nchar" Nullable="false" MaxLength="10" />
+          <Property Name="InvoiceNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="Note" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="MandateMaster">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="SID" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="NPI" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="SID" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="NPI" Type="nvarchar" Nullable="false" MaxLength="50" />
           <Property Name="FiscalYear" Type="nchar" MaxLength="10" />
           <Property Name="ServiceStart" Type="datetime" />
           <Property Name="ServiceEnd" Type="datetime" />
@@ -47,20 +168,21 @@ warning 6002: The table/view 'csny.dbo.AgencyMaster' does not have a primary key
           <Property Name="HomeDistrict" Type="nchar" MaxLength="10" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'csny.dbo.SessionDetail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+      warning 6002: The table/view 'CSNY_New.dbo.SessionDetail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
         <EntityType Name="SessionDetail">
           <Key>
             <PropertyRef Name="SrNo" />
             <PropertyRef Name="SessionID" />
           </Key>
-          <Property Name="SrNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SrNo" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="SessionID" Type="int" Nullable="false" />
           <Property Name="SID" Type="nchar" MaxLength="15" />
           <Property Name="Date" Type="date" />
           <Property Name="AttnCode" Type="nchar" MaxLength="10" />
           <Property Name="GroupSize" Type="nchar" MaxLength="10" />
-          <Property Name="StartTime" Type="time" Precision="7" />
-          <Property Name="EndTime" Type="time" Precision="7" />
+          <Property Name="StartTime" Type="time" />
+          <Property Name="EndTime" Type="time" />
           <Property Name="Location" Type="nchar" MaxLength="25" />
           <Property Name="TID" Type="nchar" MaxLength="15" />
           <Property Name="ServiceType" Type="nvarchar(max)" />
@@ -68,7 +190,8 @@ warning 6002: The table/view 'csny.dbo.SessionDetail' does not have a primary ke
           <Property Name="LastModified" Type="datetime" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'csny.dbo.SessionNotPDetail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+      warning 6002: The table/view 'CSNY_New.dbo.SessionNotPDetail' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
         <EntityType Name="SessionNotPDetail">
           <Key>
             <PropertyRef Name="SrNo" />
@@ -80,24 +203,25 @@ warning 6002: The table/view 'csny.dbo.SessionNotPDetail' does not have a primar
           <Property Name="Date" Type="date" />
           <Property Name="AttnCode" Type="nchar" MaxLength="10" />
           <Property Name="GroupSize" Type="nchar" MaxLength="10" />
-          <Property Name="StartTime" Type="time" Precision="7" />
-          <Property Name="EndTime" Type="time" Precision="7" />
+          <Property Name="StartTime" Type="time" />
+          <Property Name="EndTime" Type="time" />
           <Property Name="Location" Type="nchar" MaxLength="25" />
           <Property Name="TID" Type="nchar" MaxLength="15" />
           <Property Name="ServiceType" Type="nvarchar(max)" />
           <Property Name="GroupType" Type="nchar" MaxLength="10" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'csny.dbo.StagingTable' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+      warning 6002: The table/view 'CSNY_New.dbo.StagingTable' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
         <EntityType Name="StagingTable">
           <Key>
             <PropertyRef Name="SID" />
             <PropertyRef Name="NYCI" />
           </Key>
-          <Property Name="SID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="FiscalYear" Type="nvarchar" MaxLength="10" />
           <Property Name="NPI" Type="nchar" MaxLength="50" />
-          <Property Name="NYCI" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="NYCI" Type="nchar" Nullable="false" MaxLength="50" />
           <Property Name="StudentLastName" Type="nchar" MaxLength="50" />
           <Property Name="StudentFirstName" Type="nchar" MaxLength="50" />
           <Property Name="Frequency" Type="nchar" MaxLength="10" />
@@ -112,7 +236,7 @@ warning 6002: The table/view 'csny.dbo.StagingTable' does not have a primary key
           <Key>
             <PropertyRef Name="SID" />
           </Key>
-          <Property Name="SID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="StudentFirstName" Type="nvarchar(max)" />
           <Property Name="StudentLastName" Type="nvarchar(max)" />
           <Property Name="Address1" Type="nvarchar(max)" />
@@ -126,7 +250,7 @@ warning 6002: The table/view 'csny.dbo.StagingTable' does not have a primary key
           <Property Name="GuardianMobile" Type="nvarchar" MaxLength="50" />
           <Property Name="GuardianEmail" Type="nvarchar" MaxLength="50" />
           <Property Name="DOB" Type="nvarchar" MaxLength="50" />
-          <Property Name="NYCI" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="NYCI" Type="nchar" Nullable="false" MaxLength="50" />
           <Property Name="TypeOfService" Type="nchar" MaxLength="50" />
           <Property Name="Location" Type="nchar" MaxLength="100" />
           <Property Name="PayType" Type="nvarchar" MaxLength="50" />
@@ -141,9 +265,9 @@ warning 6002: The table/view 'csny.dbo.StagingTable' does not have a primary key
           <Key>
             <PropertyRef Name="diagram_id" />
           </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="128" />
           <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="diagram_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
@@ -151,14 +275,14 @@ warning 6002: The table/view 'csny.dbo.StagingTable' does not have a primary key
           <Key>
             <PropertyRef Name="TID" />
           </Key>
-          <Property Name="TID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="FirstName" Type="nchar" MaxLength="50" />
           <Property Name="LastName" Type="nchar" MaxLength="50" />
           <Property Name="Address1" Type="nvarchar(max)" />
           <Property Name="address2" Type="nvarchar(max)" />
           <Property Name="State" Type="nchar" MaxLength="50" />
           <Property Name="City" Type="nchar" MaxLength="50" />
-          <Property Name="Email" Type="nchar" MaxLength="100" Nullable="false" />
+          <Property Name="Email" Type="nchar" Nullable="false" MaxLength="100" />
           <Property Name="Phone" Type="nchar" MaxLength="50" />
           <Property Name="NPI" Type="nchar" MaxLength="15" />
           <Property Name="UserName" Type="nchar" MaxLength="50" />
@@ -168,11 +292,13 @@ warning 6002: The table/view 'csny.dbo.StagingTable' does not have a primary key
           <Property Name="DateOfRegistratio" Type="date" />
           <Property Name="LastLogin" Type="datetime" />
           <Property Name="IsActive" Type="bit" />
+          <Property Name="EndService" Type="date" />
           <Property Name="UserType" Type="nvarchar" MaxLength="50" />
           <Property Name="Lock" Type="nchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'csny.dbo.ZipCodes' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+      warning 6002: The table/view 'CSNY_New.dbo.ZipCodes' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
         <EntityType Name="ZipCodes">
           <Key>
             <PropertyRef Name="ZIPCode" />
@@ -192,31 +318,32 @@ warning 6002: The table/view 'csny.dbo.ZipCodes' does not have a primary key def
             <PropertyRef Name="Latitude" />
             <PropertyRef Name="Longitude" />
           </Key>
-          <Property Name="ZIPCode" Type="char" MaxLength="5" Nullable="false" />
-          <Property Name="ZIPType" Type="char" MaxLength="1" Nullable="false" />
-          <Property Name="CityName" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="CityType" Type="char" MaxLength="1" Nullable="false" />
-          <Property Name="CountyName" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="CountyFIPS" Type="char" MaxLength="5" Nullable="false" />
-          <Property Name="StateName" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="StateAbbr" Type="char" MaxLength="2" Nullable="false" />
-          <Property Name="StateFIPS" Type="char" MaxLength="2" Nullable="false" />
-          <Property Name="MSACode" Type="char" MaxLength="4" Nullable="false" />
-          <Property Name="AreaCode" Type="varchar" MaxLength="7" Nullable="false" />
-          <Property Name="TimeZone" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="ZIPCode" Type="char" Nullable="false" MaxLength="5" />
+          <Property Name="ZIPType" Type="char" Nullable="false" MaxLength="1" />
+          <Property Name="CityName" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="CityType" Type="char" Nullable="false" MaxLength="1" />
+          <Property Name="CountyName" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="CountyFIPS" Type="char" Nullable="false" MaxLength="5" />
+          <Property Name="StateName" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="StateAbbr" Type="char" Nullable="false" MaxLength="2" />
+          <Property Name="StateFIPS" Type="char" Nullable="false" MaxLength="2" />
+          <Property Name="MSACode" Type="char" Nullable="false" MaxLength="4" />
+          <Property Name="AreaCode" Type="varchar" Nullable="false" MaxLength="7" />
+          <Property Name="TimeZone" Type="varchar" Nullable="false" MaxLength="10" />
           <Property Name="UTC" Type="int" Nullable="false" />
-          <Property Name="DST" Type="char" MaxLength="1" Nullable="false" />
+          <Property Name="DST" Type="char" Nullable="false" MaxLength="1" />
           <Property Name="Latitude" Type="float" Nullable="false" />
           <Property Name="Longitude" Type="float" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'csny.dbo.vw_CurrentTherapists' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+      warning 6002: The table/view 'CSNY_New.dbo.vw_CurrentTherapists' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
         <EntityType Name="vw_CurrentTherapists">
           <Key>
             <PropertyRef Name="SID" />
             <PropertyRef Name="NPI" />
           </Key>
-          <Property Name="SID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SID" Type="nvarchar" Nullable="false" MaxLength="50" />
           <Property Name="FundingCode" Type="nchar" MaxLength="10" />
           <Property Name="BoroughCode" Type="nchar" MaxLength="10" />
           <Property Name="SchoolLocationCode" Type="nchar" MaxLength="10" />
@@ -228,7 +355,7 @@ warning 6002: The table/view 'csny.dbo.vw_CurrentTherapists' does not have a pri
           <Property Name="Duration" Type="nchar" MaxLength="10" />
           <Property Name="Language" Type="nvarchar" MaxLength="50" />
           <Property Name="RowNum" Type="bigint" />
-          <Property Name="NPI" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="NPI" Type="nvarchar" Nullable="false" MaxLength="50" />
           <Property Name="FiscalYear" Type="nchar" MaxLength="10" />
         </EntityType>
         <Function Name="AddStaging" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -282,12 +409,34 @@ warning 6002: The table/view 'csny.dbo.vw_CurrentTherapists' does not have a pri
           <Parameter Name="UserName" Type="varchar" Mode="In" />
           <Parameter Name="Password" Type="nvarchar(max)" Mode="In" />
         </Function>
-        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="AdminList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="BillingSession" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="StartDay" Type="nvarchar" Mode="In" />
+          <Parameter Name="EndDay" Type="nvarchar" Mode="In" />
+          <Parameter Name="TID" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="CreateInvoice" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TID" Type="nvarchar" Mode="In" />
+          <Parameter Name="AgeGroup" Type="nvarchar" Mode="In" />
+          <Parameter Name="Year" Type="nvarchar" Mode="In" />
+          <Parameter Name="Month" Type="nvarchar" Mode="In" />
+          <Parameter Name="InvoiceNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="Note" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="fn_diagramobjects" ReturnType="int" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="GetStudentInformation_Pdf" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="sid" Type="int" Mode="In" />
           <Parameter Name="FundingCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="NPI" Type="nvarchar" Mode="In" />
         </Function>
-        <Function Name="ResetTherapistLock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="ResetTherapistLock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TID" Type="varchar(max)" Mode="In" />
+        </Function>
+        <Function Name="SetServiceEndInMandate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NPI" Type="nvarchar" Mode="In" />
+          <Parameter Name="Fiscal" Type="nvarchar" Mode="In" />
+          <Parameter Name="ServiceEnd" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="Sp_AddMandate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SID" Type="nvarchar" Mode="In" />
           <Parameter Name="NPI" Type="nvarchar" Mode="In" />
@@ -311,6 +460,14 @@ warning 6002: The table/view 'csny.dbo.vw_CurrentTherapists' does not have a pri
           <Parameter Name="owner_id" Type="int" Mode="In" />
           <Parameter Name="version" Type="int" Mode="In" />
           <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="SP_BillingNew" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fiscal" Type="nvarchar" Mode="In" />
+          <Parameter Name="StartDay" Type="nvarchar" Mode="In" />
+          <Parameter Name="EndDay" Type="nvarchar" Mode="In" />
+          <Parameter Name="TID" Type="nvarchar" Mode="In" />
+          <Parameter Name="FundingCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="NPI" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
@@ -363,11 +520,13 @@ warning 6002: The table/view 'csny.dbo.vw_CurrentTherapists' does not have a pri
           <Parameter Name="FundingCode" Type="nvarchar" Mode="In" />
           <Parameter Name="FiscalYear" Type="nvarchar" Mode="In" />
           <Parameter Name="Month" Type="nvarchar" Mode="In" />
+          <Parameter Name="NPI" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="SP_GenerateReportAsR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FundingCode" Type="nvarchar" Mode="In" />
           <Parameter Name="FiscalYear" Type="nvarchar" Mode="In" />
           <Parameter Name="Month" Type="nvarchar" Mode="In" />
+          <Parameter Name="NPI" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="sp_get_MandateInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SID" Type="nvarchar" Mode="In" />
@@ -411,6 +570,13 @@ warning 6002: The table/view 'csny.dbo.vw_CurrentTherapists' does not have a pri
           <Parameter Name="SID" Type="nvarchar" Mode="In" />
           <Parameter Name="Sdate" Type="datetime" Mode="In" />
         </Function>
+        <Function Name="SP_GetSessionCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FundingCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="FiscalYear" Type="nvarchar" Mode="In" />
+          <Parameter Name="Month" Type="nvarchar" Mode="In" />
+          <Parameter Name="NPI" Type="nvarchar" Mode="In" />
+          <Parameter Name="AttCode" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="SP_getSessionList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="StartDay" Type="nvarchar" Mode="In" />
           <Parameter Name="EndDay" Type="nvarchar" Mode="In" />
@@ -438,14 +604,21 @@ warning 6002: The table/view 'csny.dbo.vw_CurrentTherapists' does not have a pri
           <Parameter Name="FundingCode" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="Sp_GetStudentSessionDetail_Pdf" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="NPI" Type="nvarchar" Mode="In" />
-          <Parameter Name="FundingCode" Type="nvarchar" Mode="In" />
           <Parameter Name="SID" Type="int" Mode="In" />
-          <Parameter Name="year" Type="int" Mode="In" />
-          <Parameter Name="month" Type="int" Mode="In" />
+          <Parameter Name="fiscal" Type="nvarchar" Mode="In" />
+          <Parameter Name="StartDay" Type="nvarchar" Mode="In" />
+          <Parameter Name="EndDay" Type="nvarchar" Mode="In" />
+          <Parameter Name="TID" Type="nvarchar" Mode="In" />
+          <Parameter Name="FundingCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="NPI" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="SP_GetTherapistInfoByNPI" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NPI" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="SP_GetTherapistListByFCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FundingCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="FiscalYear" Type="nvarchar" Mode="In" />
+          <Parameter Name="Month" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="Sp_getTherpist_NPI" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TID" Type="nvarchar" Mode="In" />
@@ -500,6 +673,7 @@ warning 6002: The table/view 'csny.dbo.vw_CurrentTherapists' does not have a pri
           <Parameter Name="EndDay" Type="nvarchar" Mode="In" />
           <Parameter Name="TID" Type="nvarchar" Mode="In" />
           <Parameter Name="FundingCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="NPI" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="SP_SessCountByServiceType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="StartDay" Type="nvarchar" Mode="In" />
@@ -508,6 +682,13 @@ warning 6002: The table/view 'csny.dbo.vw_CurrentTherapists' does not have a pri
           <Parameter Name="ServiceType" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="SP_TherapistList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_TherapistListByMonthFiscal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Month" Type="nvarchar" Mode="In" />
+          <Parameter Name="year" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="SP_Unlock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TID" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="sp_Update_LastLogin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Username" Type="nvarchar" Mode="In" />
         </Function>
@@ -576,6 +757,8 @@ warning 6002: The table/view 'csny.dbo.vw_CurrentTherapists' does not have a pri
           <Parameter Name="SSN" Type="varchar" Mode="In" />
           <Parameter Name="ServiceType" Type="varchar" Mode="In" />
           <Parameter Name="UserType" Type="varchar" Mode="In" />
+          <Parameter Name="IsActive" Type="bit" Mode="In" />
+          <Parameter Name="EndService" Type="date" Mode="In" />
         </Function>
         <Function Name="SP_UpdateTherapistPassword" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TID" Type="nvarchar" Mode="In" />
@@ -589,116 +772,34 @@ warning 6002: The table/view 'csny.dbo.vw_CurrentTherapists' does not have a pri
         <Function Name="UpadteSessionAsRecorded" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SrNo" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="UpdateInvocie" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="nvarchar" Mode="In" />
+          <Parameter Name="InvoiceNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="Note" Type="nvarchar(max)" Mode="In" />
+        </Function>
         <Function Name="UpdateTherapistLock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TID" Type="nvarchar" Mode="In" />
         </Function>
-        <EntityContainer Name="csnyModelStoreContainer">
-          <EntitySet Name="FundingCodeMaster" EntityType="Self.FundingCodeMaster" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="MandateMaster" EntityType="Self.MandateMaster" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="StudentMaster" EntityType="Self.StudentMaster" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="TherapistMaster" EntityType="Self.TherapistMaster" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="AgencyMaster" EntityType="Self.AgencyMaster" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-[AgencyMaster].[AID] AS [AID], 
-[AgencyMaster].[NameOfAgency] AS [NameOfAgency], 
-[AgencyMaster].[Address1] AS [Address1], 
-[AgencyMaster].[Address2] AS [Address2], 
-[AgencyMaster].[Phone] AS [Phone], 
-[AgencyMaster].[RepFirstName] AS [RepFirstName], 
-[AgencyMaster].[RepLastName] AS [RepLastName], 
-[AgencyMaster].[TIN] AS [TIN]
-FROM [dbo].[AgencyMaster] AS [AgencyMaster]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="SessionDetail" EntityType="Self.SessionDetail" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-[SessionDetail].[SrNo] AS [SrNo], 
-[SessionDetail].[SessionID] AS [SessionID], 
-[SessionDetail].[SID] AS [SID], 
-[SessionDetail].[Date] AS [Date], 
-[SessionDetail].[AttnCode] AS [AttnCode], 
-[SessionDetail].[GroupSize] AS [GroupSize], 
-[SessionDetail].[StartTime] AS [StartTime], 
-[SessionDetail].[EndTime] AS [EndTime], 
-[SessionDetail].[Location] AS [Location], 
-[SessionDetail].[TID] AS [TID], 
-[SessionDetail].[ServiceType] AS [ServiceType], 
-[SessionDetail].[GroupType] AS [GroupType], 
-[SessionDetail].[LastModified] AS [LastModified]
-FROM [dbo].[SessionDetail] AS [SessionDetail]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="SessionNotPDetail" EntityType="Self.SessionNotPDetail" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-[SessionNotPDetail].[SrNo] AS [SrNo], 
-[SessionNotPDetail].[SessionID] AS [SessionID], 
-[SessionNotPDetail].[SID] AS [SID], 
-[SessionNotPDetail].[Date] AS [Date], 
-[SessionNotPDetail].[AttnCode] AS [AttnCode], 
-[SessionNotPDetail].[GroupSize] AS [GroupSize], 
-[SessionNotPDetail].[StartTime] AS [StartTime], 
-[SessionNotPDetail].[EndTime] AS [EndTime], 
-[SessionNotPDetail].[Location] AS [Location], 
-[SessionNotPDetail].[TID] AS [TID], 
-[SessionNotPDetail].[ServiceType] AS [ServiceType], 
-[SessionNotPDetail].[GroupType] AS [GroupType]
-FROM [dbo].[SessionNotPDetail] AS [SessionNotPDetail]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="StagingTable" EntityType="Self.StagingTable" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-[StagingTable].[SID] AS [SID], 
-[StagingTable].[FiscalYear] AS [FiscalYear], 
-[StagingTable].[NPI] AS [NPI], 
-[StagingTable].[NYCI] AS [NYCI], 
-[StagingTable].[StudentLastName] AS [StudentLastName], 
-[StagingTable].[StudentFirstName] AS [StudentFirstName], 
-[StagingTable].[Frequency] AS [Frequency], 
-[StagingTable].[GroupSize] AS [GroupSize], 
-[StagingTable].[Duration] AS [Duration], 
-[StagingTable].[Language] AS [Language], 
-[StagingTable].[ServiceStartDate] AS [ServiceStartDate], 
-[StagingTable].[ServiceEndDate] AS [ServiceEndDate], 
-[StagingTable].[FundingCode] AS [FundingCode]
-FROM [dbo].[StagingTable] AS [StagingTable]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="ZipCodes" EntityType="Self.ZipCodes" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-[ZipCodes].[ZIPCode] AS [ZIPCode], 
-[ZipCodes].[ZIPType] AS [ZIPType], 
-[ZipCodes].[CityName] AS [CityName], 
-[ZipCodes].[CityType] AS [CityType], 
-[ZipCodes].[CountyName] AS [CountyName], 
-[ZipCodes].[CountyFIPS] AS [CountyFIPS], 
-[ZipCodes].[StateName] AS [StateName], 
-[ZipCodes].[StateAbbr] AS [StateAbbr], 
-[ZipCodes].[StateFIPS] AS [StateFIPS], 
-[ZipCodes].[MSACode] AS [MSACode], 
-[ZipCodes].[AreaCode] AS [AreaCode], 
-[ZipCodes].[TimeZone] AS [TimeZone], 
-[ZipCodes].[UTC] AS [UTC], 
-[ZipCodes].[DST] AS [DST], 
-[ZipCodes].[Latitude] AS [Latitude], 
-[ZipCodes].[Longitude] AS [Longitude]
-FROM [dbo].[ZipCodes] AS [ZipCodes]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="vw_CurrentTherapists" EntityType="Self.vw_CurrentTherapists" store:Type="Views" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-[vw_CurrentTherapists].[SID] AS [SID], 
-[vw_CurrentTherapists].[FundingCode] AS [FundingCode], 
-[vw_CurrentTherapists].[BoroughCode] AS [BoroughCode], 
-[vw_CurrentTherapists].[SchoolLocationCode] AS [SchoolLocationCode], 
-[vw_CurrentTherapists].[HomeDistrict] AS [HomeDistrict], 
-[vw_CurrentTherapists].[ServiceStart] AS [ServiceStart], 
-[vw_CurrentTherapists].[ServiceEnd] AS [ServiceEnd], 
-[vw_CurrentTherapists].[Frequency] AS [Frequency], 
-[vw_CurrentTherapists].[GroupSize] AS [GroupSize], 
-[vw_CurrentTherapists].[Duration] AS [Duration], 
-[vw_CurrentTherapists].[Language] AS [Language], 
-[vw_CurrentTherapists].[RowNum] AS [RowNum], 
-[vw_CurrentTherapists].[NPI] AS [NPI], 
-[vw_CurrentTherapists].[FiscalYear] AS [FiscalYear]
-FROM [dbo].[vw_CurrentTherapists] AS [vw_CurrentTherapists]</DefiningQuery>
-          </EntitySet>
-        </EntityContainer>
+        <!--Errors Found During Generation:
+      warning 6013: The table/view 'CSNY_New.dbo.LocationMaster' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+      
+      <EntityType Name="LocationMaster">
+        <Property Name="LocationName" Type="nchar" MaxLength="50" />
+      </EntityType>
+      Errors Found During Generation:
+      warning 6013: The table/view 'CSNY_New.dbo.RoleDetail' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+      
+      <EntityType Name="RoleDetail">
+        <Property Name="UserID" Type="nchar" MaxLength="10" />
+        <Property Name="RoleID" Type="nchar" MaxLength="10" />
+      </EntityType>
+      Errors Found During Generation:
+      warning 6013: The table/view 'CSNY_New.dbo.RoleMaster' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+      
+      <EntityType Name="RoleMaster">
+        <Property Name="RoleName" Type="nchar" MaxLength="20" />
+        <Property Name="RoleID" Type="nchar" MaxLength="10" />
+      </EntityType>-->
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -955,11 +1056,9 @@ FROM [dbo].[vw_CurrentTherapists] AS [vw_CurrentTherapists]</DefiningQuery>
             <Parameter Name="UserName" Mode="In" Type="String" />
             <Parameter Name="Password" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="GetStudentInformation_Pdf" ReturnType="Collection(csnyModel.GetStudentInformation_Pdf_Result)">
-            <Parameter Name="sid" Mode="In" Type="Int32" />
-            <Parameter Name="FundingCode" Mode="In" Type="String" />
+          <FunctionImport Name="ResetTherapistLock" >
+          <Parameter Name="TID" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="ResetTherapistLock" />
           <FunctionImport Name="Sp_AddMandate">
             <Parameter Name="SID" Mode="In" Type="String" />
             <Parameter Name="NPI" Mode="In" Type="String" />
@@ -1035,11 +1134,13 @@ FROM [dbo].[vw_CurrentTherapists] AS [vw_CurrentTherapists]</DefiningQuery>
             <Parameter Name="FundingCode" Mode="In" Type="String" />
             <Parameter Name="FiscalYear" Mode="In" Type="String" />
             <Parameter Name="Month" Mode="In" Type="String" />
+            <Parameter Name="NPI" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_GenerateReportAsR" ReturnType="Collection(csnyModel.SP_GenerateReportAsR_Result)">
             <Parameter Name="FundingCode" Mode="In" Type="String" />
             <Parameter Name="FiscalYear" Mode="In" Type="String" />
             <Parameter Name="Month" Mode="In" Type="String" />
+            <Parameter Name="NPI" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_get_MandateInfo" ReturnType="Collection(csnyModel.sp_get_MandateInfo_Result)">
             <Parameter Name="SID" Mode="In" Type="String" />
@@ -1161,6 +1262,7 @@ FROM [dbo].[vw_CurrentTherapists] AS [vw_CurrentTherapists]</DefiningQuery>
             <Parameter Name="EndDay" Mode="In" Type="String" />
             <Parameter Name="TID" Mode="In" Type="String" />
             <Parameter Name="FundingCode" Mode="In" Type="String" />
+            <Parameter Name="NPI" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SP_SessCountByServiceType" ReturnType="Collection(csnyModel.SP_SessCountByServiceType_Result)">
             <Parameter Name="StartDay" Mode="In" Type="String" />
@@ -1237,6 +1339,8 @@ FROM [dbo].[vw_CurrentTherapists] AS [vw_CurrentTherapists]</DefiningQuery>
             <Parameter Name="SSN" Mode="In" Type="String" />
             <Parameter Name="ServiceType" Mode="In" Type="String" />
             <Parameter Name="UserType" Mode="In" Type="String" />
+            <Parameter Name="IsActive" Mode="In" Type="Boolean" />
+            <Parameter Name="EndService" Mode="In" Type="DateTime" />
           </FunctionImport>
           <FunctionImport Name="SP_UpdateTherapistPassword">
             <Parameter Name="TID" Mode="In" Type="String" />
@@ -1257,14 +1361,73 @@ FROM [dbo].[vw_CurrentTherapists] AS [vw_CurrentTherapists]</DefiningQuery>
             <Parameter Name="NPI" Mode="In" Type="String" />
             <Parameter Name="FundingCode" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="Sp_GetStudentSessionDetail_Pdf" ReturnType="Collection(csnyModel.Sp_GetStudentSessionDetail_Pdf_Result)">
-            <Parameter Name="NPI" Mode="In" Type="String" />
-            <Parameter Name="FundingCode" Mode="In" Type="String" />
-            <Parameter Name="SID" Mode="In" Type="Int32" />
-            <Parameter Name="year" Mode="In" Type="Int32" />
-            <Parameter Name="month" Mode="In" Type="Int32" />
-          </FunctionImport>
           <EntitySet Name="TherapistMasters" EntityType="csnyModel.TherapistMaster" />
+          <EntitySet Name="InvoiceDetails" EntityType="csnyModel.InvoiceDetail" />
+          <FunctionImport Name="AdminList" ReturnType="Collection(csnyModel.AdminList_Result)" />
+          <FunctionImport Name="BillingSession" ReturnType="Collection(csnyModel.BillingSession_Result)">
+            <Parameter Name="StartDay" Mode="In" Type="String" />
+            <Parameter Name="EndDay" Mode="In" Type="String" />
+            <Parameter Name="TID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CreateInvoice">
+            <Parameter Name="TID" Mode="In" Type="String" />
+            <Parameter Name="AgeGroup" Mode="In" Type="String" />
+            <Parameter Name="Year" Mode="In" Type="String" />
+            <Parameter Name="Month" Mode="In" Type="String" />
+            <Parameter Name="InvoiceNo" Mode="In" Type="String" />
+            <Parameter Name="Note" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetStudentInformation_Pdf" ReturnType="Collection(csnyModel.GetStudentInformation_Pdf_Result1)">
+            <Parameter Name="sid" Mode="In" Type="Int32" />
+            <Parameter Name="FundingCode" Mode="In" Type="String" />
+            <Parameter Name="NPI" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SetServiceEndInMandate">
+            <Parameter Name="NPI" Mode="In" Type="String" />
+            <Parameter Name="Fiscal" Mode="In" Type="String" />
+            <Parameter Name="ServiceEnd" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_BillingNew" ReturnType="Collection(csnyModel.SP_BillingNew_Result)">
+            <Parameter Name="fiscal" Mode="In" Type="String" />
+            <Parameter Name="StartDay" Mode="In" Type="String" />
+            <Parameter Name="EndDay" Mode="In" Type="String" />
+            <Parameter Name="TID" Mode="In" Type="String" />
+            <Parameter Name="FundingCode" Mode="In" Type="String" />
+            <Parameter Name="NPI" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_GetSessionCount" ReturnType="Collection(Int32)">
+            <Parameter Name="FundingCode" Mode="In" Type="String" />
+            <Parameter Name="FiscalYear" Mode="In" Type="String" />
+            <Parameter Name="Month" Mode="In" Type="String" />
+            <Parameter Name="NPI" Mode="In" Type="String" />
+            <Parameter Name="AttCode" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_GetTherapistListByFCode" ReturnType="Collection(csnyModel.SP_GetTherapistListByFCode_Result)">
+            <Parameter Name="FundingCode" Mode="In" Type="String" />
+            <Parameter Name="FiscalYear" Mode="In" Type="String" />
+            <Parameter Name="Month" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_TherapistListByMonthFiscal" ReturnType="Collection(csnyModel.SP_TherapistListByMonthFiscal_Result)">
+            <Parameter Name="Month" Mode="In" Type="String" />
+            <Parameter Name="year" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_Unlock">
+          <Parameter Name="TID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateInvocie">
+            <Parameter Name="ID" Mode="In" Type="String" />
+            <Parameter Name="InvoiceNo" Mode="In" Type="String" />
+            <Parameter Name="Note" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Sp_GetStudentSessionDetail_Pdf" ReturnType="Collection(csnyModel.Sp_GetStudentSessionDetail_Pdf_Result)">
+            <Parameter Name="SID" Mode="In" Type="Int32" />
+            <Parameter Name="fiscal" Mode="In" Type="String" />
+            <Parameter Name="StartDay" Mode="In" Type="String" />
+            <Parameter Name="EndDay" Mode="In" Type="String" />
+            <Parameter Name="TID" Mode="In" Type="String" />
+            <Parameter Name="FundingCode" Mode="In" Type="String" />
+            <Parameter Name="NPI" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="GetStudentInformation_Pdf_Result">
           <Property Type="String" Name="BoroughCode" Nullable="true" MaxLength="10" />
@@ -1903,35 +2066,6 @@ FROM [dbo].[vw_CurrentTherapists] AS [vw_CurrentTherapists]</DefiningQuery>
           <Property Type="Int32" Name="SID" Nullable="false" />
           <Property Type="String" Name="StudentName" Nullable="true" />
         </ComplexType>
-        <ComplexType Name="Sp_GetStudentSessionDetail_Pdf_Result">
-          <Property Type="Int32" Name="SrNo" Nullable="false" />
-          <Property Type="Int32" Name="SessionID" Nullable="false" />
-          <Property Type="String" Name="BoroughCode" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="HomeDistrict" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="SchoolLocationCode" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="LastName" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="NPI" Nullable="true" MaxLength="15" />
-          <Property Type="String" Name="Address1" Nullable="true" />
-          <Property Type="String" Name="address2" Nullable="true" />
-          <Property Type="String" Name="Phone" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="NYCI" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="StudentFirstName" Nullable="true" />
-          <Property Type="String" Name="StudentLastName" Nullable="true" />
-          <Property Type="String" Name="DOB" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="MandGroupType" Nullable="true" MaxLength="10" />
-          <Property Type="DateTime" Name="ServiceStart" Nullable="true" Precision="23" />
-          <Property Type="DateTime" Name="ServiceEnd" Nullable="true" Precision="23" />
-          <Property Type="String" Name="MandFrequency" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="MandDuration" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="MandGroupSize" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="Language" Nullable="true" MaxLength="50" />
-          <Property Type="DateTime" Name="Date" Nullable="true" />
-          <Property Type="String" Name="GroupSize" Nullable="true" MaxLength="10" />
-          <Property Type="Time" Name="StartTime" Nullable="true" />
-          <Property Type="Time" Name="EndTime" Nullable="true" />
-          <Property Type="String" Name="Location" Nullable="true" MaxLength="25" />
-        </ComplexType>
         <EntityType Name="TherapistMaster">
           <Key>
             <PropertyRef Name="TID" />
@@ -1955,7 +2089,147 @@ FROM [dbo].[vw_CurrentTherapists] AS [vw_CurrentTherapists]</DefiningQuery>
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="UserType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Lock" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Type="DateTime" Name="EndService" Precision="0" />
         </EntityType>
+        <EntityType Name="InvoiceDetail">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="TID" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Type="String" Name="FundingCode" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Type="String" Name="Fiscal" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Type="String" Name="month" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Type="String" Name="InvoiceNo" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Note" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <ComplexType Name="AdminList_Result">
+          <Property Type="Int32" Name="TID" Nullable="false" />
+          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="LastName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Address1" Nullable="true" />
+          <Property Type="String" Name="address2" Nullable="true" />
+          <Property Type="String" Name="State" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="City" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Phone" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="NPI" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="UserName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Password" Nullable="true" />
+          <Property Type="String" Name="ServiceType" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PayScale" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="DateOfRegistratio" Nullable="true" />
+          <Property Type="DateTime" Name="LastLogin" Nullable="true" Precision="23" />
+          <Property Type="Boolean" Name="IsActive" Nullable="true" />
+          <Property Type="DateTime" Name="EndService" Nullable="true" />
+          <Property Type="String" Name="UserType" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Lock" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="BillingSession_Result">
+          <Property Type="Int32" Name="SrNo" Nullable="false" />
+          <Property Type="Int32" Name="SessionID" Nullable="false" />
+          <Property Type="String" Name="SID" Nullable="true" MaxLength="15" />
+          <Property Type="DateTime" Name="Date" Nullable="true" />
+          <Property Type="String" Name="AttnCode" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="GroupSize" Nullable="true" MaxLength="10" />
+          <Property Type="Time" Name="StartTime" Nullable="true" />
+          <Property Type="Time" Name="EndTime" Nullable="true" />
+          <Property Type="String" Name="Location" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="TID" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="ServiceType" Nullable="true" />
+          <Property Type="String" Name="GroupType" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="LastModified" Nullable="true" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="GetStudentInformation_Pdf_Result1">
+          <Property Type="String" Name="BoroughCode" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="HomeDistrict" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="SchoolLocationCode" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="NYCI" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="StudentFirstName" Nullable="true" />
+          <Property Type="String" Name="StudentLastName" Nullable="true" />
+          <Property Type="String" Name="DOB" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="ServiceStart" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="ServiceEnd" Nullable="true" Precision="23" />
+          <Property Type="String" Name="MandFrequency" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="MandDuration" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="MandGroupSize" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Language" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="SP_BillingNew_Result">
+          <Property Type="Int32" Name="SrNo" Nullable="false" />
+          <Property Type="Int32" Name="SessionID" Nullable="false" />
+          <Property Type="String" Name="SID" Nullable="true" MaxLength="15" />
+          <Property Type="DateTime" Name="Date" Nullable="true" />
+          <Property Type="String" Name="AttnCode" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="GroupSize" Nullable="true" MaxLength="10" />
+          <Property Type="Time" Name="StartTime" Nullable="true" />
+          <Property Type="Time" Name="EndTime" Nullable="true" />
+          <Property Type="String" Name="Location" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="TID" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="ServiceType" Nullable="true" />
+          <Property Type="String" Name="GroupType" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="LastModified" Nullable="true" Precision="23" />
+          <Property Type="String" Name="StudentFirstName" Nullable="true" />
+          <Property Type="String" Name="StudentLastName" Nullable="true" />
+          <Property Type="String" Name="Language" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="RowNum" Nullable="true" />
+          <Property Type="String" Name="FundingCode" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="ServiceStart" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="ServiceEnd" Nullable="true" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="SP_GetTherapistListByFCode_Result">
+          <Property Type="String" Name="LastName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="TID" Nullable="false" />
+          <Property Type="String" Name="NPI" Nullable="true" MaxLength="15" />
+        </ComplexType>
+        <ComplexType Name="SP_TherapistListByMonthFiscal_Result">
+          <Property Type="Int32" Name="TID" Nullable="false" />
+          <Property Type="String" Name="FirstName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="LastName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Address1" Nullable="true" />
+          <Property Type="String" Name="address2" Nullable="true" />
+          <Property Type="String" Name="State" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="City" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Email" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="Phone" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="NPI" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="UserName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Password" Nullable="true" />
+          <Property Type="String" Name="ServiceType" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PayScale" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="DateOfRegistratio" Nullable="true" />
+          <Property Type="DateTime" Name="LastLogin" Nullable="true" Precision="23" />
+          <Property Type="Boolean" Name="IsActive" Nullable="true" />
+          <Property Type="DateTime" Name="EndService" Nullable="true" />
+          <Property Type="String" Name="UserType" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Lock" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="Sp_GetStudentSessionDetail_Pdf_Result">
+          <Property Type="Int32" Name="SrNo" Nullable="false" />
+          <Property Type="Int32" Name="SessionID" Nullable="false" />
+          <Property Type="String" Name="SID" Nullable="true" MaxLength="15" />
+          <Property Type="DateTime" Name="Date" Nullable="true" />
+          <Property Type="String" Name="AttnCode" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="GroupSize" Nullable="true" MaxLength="10" />
+          <Property Type="Time" Name="StartTime" Nullable="true" />
+          <Property Type="Time" Name="EndTime" Nullable="true" />
+          <Property Type="String" Name="Location" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="TID" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="ServiceType" Nullable="true" />
+          <Property Type="String" Name="GroupType" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="LastModified" Nullable="true" Precision="23" />
+          <Property Type="String" Name="StudentFirstName" Nullable="true" />
+          <Property Type="String" Name="StudentLastName" Nullable="true" />
+          <Property Type="String" Name="Language" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="RowNum" Nullable="true" />
+          <Property Type="String" Name="FundingCode" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="ServiceStart" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="ServiceEnd" Nullable="true" Precision="23" />
+          <Property Type="String" Name="MandFrequency" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="MandGroupSize" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="MandDuration" Nullable="true" MaxLength="10" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2146,25 +2420,6 @@ FROM [dbo].[vw_CurrentTherapists] AS [vw_CurrentTherapists]</DefiningQuery>
           <FunctionImportMapping FunctionImportName="AddStaging" FunctionName="csnyModel.Store.AddStaging" />
           <FunctionImportMapping FunctionImportName="AddStudent" FunctionName="csnyModel.Store.AddStudent" />
           <FunctionImportMapping FunctionImportName="AddTherapist" FunctionName="csnyModel.Store.AddTherapist" />
-          <FunctionImportMapping FunctionImportName="GetStudentInformation_Pdf" FunctionName="csnyModel.Store.GetStudentInformation_Pdf">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="csnyModel.GetStudentInformation_Pdf_Result">
-                <ScalarProperty Name="BoroughCode" ColumnName="BoroughCode" />
-                <ScalarProperty Name="HomeDistrict" ColumnName="HomeDistrict" />
-                <ScalarProperty Name="SchoolLocationCode" ColumnName="SchoolLocationCode" />
-                <ScalarProperty Name="NYCI" ColumnName="NYCI" />
-                <ScalarProperty Name="StudentFirstName" ColumnName="StudentFirstName" />
-                <ScalarProperty Name="StudentLastName" ColumnName="StudentLastName" />
-                <ScalarProperty Name="DOB" ColumnName="DOB" />
-                <ScalarProperty Name="ServiceStart" ColumnName="ServiceStart" />
-                <ScalarProperty Name="ServiceEnd" ColumnName="ServiceEnd" />
-                <ScalarProperty Name="MandFrequency" ColumnName="MandFrequency" />
-                <ScalarProperty Name="MandDuration" ColumnName="MandDuration" />
-                <ScalarProperty Name="MandGroupSize" ColumnName="MandGroupSize" />
-                <ScalarProperty Name="Language" ColumnName="Language" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="ResetTherapistLock" FunctionName="csnyModel.Store.ResetTherapistLock" />
           <FunctionImportMapping FunctionImportName="Sp_AddMandate" FunctionName="csnyModel.Store.Sp_AddMandate" />
           <FunctionImportMapping FunctionImportName="SP_AddUserRole" FunctionName="csnyModel.Store.SP_AddUserRole" />
@@ -2943,42 +3198,10 @@ FROM [dbo].[vw_CurrentTherapists] AS [vw_CurrentTherapists]</DefiningQuery>
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="Sp_GetStudentSessionDetail_Pdf" FunctionName="csnyModel.Store.Sp_GetStudentSessionDetail_Pdf">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="csnyModel.Sp_GetStudentSessionDetail_Pdf_Result">
-                <ScalarProperty Name="SrNo" ColumnName="SrNo" />
-                <ScalarProperty Name="SessionID" ColumnName="SessionID" />
-                <ScalarProperty Name="BoroughCode" ColumnName="BoroughCode" />
-                <ScalarProperty Name="HomeDistrict" ColumnName="HomeDistrict" />
-                <ScalarProperty Name="SchoolLocationCode" ColumnName="SchoolLocationCode" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="NPI" ColumnName="NPI" />
-                <ScalarProperty Name="Address1" ColumnName="Address1" />
-                <ScalarProperty Name="address2" ColumnName="address2" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="NYCI" ColumnName="NYCI" />
-                <ScalarProperty Name="StudentFirstName" ColumnName="StudentFirstName" />
-                <ScalarProperty Name="StudentLastName" ColumnName="StudentLastName" />
-                <ScalarProperty Name="DOB" ColumnName="DOB" />
-                <ScalarProperty Name="MandGroupType" ColumnName="MandGroupType" />
-                <ScalarProperty Name="ServiceStart" ColumnName="ServiceStart" />
-                <ScalarProperty Name="ServiceEnd" ColumnName="ServiceEnd" />
-                <ScalarProperty Name="MandFrequency" ColumnName="MandFrequency" />
-                <ScalarProperty Name="MandDuration" ColumnName="MandDuration" />
-                <ScalarProperty Name="MandGroupSize" ColumnName="MandGroupSize" />
-                <ScalarProperty Name="Language" ColumnName="Language" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="GroupSize" ColumnName="GroupSize" />
-                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
-                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
-                <ScalarProperty Name="Location" ColumnName="Location" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <EntitySetMapping Name="TherapistMasters">
             <EntityTypeMapping TypeName="csnyModel.TherapistMaster">
               <MappingFragment StoreEntitySet="TherapistMaster">
+                <ScalarProperty Name="EndService" ColumnName="EndService" />
                 <ScalarProperty Name="Lock" ColumnName="Lock" />
                 <ScalarProperty Name="UserType" ColumnName="UserType" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
@@ -3001,6 +3224,179 @@ FROM [dbo].[vw_CurrentTherapists] AS [vw_CurrentTherapists]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="InvoiceDetails">
+            <EntityTypeMapping TypeName="csnyModel.InvoiceDetail">
+              <MappingFragment StoreEntitySet="InvoiceDetail">
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="month" ColumnName="month" />
+                <ScalarProperty Name="Fiscal" ColumnName="Fiscal" />
+                <ScalarProperty Name="FundingCode" ColumnName="FundingCode" />
+                <ScalarProperty Name="TID" ColumnName="TID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AdminList" FunctionName="csnyModel.Store.AdminList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="csnyModel.AdminList_Result">
+                <ScalarProperty Name="TID" ColumnName="TID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="address2" ColumnName="address2" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="NPI" ColumnName="NPI" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="ServiceType" ColumnName="ServiceType" />
+                <ScalarProperty Name="PayScale" ColumnName="PayScale" />
+                <ScalarProperty Name="DateOfRegistratio" ColumnName="DateOfRegistratio" />
+                <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="EndService" ColumnName="EndService" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="Lock" ColumnName="Lock" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="BillingSession" FunctionName="csnyModel.Store.BillingSession">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="csnyModel.BillingSession_Result">
+                <ScalarProperty Name="SrNo" ColumnName="SrNo" />
+                <ScalarProperty Name="SessionID" ColumnName="SessionID" />
+                <ScalarProperty Name="SID" ColumnName="SID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="AttnCode" ColumnName="AttnCode" />
+                <ScalarProperty Name="GroupSize" ColumnName="GroupSize" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="TID" ColumnName="TID" />
+                <ScalarProperty Name="ServiceType" ColumnName="ServiceType" />
+                <ScalarProperty Name="GroupType" ColumnName="GroupType" />
+                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CreateInvoice" FunctionName="csnyModel.Store.CreateInvoice" />
+          <FunctionImportMapping FunctionImportName="GetStudentInformation_Pdf" FunctionName="csnyModel.Store.GetStudentInformation_Pdf">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="csnyModel.GetStudentInformation_Pdf_Result1">
+                <ScalarProperty Name="BoroughCode" ColumnName="BoroughCode" />
+                <ScalarProperty Name="HomeDistrict" ColumnName="HomeDistrict" />
+                <ScalarProperty Name="SchoolLocationCode" ColumnName="SchoolLocationCode" />
+                <ScalarProperty Name="NYCI" ColumnName="NYCI" />
+                <ScalarProperty Name="StudentFirstName" ColumnName="StudentFirstName" />
+                <ScalarProperty Name="StudentLastName" ColumnName="StudentLastName" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="ServiceStart" ColumnName="ServiceStart" />
+                <ScalarProperty Name="ServiceEnd" ColumnName="ServiceEnd" />
+                <ScalarProperty Name="MandFrequency" ColumnName="MandFrequency" />
+                <ScalarProperty Name="MandDuration" ColumnName="MandDuration" />
+                <ScalarProperty Name="MandGroupSize" ColumnName="MandGroupSize" />
+                <ScalarProperty Name="Language" ColumnName="Language" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SetServiceEndInMandate" FunctionName="csnyModel.Store.SetServiceEndInMandate" />
+          <FunctionImportMapping FunctionImportName="SP_BillingNew" FunctionName="csnyModel.Store.SP_BillingNew">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="csnyModel.SP_BillingNew_Result">
+                <ScalarProperty Name="SrNo" ColumnName="SrNo" />
+                <ScalarProperty Name="SessionID" ColumnName="SessionID" />
+                <ScalarProperty Name="SID" ColumnName="SID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="AttnCode" ColumnName="AttnCode" />
+                <ScalarProperty Name="GroupSize" ColumnName="GroupSize" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="TID" ColumnName="TID" />
+                <ScalarProperty Name="ServiceType" ColumnName="ServiceType" />
+                <ScalarProperty Name="GroupType" ColumnName="GroupType" />
+                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+                <ScalarProperty Name="StudentFirstName" ColumnName="StudentFirstName" />
+                <ScalarProperty Name="StudentLastName" ColumnName="StudentLastName" />
+                <ScalarProperty Name="Language" ColumnName="Language" />
+                <ScalarProperty Name="RowNum" ColumnName="RowNum" />
+                <ScalarProperty Name="FundingCode" ColumnName="FundingCode" />
+                <ScalarProperty Name="ServiceStart" ColumnName="ServiceStart" />
+                <ScalarProperty Name="ServiceEnd" ColumnName="ServiceEnd" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_GetSessionCount" FunctionName="csnyModel.Store.SP_GetSessionCount" />
+          <FunctionImportMapping FunctionImportName="SP_GetTherapistListByFCode" FunctionName="csnyModel.Store.SP_GetTherapistListByFCode">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="csnyModel.SP_GetTherapistListByFCode_Result">
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="TID" ColumnName="TID" />
+                <ScalarProperty Name="NPI" ColumnName="NPI" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_TherapistListByMonthFiscal" FunctionName="csnyModel.Store.SP_TherapistListByMonthFiscal">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="csnyModel.SP_TherapistListByMonthFiscal_Result">
+                <ScalarProperty Name="TID" ColumnName="TID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="address2" ColumnName="address2" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="NPI" ColumnName="NPI" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="ServiceType" ColumnName="ServiceType" />
+                <ScalarProperty Name="PayScale" ColumnName="PayScale" />
+                <ScalarProperty Name="DateOfRegistratio" ColumnName="DateOfRegistratio" />
+                <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="EndService" ColumnName="EndService" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="Lock" ColumnName="Lock" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_Unlock" FunctionName="csnyModel.Store.SP_Unlock" />
+          <FunctionImportMapping FunctionImportName="UpdateInvocie" FunctionName="csnyModel.Store.UpdateInvocie" />
+          <FunctionImportMapping FunctionImportName="Sp_GetStudentSessionDetail_Pdf" FunctionName="csnyModel.Store.Sp_GetStudentSessionDetail_Pdf">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="csnyModel.Sp_GetStudentSessionDetail_Pdf_Result">
+                <ScalarProperty Name="SrNo" ColumnName="SrNo" />
+                <ScalarProperty Name="SessionID" ColumnName="SessionID" />
+                <ScalarProperty Name="SID" ColumnName="SID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="AttnCode" ColumnName="AttnCode" />
+                <ScalarProperty Name="GroupSize" ColumnName="GroupSize" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="TID" ColumnName="TID" />
+                <ScalarProperty Name="ServiceType" ColumnName="ServiceType" />
+                <ScalarProperty Name="GroupType" ColumnName="GroupType" />
+                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+                <ScalarProperty Name="StudentFirstName" ColumnName="StudentFirstName" />
+                <ScalarProperty Name="StudentLastName" ColumnName="StudentLastName" />
+                <ScalarProperty Name="Language" ColumnName="Language" />
+                <ScalarProperty Name="RowNum" ColumnName="RowNum" />
+                <ScalarProperty Name="FundingCode" ColumnName="FundingCode" />
+                <ScalarProperty Name="ServiceStart" ColumnName="ServiceStart" />
+                <ScalarProperty Name="ServiceEnd" ColumnName="ServiceEnd" />
+                <ScalarProperty Name="MandFrequency" ColumnName="MandFrequency" />
+                <ScalarProperty Name="MandGroupSize" ColumnName="MandGroupSize" />
+                <ScalarProperty Name="MandDuration" ColumnName="MandDuration" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

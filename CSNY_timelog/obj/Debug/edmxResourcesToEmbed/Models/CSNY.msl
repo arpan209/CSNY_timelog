@@ -1209,6 +1209,7 @@
     <EntitySetMapping Name="InvoiceDetails">
       <EntityTypeMapping TypeName="CSNYModel.InvoiceDetail">
         <MappingFragment StoreEntitySet="InvoiceDetail">
+          <ScalarProperty Name="Note" ColumnName="Note" />
           <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
           <ScalarProperty Name="month" ColumnName="month" />
           <ScalarProperty Name="Fiscal" ColumnName="Fiscal" />

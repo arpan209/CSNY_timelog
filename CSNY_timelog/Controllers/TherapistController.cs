@@ -26,8 +26,8 @@ namespace CSNY_timelog.Controllers
 
             var result = db.Sp_get_Therpist_Info(Id).SingleOrDefault();
 
-            Session["NPI"] = result.NPI.Trim();
-            if (string.IsNullOrEmpty(Session["NPI"].ToString()))
+            Session["NPI"] = result.NPI;
+            if (string.IsNullOrEmpty(result.NPI))
             {
                 Response.Write("<script> alert('After you register, an administrator needs to assign your account the proper user rights, so there may be a delay in seeing your caseload.  Please contact an administrator.')</script>");
             }

@@ -39,6 +39,7 @@ namespace GenerateReport.Models
         public DbSet<ZipCode> ZipCodes { get; set; }
         public DbSet<vw_CurrentTherapists> vw_CurrentTherapists { get; set; }
         public DbSet<TherapistMaster> TherapistMasters { get; set; }
+        public DbSet<InvoiceDetail> InvoiceDetails { get; set; }
     
         public virtual int AddStaging(string fiscal, string nPI, string nYCID, string lastName, string firstName, string frequency, string groupSize, string duration, string language, string fundingCode, string startDate, string endDate)
         {
@@ -235,22 +236,13 @@ namespace GenerateReport.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddTherapist", firstNameParameter, lastNameParameter, address1Parameter, address2Parameter, cityParameter, stateParameter, emailParameter, phoneParameter, dateofRegistrationParameter, lastLoginDateParameter, userNameParameter, passwordParameter);
         }
     
-        public virtual ObjectResult<GetStudentInformation_Pdf_Result> GetStudentInformation_Pdf(Nullable<int> sid, string fundingCode)
+        public virtual int ResetTherapistLock(string tID)
         {
-            var sidParameter = sid.HasValue ?
-                new ObjectParameter("sid", sid) :
-                new ObjectParameter("sid", typeof(int));
+            var tIDParameter = tID != null ?
+                new ObjectParameter("TID", tID) :
+                new ObjectParameter("TID", typeof(string));
     
-            var fundingCodeParameter = fundingCode != null ?
-                new ObjectParameter("FundingCode", fundingCode) :
-                new ObjectParameter("FundingCode", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetStudentInformation_Pdf_Result>("GetStudentInformation_Pdf", sidParameter, fundingCodeParameter);
-        }
-    
-        public virtual int ResetTherapistLock()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ResetTherapistLock");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ResetTherapistLock", tIDParameter);
         }
     
         public virtual int Sp_AddMandate(string sID, string nPI, string fiscal, Nullable<System.DateTime> startDate, Nullable<System.DateTime> endDate, string frequency, string groupSize, string duration, string language, string fundingCode, string boroCode, string schoolCode, string homeDistrict)
@@ -486,7 +478,7 @@ namespace GenerateReport.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_FindUser_ByUserID_Result>("SP_FindUser_ByUserID", sIDParameter);
         }
     
-        public virtual ObjectResult<sp_Generate_Report_Result> sp_Generate_Report(string fundingCode, string fiscalYear, string month)
+        public virtual ObjectResult<sp_Generate_Report_Result> sp_Generate_Report(string fundingCode, string fiscalYear, string month, string nPI)
         {
             var fundingCodeParameter = fundingCode != null ?
                 new ObjectParameter("FundingCode", fundingCode) :
@@ -500,10 +492,14 @@ namespace GenerateReport.Models
                 new ObjectParameter("Month", month) :
                 new ObjectParameter("Month", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_Generate_Report_Result>("sp_Generate_Report", fundingCodeParameter, fiscalYearParameter, monthParameter);
+            var nPIParameter = nPI != null ?
+                new ObjectParameter("NPI", nPI) :
+                new ObjectParameter("NPI", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_Generate_Report_Result>("sp_Generate_Report", fundingCodeParameter, fiscalYearParameter, monthParameter, nPIParameter);
         }
     
-        public virtual ObjectResult<SP_GenerateReportAsR_Result> SP_GenerateReportAsR(string fundingCode, string fiscalYear, string month)
+        public virtual ObjectResult<SP_GenerateReportAsR_Result> SP_GenerateReportAsR(string fundingCode, string fiscalYear, string month, string nPI)
         {
             var fundingCodeParameter = fundingCode != null ?
                 new ObjectParameter("FundingCode", fundingCode) :
@@ -517,7 +513,11 @@ namespace GenerateReport.Models
                 new ObjectParameter("Month", month) :
                 new ObjectParameter("Month", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_GenerateReportAsR_Result>("SP_GenerateReportAsR", fundingCodeParameter, fiscalYearParameter, monthParameter);
+            var nPIParameter = nPI != null ?
+                new ObjectParameter("NPI", nPI) :
+                new ObjectParameter("NPI", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_GenerateReportAsR_Result>("SP_GenerateReportAsR", fundingCodeParameter, fiscalYearParameter, monthParameter, nPIParameter);
         }
     
         public virtual ObjectResult<sp_get_MandateInfo_Result> sp_get_MandateInfo(string sID, string nPI, Nullable<System.DateTime> sdate)
@@ -905,7 +905,7 @@ namespace GenerateReport.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_renamediagram", diagramnameParameter, owner_idParameter, new_diagramnameParameter);
         }
     
-        public virtual ObjectResult<SP_SessCountByFuningCode_Result> SP_SessCountByFuningCode(string startDay, string endDay, string tID, string fundingCode)
+        public virtual ObjectResult<SP_SessCountByFuningCode_Result> SP_SessCountByFuningCode(string startDay, string endDay, string tID, string fundingCode, string nPI)
         {
             var startDayParameter = startDay != null ?
                 new ObjectParameter("StartDay", startDay) :
@@ -923,7 +923,11 @@ namespace GenerateReport.Models
                 new ObjectParameter("FundingCode", fundingCode) :
                 new ObjectParameter("FundingCode", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_SessCountByFuningCode_Result>("SP_SessCountByFuningCode", startDayParameter, endDayParameter, tIDParameter, fundingCodeParameter);
+            var nPIParameter = nPI != null ?
+                new ObjectParameter("NPI", nPI) :
+                new ObjectParameter("NPI", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_SessCountByFuningCode_Result>("SP_SessCountByFuningCode", startDayParameter, endDayParameter, tIDParameter, fundingCodeParameter, nPIParameter);
         }
     
         public virtual ObjectResult<SP_SessCountByServiceType_Result> SP_SessCountByServiceType(string startDay, string endDay, string tID, string serviceType)
@@ -1160,7 +1164,7 @@ namespace GenerateReport.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_UpdateStudentInfo", sIDParameter, pFirstNameParameter, pLastNameParameter, pHomePhParameter, pOfficePhParameter, pMobilPhParameter, pEmailParameter, gNameParameter, gEmailParameter, gMobilPhParameter, nYCIDParameter, locationParameter, firstNameParameter, lastNameParameter, address1Parameter, dOBParameter, payTypeParameter, referralParameter, serviceTypeParameter, diagnosisParameter, parentReportParameter, commentsParameter);
         }
     
-        public virtual int SP_UpdateTherapistInfo(string tID, string firstName, string lastName, string address1, string address2, string city, string state, string email, string phone, string sSN, string serviceType, string userType)
+        public virtual int SP_UpdateTherapistInfo(string tID, string firstName, string lastName, string address1, string address2, string city, string state, string email, string phone, string sSN, string serviceType, string userType, Nullable<bool> isActive, Nullable<System.DateTime> endService)
         {
             var tIDParameter = tID != null ?
                 new ObjectParameter("TID", tID) :
@@ -1210,7 +1214,15 @@ namespace GenerateReport.Models
                 new ObjectParameter("UserType", userType) :
                 new ObjectParameter("UserType", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_UpdateTherapistInfo", tIDParameter, firstNameParameter, lastNameParameter, address1Parameter, address2Parameter, cityParameter, stateParameter, emailParameter, phoneParameter, sSNParameter, serviceTypeParameter, userTypeParameter);
+            var isActiveParameter = isActive.HasValue ?
+                new ObjectParameter("IsActive", isActive) :
+                new ObjectParameter("IsActive", typeof(bool));
+    
+            var endServiceParameter = endService.HasValue ?
+                new ObjectParameter("EndService", endService) :
+                new ObjectParameter("EndService", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_UpdateTherapistInfo", tIDParameter, firstNameParameter, lastNameParameter, address1Parameter, address2Parameter, cityParameter, stateParameter, emailParameter, phoneParameter, sSNParameter, serviceTypeParameter, userTypeParameter, isActiveParameter, endServiceParameter);
         }
     
         public virtual int SP_UpdateTherapistPassword(string tID, string password)
@@ -1276,29 +1288,232 @@ namespace GenerateReport.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_GetStudentListBasedOnFundingCode_Pdf_Result>("Sp_GetStudentListBasedOnFundingCode_Pdf", nPIParameter, fundingCodeParameter);
         }
     
-        public virtual ObjectResult<Sp_GetStudentSessionDetail_Pdf_Result> Sp_GetStudentSessionDetail_Pdf(string nPI, string fundingCode, Nullable<int> sID, Nullable<int> year, Nullable<int> month)
+        public virtual ObjectResult<AdminList_Result> AdminList()
         {
-            var nPIParameter = nPI != null ?
-                new ObjectParameter("NPI", nPI) :
-                new ObjectParameter("NPI", typeof(string));
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<AdminList_Result>("AdminList");
+        }
+    
+        public virtual ObjectResult<BillingSession_Result> BillingSession(string startDay, string endDay, string tID)
+        {
+            var startDayParameter = startDay != null ?
+                new ObjectParameter("StartDay", startDay) :
+                new ObjectParameter("StartDay", typeof(string));
+    
+            var endDayParameter = endDay != null ?
+                new ObjectParameter("EndDay", endDay) :
+                new ObjectParameter("EndDay", typeof(string));
+    
+            var tIDParameter = tID != null ?
+                new ObjectParameter("TID", tID) :
+                new ObjectParameter("TID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<BillingSession_Result>("BillingSession", startDayParameter, endDayParameter, tIDParameter);
+        }
+    
+        public virtual int CreateInvoice(string tID, string ageGroup, string year, string month, string invoiceNo, string note)
+        {
+            var tIDParameter = tID != null ?
+                new ObjectParameter("TID", tID) :
+                new ObjectParameter("TID", typeof(string));
+    
+            var ageGroupParameter = ageGroup != null ?
+                new ObjectParameter("AgeGroup", ageGroup) :
+                new ObjectParameter("AgeGroup", typeof(string));
+    
+            var yearParameter = year != null ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(string));
+    
+            var monthParameter = month != null ?
+                new ObjectParameter("Month", month) :
+                new ObjectParameter("Month", typeof(string));
+    
+            var invoiceNoParameter = invoiceNo != null ?
+                new ObjectParameter("InvoiceNo", invoiceNo) :
+                new ObjectParameter("InvoiceNo", typeof(string));
+    
+            var noteParameter = note != null ?
+                new ObjectParameter("Note", note) :
+                new ObjectParameter("Note", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CreateInvoice", tIDParameter, ageGroupParameter, yearParameter, monthParameter, invoiceNoParameter, noteParameter);
+        }
+    
+        public virtual ObjectResult<GetStudentInformation_Pdf_Result1> GetStudentInformation_Pdf(Nullable<int> sid, string fundingCode, string nPI)
+        {
+            var sidParameter = sid.HasValue ?
+                new ObjectParameter("sid", sid) :
+                new ObjectParameter("sid", typeof(int));
     
             var fundingCodeParameter = fundingCode != null ?
                 new ObjectParameter("FundingCode", fundingCode) :
                 new ObjectParameter("FundingCode", typeof(string));
     
+            var nPIParameter = nPI != null ?
+                new ObjectParameter("NPI", nPI) :
+                new ObjectParameter("NPI", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetStudentInformation_Pdf_Result1>("GetStudentInformation_Pdf", sidParameter, fundingCodeParameter, nPIParameter);
+        }
+    
+        public virtual int SetServiceEndInMandate(string nPI, string fiscal, string serviceEnd)
+        {
+            var nPIParameter = nPI != null ?
+                new ObjectParameter("NPI", nPI) :
+                new ObjectParameter("NPI", typeof(string));
+    
+            var fiscalParameter = fiscal != null ?
+                new ObjectParameter("Fiscal", fiscal) :
+                new ObjectParameter("Fiscal", typeof(string));
+    
+            var serviceEndParameter = serviceEnd != null ?
+                new ObjectParameter("ServiceEnd", serviceEnd) :
+                new ObjectParameter("ServiceEnd", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SetServiceEndInMandate", nPIParameter, fiscalParameter, serviceEndParameter);
+        }
+    
+        public virtual ObjectResult<SP_BillingNew_Result> SP_BillingNew(string fiscal, string startDay, string endDay, string tID, string fundingCode, string nPI)
+        {
+            var fiscalParameter = fiscal != null ?
+                new ObjectParameter("fiscal", fiscal) :
+                new ObjectParameter("fiscal", typeof(string));
+    
+            var startDayParameter = startDay != null ?
+                new ObjectParameter("StartDay", startDay) :
+                new ObjectParameter("StartDay", typeof(string));
+    
+            var endDayParameter = endDay != null ?
+                new ObjectParameter("EndDay", endDay) :
+                new ObjectParameter("EndDay", typeof(string));
+    
+            var tIDParameter = tID != null ?
+                new ObjectParameter("TID", tID) :
+                new ObjectParameter("TID", typeof(string));
+    
+            var fundingCodeParameter = fundingCode != null ?
+                new ObjectParameter("FundingCode", fundingCode) :
+                new ObjectParameter("FundingCode", typeof(string));
+    
+            var nPIParameter = nPI != null ?
+                new ObjectParameter("NPI", nPI) :
+                new ObjectParameter("NPI", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_BillingNew_Result>("SP_BillingNew", fiscalParameter, startDayParameter, endDayParameter, tIDParameter, fundingCodeParameter, nPIParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> SP_GetSessionCount(string fundingCode, string fiscalYear, string month, string nPI, string attCode)
+        {
+            var fundingCodeParameter = fundingCode != null ?
+                new ObjectParameter("FundingCode", fundingCode) :
+                new ObjectParameter("FundingCode", typeof(string));
+    
+            var fiscalYearParameter = fiscalYear != null ?
+                new ObjectParameter("FiscalYear", fiscalYear) :
+                new ObjectParameter("FiscalYear", typeof(string));
+    
+            var monthParameter = month != null ?
+                new ObjectParameter("Month", month) :
+                new ObjectParameter("Month", typeof(string));
+    
+            var nPIParameter = nPI != null ?
+                new ObjectParameter("NPI", nPI) :
+                new ObjectParameter("NPI", typeof(string));
+    
+            var attCodeParameter = attCode != null ?
+                new ObjectParameter("AttCode", attCode) :
+                new ObjectParameter("AttCode", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("SP_GetSessionCount", fundingCodeParameter, fiscalYearParameter, monthParameter, nPIParameter, attCodeParameter);
+        }
+    
+        public virtual ObjectResult<SP_GetTherapistListByFCode_Result> SP_GetTherapistListByFCode(string fundingCode, string fiscalYear, string month)
+        {
+            var fundingCodeParameter = fundingCode != null ?
+                new ObjectParameter("FundingCode", fundingCode) :
+                new ObjectParameter("FundingCode", typeof(string));
+    
+            var fiscalYearParameter = fiscalYear != null ?
+                new ObjectParameter("FiscalYear", fiscalYear) :
+                new ObjectParameter("FiscalYear", typeof(string));
+    
+            var monthParameter = month != null ?
+                new ObjectParameter("Month", month) :
+                new ObjectParameter("Month", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_GetTherapistListByFCode_Result>("SP_GetTherapistListByFCode", fundingCodeParameter, fiscalYearParameter, monthParameter);
+        }
+    
+        public virtual ObjectResult<SP_TherapistListByMonthFiscal_Result> SP_TherapistListByMonthFiscal(string month, string year)
+        {
+            var monthParameter = month != null ?
+                new ObjectParameter("Month", month) :
+                new ObjectParameter("Month", typeof(string));
+    
+            var yearParameter = year != null ?
+                new ObjectParameter("year", year) :
+                new ObjectParameter("year", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_TherapistListByMonthFiscal_Result>("SP_TherapistListByMonthFiscal", monthParameter, yearParameter);
+        }
+    
+        public virtual int SP_Unlock(string tID)
+        {
+            var tIDParameter = tID != null ?
+                new ObjectParameter("TID", tID) :
+                new ObjectParameter("TID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_Unlock", tIDParameter);
+        }
+    
+        public virtual int UpdateInvocie(string iD, string invoiceNo, string note)
+        {
+            var iDParameter = iD != null ?
+                new ObjectParameter("ID", iD) :
+                new ObjectParameter("ID", typeof(string));
+    
+            var invoiceNoParameter = invoiceNo != null ?
+                new ObjectParameter("InvoiceNo", invoiceNo) :
+                new ObjectParameter("InvoiceNo", typeof(string));
+    
+            var noteParameter = note != null ?
+                new ObjectParameter("Note", note) :
+                new ObjectParameter("Note", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateInvocie", iDParameter, invoiceNoParameter, noteParameter);
+        }
+    
+        public virtual ObjectResult<Sp_GetStudentSessionDetail_Pdf_Result> Sp_GetStudentSessionDetail_Pdf(Nullable<int> sID, string fiscal, string startDay, string endDay, string tID, string fundingCode, string nPI)
+        {
             var sIDParameter = sID.HasValue ?
                 new ObjectParameter("SID", sID) :
                 new ObjectParameter("SID", typeof(int));
     
-            var yearParameter = year.HasValue ?
-                new ObjectParameter("year", year) :
-                new ObjectParameter("year", typeof(int));
+            var fiscalParameter = fiscal != null ?
+                new ObjectParameter("fiscal", fiscal) :
+                new ObjectParameter("fiscal", typeof(string));
     
-            var monthParameter = month.HasValue ?
-                new ObjectParameter("month", month) :
-                new ObjectParameter("month", typeof(int));
+            var startDayParameter = startDay != null ?
+                new ObjectParameter("StartDay", startDay) :
+                new ObjectParameter("StartDay", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_GetStudentSessionDetail_Pdf_Result>("Sp_GetStudentSessionDetail_Pdf", nPIParameter, fundingCodeParameter, sIDParameter, yearParameter, monthParameter);
+            var endDayParameter = endDay != null ?
+                new ObjectParameter("EndDay", endDay) :
+                new ObjectParameter("EndDay", typeof(string));
+    
+            var tIDParameter = tID != null ?
+                new ObjectParameter("TID", tID) :
+                new ObjectParameter("TID", typeof(string));
+    
+            var fundingCodeParameter = fundingCode != null ?
+                new ObjectParameter("FundingCode", fundingCode) :
+                new ObjectParameter("FundingCode", typeof(string));
+    
+            var nPIParameter = nPI != null ?
+                new ObjectParameter("NPI", nPI) :
+                new ObjectParameter("NPI", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Sp_GetStudentSessionDetail_Pdf_Result>("Sp_GetStudentSessionDetail_Pdf", sIDParameter, fiscalParameter, startDayParameter, endDayParameter, tIDParameter, fundingCodeParameter, nPIParameter);
         }
     }
 }

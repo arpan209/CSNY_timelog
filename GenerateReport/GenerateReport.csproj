@@ -125,7 +125,13 @@
     <Compile Include="Framework\FormNameValueRequiredAttribute.cs" />
     <Compile Include="Framework\FormValueRequiredAttribute.cs" />
     <Compile Include="Framework\ParameterBasedOnFormNameAttribute.cs" />
+    <Compile Include="Models\AdminList_Result.cs">
+      <DependentUpon>CsnyModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\AgencyMaster.cs">
+      <DependentUpon>CsnyModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BillingSession_Result.cs">
       <DependentUpon>CsnyModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CsnyModel.Context.cs">
@@ -149,6 +155,12 @@
     <Compile Include="Models\GetStudentInformation_Pdf_Result.cs">
       <DependentUpon>CsnyModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GetStudentInformation_Pdf_Result1.cs">
+      <DependentUpon>CsnyModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\InvoiceDetail.cs">
+      <DependentUpon>CsnyModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\MandateMaster.cs">
       <DependentUpon>CsnyModel.tt</DependentUpon>
     </Compile>
@@ -156,6 +168,9 @@
       <DependentUpon>CsnyModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SessionNotPDetail.cs">
+      <DependentUpon>CsnyModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_BillingNew_Result.cs">
       <DependentUpon>CsnyModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SP_FindStudent_ByNPI_Result.cs">
@@ -236,6 +251,9 @@
     <Compile Include="Models\SP_GetTherapistInfoByNPI_Result.cs">
       <DependentUpon>CsnyModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SP_GetTherapistListByFCode_Result.cs">
+      <DependentUpon>CsnyModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Sp_getTherpist_SessionInDay_Result.cs">
       <DependentUpon>CsnyModel.tt</DependentUpon>
     </Compile>
@@ -252,6 +270,9 @@
       <DependentUpon>CsnyModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SP_SessCountByServiceType_Result.cs">
+      <DependentUpon>CsnyModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_TherapistListByMonthFiscal_Result.cs">
       <DependentUpon>CsnyModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SP_TherapistList_Result.cs">
@@ -275,12 +296,39 @@
     <Compile Include="Models\ZipCode.cs">
       <DependentUpon>CsnyModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="PdfReportAreaRegistration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\FormGenerateViewModel.cs" />
     <Compile Include="ZipFileResult.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bin\GenerateReport.dll" />
+    <Content Include="bin\GenerateReport.pdb" />
+    <Content Include="bin\Microsoft.Web.Infrastructure.dll" />
+    <Content Include="bin\Microsoft.Web.Mvc.FixedDisplayModes.dll" />
+    <Content Include="bin\Newtonsoft.Json.dll" />
+    <Content Include="bin\Newtonsoft.Json.xml" />
+    <Content Include="bin\System.Net.Http.Formatting.dll" />
+    <Content Include="bin\System.Net.Http.Formatting.xml" />
+    <Content Include="bin\System.Web.Helpers.dll" />
+    <Content Include="bin\System.Web.Helpers.xml" />
+    <Content Include="bin\System.Web.Http.dll" />
+    <Content Include="bin\System.Web.Http.WebHost.dll" />
+    <Content Include="bin\System.Web.Http.WebHost.xml" />
+    <Content Include="bin\System.Web.Http.xml" />
+    <Content Include="bin\System.Web.Mvc.dll" />
+    <Content Include="bin\System.Web.Mvc.xml" />
+    <Content Include="bin\System.Web.Razor.dll" />
+    <Content Include="bin\System.Web.Razor.xml" />
+    <Content Include="bin\System.Web.WebPages.Deployment.dll" />
+    <Content Include="bin\System.Web.WebPages.Deployment.xml" />
+    <Content Include="bin\System.Web.WebPages.dll" />
+    <Content Include="bin\System.Web.WebPages.Razor.dll" />
+    <Content Include="bin\System.Web.WebPages.Razor.xml" />
+    <Content Include="bin\System.Web.WebPages.xml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

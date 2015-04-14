@@ -30,10 +30,17 @@ namespace CSNY_timelog.Helper
             try
             {
                 MailMessage mail = new MailMessage();
-
-                mail.To.Add(new MailAddress("eloraw@citysoundsny.com"));
-                mail.Bcc.Add(new MailAddress(ConfigurationManager.AppSettings["Bcc"].ToString()));
-                mail.CC.Add(new MailAddress(ConfigurationManager.AppSettings["Cc"].ToString()));
+                if (Convert.ToBoolean(ConfigurationManager.AppSettings["developement"]))
+                {
+                    mail.To.Add(new MailAddress("eloraw@citysoundsny.com"));
+                    mail.Bcc.Add(new MailAddress(ConfigurationManager.AppSettings["Bcc"].ToString()));
+                    mail.CC.Add(new MailAddress(ConfigurationManager.AppSettings["Cc"].ToString()));
+                }
+                else
+                {
+                    mail.To.Add("csny.csg@gmail.com");
+                }
+              
                 mail.ReplyToList.Add(new MailAddress(ConfigurationManager.AppSettings["ReplyTo"].ToString(), "reply-to"));
                 mail.From = new MailAddress(ConfigurationManager.AppSettings["MailFrom"].ToString(), ConfigurationManager.AppSettings["BehalfOf"].ToString());
                 mail.Subject = "CSNY New Registration Notice";
@@ -55,11 +62,10 @@ namespace CSNY_timelog.Helper
                 mail.IsBodyHtml = true;
                 SmtpClient smtp = new SmtpClient(ConfigurationManager.AppSettings["mailserver"].ToString(),
                         Convert.ToInt32(ConfigurationManager.AppSettings["port"]));
-                if (Convert.ToBoolean(ConfigurationManager.AppSettings["developement"]))
-                {
+               
                     smtp.Credentials = new NetworkCredential(ConfigurationManager.AppSettings["username"].ToString(),
                         ConfigurationManager.AppSettings["password"].ToString());
-                }
+               
                 smtp.EnableSsl = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableSsl"]);
                 smtp.Send(mail);
             }
@@ -80,8 +86,17 @@ namespace CSNY_timelog.Helper
             {
                 MailMessage mail = new MailMessage();
 
-                mail.To.Add(ContactEmail.ToString());
-                mail.Bcc.Add(new MailAddress(ConfigurationManager.AppSettings["Bcc"].ToString()));
+                if (Convert.ToBoolean(ConfigurationManager.AppSettings["developement"]))
+                {
+                    mail.To.Add(ContactEmail.ToString());
+                    mail.Bcc.Add(new MailAddress(ConfigurationManager.AppSettings["Bcc"].ToString()));
+                }
+                else
+                {
+                    mail.To.Add("csny.csg@gmail.com");
+                }
+
+              
                 mail.ReplyToList.Add(new MailAddress(ConfigurationManager.AppSettings["ReplyTo"].ToString(), "reply-to"));
                 mail.From = new MailAddress(ConfigurationManager.AppSettings["MailFrom"].ToString(), ConfigurationManager.AppSettings["BehalfOf"].ToString());
                 mail.Subject = "CSNY - Registration Confirmation";
@@ -112,11 +127,10 @@ namespace CSNY_timelog.Helper
                 mail.IsBodyHtml = true;
                 SmtpClient smtp = new SmtpClient(ConfigurationManager.AppSettings["mailserver"].ToString(),
                         Convert.ToInt32(ConfigurationManager.AppSettings["port"]));
-                if (Convert.ToBoolean(ConfigurationManager.AppSettings["developement"]))
-                {
+              
                     smtp.Credentials = new NetworkCredential(ConfigurationManager.AppSettings["username"].ToString(),
                         ConfigurationManager.AppSettings["password"].ToString());
-                }
+               
                 smtp.EnableSsl = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableSsl"]);
                 smtp.Send(mail);
             }
@@ -188,12 +202,19 @@ namespace CSNY_timelog.Helper
             {
                 MailMessage mail = new MailMessage();
 
-                mail.To.Add(Email.ToString());
-                mail.Bcc.Add(new MailAddress(ConfigurationManager.AppSettings["Bcc"].ToString()));
-                if (!string.IsNullOrEmpty(AdminList))
+                if (Convert.ToBoolean(ConfigurationManager.AppSettings["developement"]))
                 {
-                    mail.CC.Add(AdminList);
+                    mail.To.Add(Email.ToString());
+                    mail.Bcc.Add(new MailAddress(ConfigurationManager.AppSettings["Bcc"].ToString()));
+                    if (!string.IsNullOrEmpty(AdminList))
+                    {
+                        mail.CC.Add(AdminList);
+                    }
                 }
+                else {
+                    mail.To.Add("csny.csg@gmail.com");
+                }
+
                 
                 mail.ReplyToList.Add(new MailAddress(ConfigurationManager.AppSettings["ReplyTo"].ToString(), "reply-to"));
                 mail.From = new MailAddress(ConfigurationManager.AppSettings["MailFrom"].ToString(), ConfigurationManager.AppSettings["BehalfOf"].ToString());
@@ -221,11 +242,10 @@ namespace CSNY_timelog.Helper
                 mail.IsBodyHtml = true;
                 SmtpClient smtp = new SmtpClient(ConfigurationManager.AppSettings["mailserver"].ToString(),
                         Convert.ToInt32(ConfigurationManager.AppSettings["port"]));
-                if (Convert.ToBoolean(ConfigurationManager.AppSettings["developement"]))
-                {
+                
                     smtp.Credentials = new NetworkCredential(ConfigurationManager.AppSettings["username"].ToString(),
                         ConfigurationManager.AppSettings["password"].ToString());
-                }
+                
                 smtp.EnableSsl = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableSsl"]);
                 smtp.Send(mail);
             }

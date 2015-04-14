@@ -16,6 +16,7 @@
         <EntityTypeShape EntityType="csnyModel.ZipCode" Width="1.5" PointX="10.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="csnyModel.vw_CurrentTherapists" Width="1.5" PointX="4.75" PointY="10.75" IsExpanded="true" />
         <EntityTypeShape EntityType="csnyModel.TherapistMaster" Width="1.5" PointX="7.375" PointY="10.75" />
+        <EntityTypeShape EntityType="csnyModel.InvoiceDetail" Width="1.5" PointX="8.491702737515654" PointY="18.739128240728345" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

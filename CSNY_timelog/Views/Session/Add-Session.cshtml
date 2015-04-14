@@ -20,19 +20,35 @@
         rel="stylesheet" type="text/css" />
 <link href="@Url.Content("~/css/chosen.css")" rel="stylesheet"  type="text/css" />
 
+<link href="@Url.Content("~/Content/themes/base/timepicker/jquery.ui.timepicker.css?v=0.3.3")"
+      rel="stylesheet" type="text/css" />
+
+<link rel="stylesheet" href="~/Content/themes/base/timepicker/include/ui-1.10.0/ui-lightness/jquery-ui-1.10.0.custom.min.css" type="text/css" />
+
 <script src="@Url.Content("~/Scripts/jquery-1.7.2.min.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/jquery-ui-1.8.20.min.js")" type="text/javascript"></script>
 
 <script src="@Url.Content("~/Scripts/chosen.jquery.js")" type="text/javascript"></script>
 
+@*<script src="@Url.Content("~/Content/themes/base/timepicker/include/jquery-1.9.0.min.js")" type="text/javascript"></script>*@
 
+<script src="@Url.Content("~/Content/themes/base/timepicker/jquery.ui.timepicker.js?v=0.3.3")" type="text/javascript"></script>
+
+<script type="text/javascript" src="~/Content/themes/base/timepicker/include/ui-1.10.0/jquery.ui.core.min.js"></script>
+
+@*<script src="@Url.Content("~/Content/themes/base/timepicker1/jquery.timepicker.js")" type="text/javascript"></script>*@
+
+@*<script type="text/javascript" src="~/Content/themes/base/timepicker/include/ui-1.10.0/jquery.ui.widget.min.js"></script>
+
+<script type="text/javascript" src="~/Content/themes/base/timepicker/include/ui-1.10.0/jquery.ui.tabs.min.js"></script>*@
+
+@*<script src="@Url.Content("~/Content/themes/base/jquery.keynav/javascript/jquery.keynav.js")" type="text/javascript"></script>
+
+<script src="@Url.Content("~/Content/themes/base/jquery.keynav/javascript/jquery-1.9.1.min.js")" type="text/javascript"></script>*@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        var npi = '@Session["NPI"]';
-        if(npi == ""){
-            window.location.href = '@Url.Content("~/therapist/index")';
-        }
+
         var today = new Date();
         var y = today.getFullYear().toString().substr(2, 2);
 
@@ -107,7 +123,7 @@
             else { Language = "Cantonese "; }
             LanguageDropDown.options[LanguageDropDown.selectedIndex].text = Language.trim();
 
-            var am = "AM";
+           @* var am = "AM";
             var Start = '@Model.StartAMPM';
             if (Start.indexOf(am) > -1) {
                 document.getElementById("StartA").checked = true;
@@ -122,7 +138,7 @@
             }
             else {
                 document.getElementById("EndP").checked = true;
-            }
+            }*@
 
             var StudName = '@Model.StudentListText';
         }
@@ -146,8 +162,113 @@
 
     });
 
-   
+    //$(document).ready(function () {
+    //    $('#StartTime').timepicker({
+    //        timeFormat: 'hh:mm:ss p',
+    //        minTime: '6:00:00 AM', // 11:45:00 AM,
+    //        maxTime: '9:00:00 PM',
+    //        //maxHour: 20,
+    //    //maxMinutes: 30,
+    //    //startTime: new Date(0,0,0,15,0,0), // 3:00:00 PM - noon
+    //        interval: 15, // 15 minutes
+    //            change: function() {
+    //                $('#EndTime').timepicker('option', 'minTime', $(this).val());
+    //    }
+    //    });
+    //});
 
+    //$(document).ready(function () {
+    //    $('#EndTime').timepicker({
+    //        timeFormat: 'hh:mm:ss p',
+    //        //minTime: $('StartTime').val(), // 11:45:00 AM,
+    //        maxTime: '9:00:00 PM',
+    //        //maxHour: 20,
+    //        //maxMinutes: 30,
+    //        //startTime: $('#StartTime').val() , // 3:00:00 PM - noon
+    //        interval: 15 // 15 minutes
+    //    });
+    //});
+
+    $(document).ready(function () {
+        $('#StartTime').timepicker({
+            showPeriod: true,
+            onHourShow: OnHourShowCallback,
+            onMinuteShow: OnMinuteShowCallback,
+            //onSelect: OnSelectCallback
+        });
+        $('#EndTime').timepicker({
+            showPeriod: true,
+            onHourShow: function(hour){
+                if ((hour > 21) || (hour < 6)) {
+                    return false;
+                }
+                else if((hour < $('#StartTime').val().split(':')[0])) {
+                    return false;
+                }
+                else if (($('#StartTime').val().split(':')[0]) != 12) {
+                    if (($('#StartTime').val().split(':')[1].split(' ')[1] == 'PM') && (hour < parseInt($('#StartTime').val().split(':')[0]) + 12)) {
+                        /* if (hour < $('#StartTime').val().split(':')[0]) {
+                             return false;
+                         }*/
+                        return false;
+                    }
+                    else {
+                        return true;
+                    }
+                }
+                else {
+                    return true;
+                }
+                
+                },
+            onMinuteShow: function (hour, minute) {
+                if ((hour == 21 && minute >= 1) || (hour == 5 && minute <= 59)) {
+                    return false;
+                }
+                else if (($('#StartTime').val().split(':')[1].split(' ')[1] == 'AM') && (hour == $('#StartTime').val().split(':')[0] && minute <= $('#StartTime').val().split(':')[1].split(' ')[0])) {
+                    return false;
+                }
+                else if (($('#StartTime').val().split(':')[0]) != 12) {
+                    if (($('#StartTime').val().split(':')[1].split(' ')[1] == 'PM') && (hour == parseInt($('#StartTime').val().split(':')[0]) + 12 && minute <= $('#StartTime').val().split(':')[1].split(' ')[0])) {
+                        return false;
+                    }
+                    else {
+                        return true;
+                    }
+                }
+                else if (($('#StartTime').val().split(':')[0]) == 12) {
+                    if ((hour == $('#StartTime').val().split(':')[0] && minute <= $('#StartTime').val().split(':')[1].split(' ')[0])) {
+                        return false;
+                    }
+                    else {
+                        return true;
+                    }
+                }
+                    
+                return true;
+            }
+        });
+        //$('#editor-field a').keynav();
+    });
+    function OnHourShowCallback(hour) {
+        if ((hour > 20) || (hour < 6)) {
+            return false; // not valid
+        }
+        return true; // valid
+    }
+    function OnMinuteShowCallback(hour, minute) {
+        if ((hour == 20) && (minute >= 51)) { return false; } // not valid
+        if ((hour == 5) && (minute <= 59)) { return false; } // not valid
+        return true;  // valid
+    }
+    function OnSelectCallback() {
+        $('#EndTime').timepicker({
+            minTime: {
+                hour: $('#StartTime').val(),
+                //minute: $('#StartTime').val().split(':')[1]
+            }
+        });
+    }
 
     </script>
 
@@ -332,9 +453,16 @@
         if (StartTime == "") {
             error += "Please select Start Time.\n";
         }
+        else if (StartTime.split(':')[0] == "" || StartTime.split(':')[1] == "" || StartTime.split(' ')[0] == "" || StartTime.split(' ')[1] == "" || StartTime.split(':')[1].split(' ')[0] == "") {
+            error += "Please enter Start Time in correct hh:mm AM/PM format\n";
+        }
+        else if (StartTime.split(' ')[1] != 'AM' && StartTime.split(' ')[1] != 'PM') {
+            error += "Please enter Start Time in correct hh:mm AM/PM format\n";
+        }
        
-        var Start = $('input[name=Start]:checked').val();
-        StartTime = StartTime + Start;
+       // var Start = $('input[name=Start]:checked').val();
+        // StartTime = StartTime + Start;
+        var Start = StartTime.split(' ')[1];
 
         var StartValue = StartTime.split(':');
         SHour = StartValue[0];
@@ -345,9 +473,16 @@
         if (EndTime == "") {
             error += "Please select End Time.\n";
         }
+        else if (EndTime.split(':')[0] == "" || EndTime.split(':')[1] == "" || EndTime.split(' ')[0] == "" || EndTime.split(' ')[1] == "" || EndTime.split(':')[1].split(' ')[0] == "") {
+            error += "Please enter End Time in correct hh:mm AM/PM format\n";
+        }
+        else if (EndTime.split(' ')[1] != 'AM' && EndTime.split(' ')[1] != 'PM') {
+            error += "Please enter End Time in correct hh:mm AM/PM format\n";
+        }
 
-        var End = $('input[name=End]:checked').val();
-        EndTime = EndTime + End;
+       // var End = $('input[name=End]:checked').val();
+        // EndTime = EndTime + End;
+        var End = EndTime.split(' ')[1];
 
 
         var EndValue = EndTime.split(':');
@@ -362,13 +497,32 @@
 
         }
 
-        if (End == "PM" &&  EHour > 9)
+        if (End == "PM" &&  EHour >= 9)
         {
             if (EHour == 12) { }
             else {
                 error += "Session end time must be before 9 PM.\n";
             }
         }
+
+        if (Start == "AM" && End == "AM" && (SHour > EHour)) {
+            error += "Start Time must be before End Time \n";
+        }
+        else if (Start == "PM" && End == "PM" && SHour != 12 && (SHour > EHour)) {
+            error += "Start Time must be before End Time \n";
+        }
+        else if (Start == "PM" && End == "AM") {
+            error += "Start Time must be before End Time \n";
+        }
+        else if (Start == "PM" && End == "PM" && SHour != 12 && EHour == 12) {
+            error += "Start Time must be before End Time \n";
+        }
+        else if ((Start == "AM" && End == "AM" && (SHour == EHour)) || (Start == "PM" && End == "PM" && (SHour == EHour))) {
+            if (StartTime.split(':')[1].split(' ')[0] > EndTime.split(':')[1].split(' ')[0]) {
+                error += "Start Time must be before End Time \n";
+            }
+        }
+       
 
         var ServiceType = $('input[name=Service]:checked').val();
 
@@ -816,8 +970,8 @@
                 @Html.TextBoxFor(m => m.StartTime)
                  <div style="display:inline-block">
             
-              <input type="radio" name="Start" id="StartA" value="AM" checked/>AM 
-             <div> <input type="radio" name="Start" id="StartP" value="PM"/>PM</div>
+             @* <input type="radio" name="Start" id="StartA" value="AM" checked/>AM 
+             <div> <input type="radio" name="Start" id="StartP" value="PM"/>PM</div> *@
                 
             </div>     
              </div>
@@ -829,8 +983,8 @@
                  @Html.TextBoxFor(m => m.EndTime)
                <div style="display:inline-block">
             
-              <input type="radio" name="End" id="EndA" value="AM" checked/>AM 
-             <div> <input type="radio" name="End" id="EndP" value="PM"/>PM</div>
+              @*<input type="radio" name="End" id="EndA" value="AM" checked/>AM 
+             <div> <input type="radio" name="End" id="EndP" value="PM"/>PM</div>*@
                 
             </div>     
              

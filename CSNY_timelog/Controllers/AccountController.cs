@@ -169,7 +169,7 @@ namespace CSNY_timelog.Controllers
                                 Session["Username"] = username;
                                 Session["UserID"] = userid;
                                 var therapist = db.Sp_get_Therpist_Info(userid.ToString()).SingleOrDefault();
-                                Session["Fullname"] = therapist.LastName + " " + therapist.FirstName;
+                                Session["Fullname"] = therapist.FirstName;
                                 db.sp_Update_LastLogin(username);
                                 if (roleid == "1")
                                 {
