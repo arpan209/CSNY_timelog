@@ -34,7 +34,7 @@ namespace CSNY_timelog.ViewModel
         [Display(Name = "State Name")]
         public string StateName { get; set; }
 
-        [Required]
+        
         [Display(Name = "City")]
         public string City { get; set; }
 

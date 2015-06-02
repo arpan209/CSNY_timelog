@@ -365,7 +365,6 @@ namespace CSNY_timelog.Controllers
             return View(objviewmodel);
         }
 
-        [HttpGet]
         public ActionResult edit_profile()
         {
             if (CheckUserLoginStatus() <= 0)
@@ -390,7 +389,7 @@ namespace CSNY_timelog.Controllers
                         objviewmodel.FirstName = getReg.FirstName.Trim();
                         objviewmodel.LastName = getReg.LastName.Trim();
                         objviewmodel.Address1 = getReg.Address1.Trim();
-                        objviewmodel.Address2 = (!string.IsNullOrEmpty((string)(getReg.address2))) ? (string)objviewmodel.Address2.Trim() : "";
+                        objviewmodel.Address2 = (!string.IsNullOrEmpty((getReg.address2))) ? getReg.address2.Trim() : "";
                         objviewmodel.StateName = getReg.State.Trim();
                         objviewmodel.City = getReg.City.Trim();
                         objviewmodel.Email = getReg.Email.Trim();
@@ -413,7 +412,9 @@ namespace CSNY_timelog.Controllers
             return View(objviewmodel);
         }
 
-        [HttpPost]
+
+
+      [HttpPost]
         public ActionResult edit_profile(RegistrationViewModel objviewmodel)
         {
             if (CheckUserLoginStatus() <= 0)
@@ -452,32 +453,32 @@ namespace CSNY_timelog.Controllers
                         reg.StateName = objviewmodel.StateName.Trim();
                         reg.Email = objviewmodel.Email.ToLower().Trim();
                         reg.Phone = objviewmodel.Phone.Trim();
-                       // reg.SSN = objviewmodel.SSN;
-                        reg.ServiceType = objviewmodel.ServiceType;
+                        reg.SSN = getReg.NPI;
+                        reg.ServiceType = getReg.ServiceType;
                         reg.UserType = getReg.UserType;
                         //reg.EndService = Convert.ToDateTime(objviewmodel.EndService);
                         //reg.IsActive = getReg.IsActive.ToString();
-                        db.SP_UpdateTherapistInfo(loginid.ToString(), reg.FirstName, reg.LastName, reg.Address1, reg.Address2, reg.City, reg.StateName, reg.Email, reg.Phone, reg.SSN, reg.ServiceType, reg.UserType, Convert.ToBoolean(reg.IsActive), Convert.ToDateTime(reg.EndService));
+                        db.SP_UpdateTherapistInfo(loginid.ToString(), reg.FirstName, reg.LastName, reg.Address1, reg.Address2, reg.City, reg.StateName, reg.Email, reg.Phone, reg.SSN, reg.ServiceType, reg.UserType, Convert.ToBoolean(getReg.IsActive), Convert.ToDateTime(getReg.EndService));
                        
                         //db.Sp_User_Update_profile(loginid, reg.CompanyName, reg.JobTitle, reg.FirstName, reg.LastName, reg.Country, reg.Address1,
                         //    reg.Address2, reg.City, reg.State, reg.ZipCode, reg.Email, reg.PhoneNo);
                         
                         // Response.Write("<script> alert('Updated Sucessfully')</script>");
-                       var roleid = db.SP_get_user_role(getReg.UserName).SingleOrDefault().Trim();
-                       var pagename = "";
-                       if (roleid == "1")
-                       {
-                               return RedirectToAction("index", "Admin");
+                       //var roleid = db.SP_get_user_role(getReg.UserName).SingleOrDefault().Trim();
+                       //var pagename = "";
+                       //if (roleid == "1")
+                       //{
+                       //        return RedirectToAction("index", "Admin");
 
-                       }
-                       else
-                       {
+                       //}
+                       //else
+                       //{
                            
-                            return RedirectToAction("Index", "Therapist");
-                       }
+                       //     return RedirectToAction("Index", "Therapist");
+                       //}
 
 
-                       msgerror = pagename;
+                        msgerror = "success";
                     
                     //var getReg1 = (from n in db.tblRegistrations where n.ID.Equals(loginid) select n).SingleOrDefault();
                     //string fullName1 = string.Empty;
@@ -500,11 +501,104 @@ namespace CSNY_timelog.Controllers
             {
                 msgerror = ex.Message.ToString();
             }
-            fillValues();
-            fillCity(objviewmodel.StateName);
+            //fillValues();
+            //fillCity(objviewmodel.StateName);
             return Json(msgerror);
         }
-       
+
+        //[HttpPost]
+        //public ActionResult edit_profile_admin(RegistrationViewModel objviewmodel)
+        //{
+        //    if (CheckUserLoginStatus() <= 0)
+        //        return AccessDeniedView();
+
+        //    string msgerror = string.Empty;
+        //    try
+        //    {
+        //        int loginid = 0;
+        //        if (Session["UserId"] != null)
+        //        {
+        //            string StateName = string.Empty;
+
+        //            loginid = Convert.ToInt32(Session["UserId"]);
+        //            RegistrationViewModel reg = new RegistrationViewModel();
+
+
+        //            RegistrationViewModel objLR = new RegistrationViewModel();
+        //            var getReg = (from n in db.TherapistMasters where n.TID.Equals(loginid) select n).SingleOrDefault();
+        //            string fullName = string.Empty;
+        //            string Email = string.Empty;
+        //            if (getReg != null)
+        //            {
+        //                objviewmodel.Email = getReg.Email.Trim();
+        //            }
+
+
+
+
+        //            reg.FirstName = objviewmodel.FirstName.Trim();
+        //            reg.LastName = objviewmodel.LastName.Trim();
+
+        //            reg.Address1 = objviewmodel.Address1.Trim();
+        //            reg.Address2 = (!string.IsNullOrEmpty((string)(objviewmodel.Address2))) ? (string)objviewmodel.Address2.Trim() : "";
+        //            reg.City = objviewmodel.City.Trim();
+        //            reg.StateName = objviewmodel.StateName.Trim();
+        //            reg.Email = objviewmodel.Email.ToLower().Trim();
+        //            reg.Phone = objviewmodel.Phone.Trim();
+        //            // reg.SSN = objviewmodel.SSN;
+        //            reg.ServiceType = objviewmodel.ServiceType;
+        //            reg.UserType = getReg.UserType;
+        //            //reg.EndService = Convert.ToDateTime(objviewmodel.EndService);
+        //            //reg.IsActive = getReg.IsActive.ToString();
+        //            db.SP_UpdateTherapistInfo(loginid.ToString(), reg.FirstName, reg.LastName, reg.Address1, reg.Address2, reg.City, reg.StateName, reg.Email, reg.Phone, reg.SSN, reg.ServiceType, reg.UserType, Convert.ToBoolean(reg.IsActive), Convert.ToDateTime(reg.EndService));
+
+        //            //db.Sp_User_Update_profile(loginid, reg.CompanyName, reg.JobTitle, reg.FirstName, reg.LastName, reg.Country, reg.Address1,
+        //            //    reg.Address2, reg.City, reg.State, reg.ZipCode, reg.Email, reg.PhoneNo);
+
+        //            // Response.Write("<script> alert('Updated Sucessfully')</script>");
+        //            var roleid = db.SP_get_user_role(getReg.UserName).SingleOrDefault().Trim();
+        //            var pagename = "";
+        //            if (roleid == "1")
+        //            {
+        //                return RedirectToAction("index", "Admin");
+
+        //            }
+        //            else
+        //            {
+
+        //                return RedirectToAction("Index", "Therapist");
+        //            }
+
+
+        //            msgerror = pagename;
+
+        //            //var getReg1 = (from n in db.tblRegistrations where n.ID.Equals(loginid) select n).SingleOrDefault();
+        //            //string fullName1 = string.Empty;
+        //            //string Email1 = string.Empty;
+        //            //if (getReg1 != null)
+        //            //{
+        //            //    objviewmodel.Email = getReg1.Email;
+        //            //    objviewmodel.City = getReg1.City;
+        //            //    objviewmodel.CompanyName = getReg1.CompanyName;
+        //            //    // objviewmodel.Company = getReg1.CompanyName;
+        //            //}
+
+        //        }
+        //        else
+        //        {
+        //            return RedirectToAction("log_on", "account");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        msgerror = ex.Message.ToString();
+        //    }
+        //    fillValues();
+        //    fillCity(objviewmodel.StateName);
+        //    return Json(msgerror);
+        //}
+
+
         public void fillValues()
         {
             try

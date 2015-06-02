@@ -1,8 +1,10 @@
 ﻿@model CSNY_timelog.ViewModel.BillingViewModel
+@using GridMvc.Html;
+
 @using Telerik.Web;
 @using Telerik.Web.Mvc;
 @using Telerik.Web.Mvc.UI;
-@using GridMvc.Html;
+
 
 <link href="@Url.Content("~/Content/Gridmvc.css")" rel="stylesheet" />
    
@@ -23,7 +25,12 @@
             </div>
                  <div>
                 
-                    
+                        <br />
+                     <b>Year:</b>@Model.Fiscal
+                      <br />
+                     <b>Month:</b> @Model.Month
+                      <br />
+                  
                  </div>
       <div style="clear :both;"></div>
 
@@ -39,7 +46,7 @@
       columns.Add(c => c.Ps).Titled("Ps").SetWidth(50);
       //columns.Add(c => c.Group).Titled("Actual <br/> Group <br/> Size").SetWidth(30);
       
-  }).WithPaging(100).Sortable(false)
+  }).WithPaging(1000).Sortable(false)
 
 </div>
      <a>&nbsp&nbsp&nbsp   Total Count: @Model.MasterCount</a>

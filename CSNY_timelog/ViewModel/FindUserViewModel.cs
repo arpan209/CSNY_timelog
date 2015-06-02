@@ -31,6 +31,8 @@ namespace CSNY_timelog.ViewModel
         public string OSIS { get; set; }
         public string FundingCode { get; set; }
         public string Fiscal { get; set; }
+        public string S1 { get; set; }
+        public string SP { get; set; }
        
     }
     public class TherapistListViewModel

@@ -1015,4 +1015,71 @@
     
     $(".chzn-select").chosen({ no_results_text: "Oops, nothing found!" });
 
+    $(".chzn-select").chosen().change(function () {
+       // alert(+$(this).val());
+        //$('#' + $(this).val()).show();
+          $("#mandate").html("");
+        var x = document.getElementById("StudentList");
+        var StudentList = "";
+        var StudentListText = "";
+
+        if (x != "") {
+            for (var i = 0; i < x.options.length; i++) {
+                if (x.options[i].selected == true) {
+                    StudentList += x.options[i].value + ",";
+                    StudentListText += x.options[i].text + ",";
+                   // GroupSize += 1;
+                }
+            }
+        }
+
+        var ServiceType = $('input[name=Service]:checked').val();
+        var SessDatevalue = $('#SessionDate').val();
+
+        /// Check session existe of same date for a child.
+        if (ServiceType == "Child") {
+            var StudViewModel =
+                   {
+                       SessionDate: SessDatevalue, StudentList: StudentList, StudentListText: StudentListText,
+
+                   };
+
+            $.ajax({
+                type: "POST",
+
+                url: '@Url.Content("~/Session/ShowMandate")',
+
+            async: false,
+            data: JSON.stringify(StudViewModel),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+
+                if (data != "") {
+                    
+                    $("#mandate").html(data);
+
+                }
+
+            },
+            error: function (data) {
+                //  alert(data);
+            }
+
+        });
+    }
+
+
+      //  var msg = "  <br/> Service Start : " + NewStart +
+      //  " <br/> Service End : " + NewEnd +
+      //  " <br/> S1 : " + NewFreqVal[0] + " X " + NewDuraVal[0] + ":" + NewGroupVal[0] +
+      //  " <br/> SP : " + NewFreqVal[1] + " X " + NewDuraVal[1] + ":" + NewGroupVal[1] +
+      //" <br/> Language : " 
+      //  //document.getElementById("mandate").style.display = "block"
+      //  //$('.mandate').html('Hello World!');
+      //  $("#mandate").html(msg);
+      //  //document.getElementById("MyEdit").innerHTML = "My new text!";​
+
+    });
+
 </script> 

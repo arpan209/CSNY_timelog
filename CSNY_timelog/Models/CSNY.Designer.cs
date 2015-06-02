@@ -132,22 +132,6 @@ namespace CSNY_timelog.Models
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<StagingTable> StagingTables
-        {
-            get
-            {
-                if ((_StagingTables == null))
-                {
-                    _StagingTables = base.CreateObjectSet<StagingTable>("StagingTables");
-                }
-                return _StagingTables;
-            }
-        }
-        private ObjectSet<StagingTable> _StagingTables;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<StudentMaster> StudentMasters
         {
             get
@@ -256,6 +240,22 @@ namespace CSNY_timelog.Models
             }
         }
         private ObjectSet<InvoiceDetail> _InvoiceDetails;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<StagingTable> StagingTables
+        {
+            get
+            {
+                if ((_StagingTables == null))
+                {
+                    _StagingTables = base.CreateObjectSet<StagingTable>("StagingTables");
+                }
+                return _StagingTables;
+            }
+        }
+        private ObjectSet<StagingTable> _StagingTables;
 
         #endregion
 
@@ -291,14 +291,6 @@ namespace CSNY_timelog.Models
         public void AddToMandateMasters(MandateMaster mandateMaster)
         {
             base.AddObject("MandateMasters", mandateMaster);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the StagingTables EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToStagingTables(StagingTable stagingTable)
-        {
-            base.AddObject("StagingTables", stagingTable);
         }
     
         /// <summary>
@@ -355,6 +347,14 @@ namespace CSNY_timelog.Models
         public void AddToInvoiceDetails(InvoiceDetail invoiceDetail)
         {
             base.AddObject("InvoiceDetails", invoiceDetail);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the StagingTables EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToStagingTables(StagingTable stagingTable)
+        {
+            base.AddObject("StagingTables", stagingTable);
         }
 
         #endregion
@@ -511,146 +511,6 @@ namespace CSNY_timelog.Models
             }
     
             return base.ExecuteFunction<sp_get_StudentInfo_Result5>("sp_get_StudentInfo", nYCIParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="fiscal">No Metadata Documentation available.</param>
-        /// <param name="nPI">No Metadata Documentation available.</param>
-        /// <param name="nYCID">No Metadata Documentation available.</param>
-        /// <param name="lastName">No Metadata Documentation available.</param>
-        /// <param name="firstName">No Metadata Documentation available.</param>
-        /// <param name="frequency">No Metadata Documentation available.</param>
-        /// <param name="groupSize">No Metadata Documentation available.</param>
-        /// <param name="duration">No Metadata Documentation available.</param>
-        /// <param name="language">No Metadata Documentation available.</param>
-        /// <param name="fundingCode">No Metadata Documentation available.</param>
-        /// <param name="startDate">No Metadata Documentation available.</param>
-        /// <param name="endDate">No Metadata Documentation available.</param>
-        public int AddStaging(global::System.String fiscal, global::System.String nPI, global::System.String nYCID, global::System.String lastName, global::System.String firstName, global::System.String frequency, global::System.String groupSize, global::System.String duration, global::System.String language, global::System.String fundingCode, global::System.String startDate, global::System.String endDate)
-        {
-            ObjectParameter fiscalParameter;
-            if (fiscal != null)
-            {
-                fiscalParameter = new ObjectParameter("Fiscal", fiscal);
-            }
-            else
-            {
-                fiscalParameter = new ObjectParameter("Fiscal", typeof(global::System.String));
-            }
-    
-            ObjectParameter nPIParameter;
-            if (nPI != null)
-            {
-                nPIParameter = new ObjectParameter("NPI", nPI);
-            }
-            else
-            {
-                nPIParameter = new ObjectParameter("NPI", typeof(global::System.String));
-            }
-    
-            ObjectParameter nYCIDParameter;
-            if (nYCID != null)
-            {
-                nYCIDParameter = new ObjectParameter("NYCID", nYCID);
-            }
-            else
-            {
-                nYCIDParameter = new ObjectParameter("NYCID", typeof(global::System.String));
-            }
-    
-            ObjectParameter lastNameParameter;
-            if (lastName != null)
-            {
-                lastNameParameter = new ObjectParameter("LastName", lastName);
-            }
-            else
-            {
-                lastNameParameter = new ObjectParameter("LastName", typeof(global::System.String));
-            }
-    
-            ObjectParameter firstNameParameter;
-            if (firstName != null)
-            {
-                firstNameParameter = new ObjectParameter("FirstName", firstName);
-            }
-            else
-            {
-                firstNameParameter = new ObjectParameter("FirstName", typeof(global::System.String));
-            }
-    
-            ObjectParameter frequencyParameter;
-            if (frequency != null)
-            {
-                frequencyParameter = new ObjectParameter("Frequency", frequency);
-            }
-            else
-            {
-                frequencyParameter = new ObjectParameter("Frequency", typeof(global::System.String));
-            }
-    
-            ObjectParameter groupSizeParameter;
-            if (groupSize != null)
-            {
-                groupSizeParameter = new ObjectParameter("GroupSize", groupSize);
-            }
-            else
-            {
-                groupSizeParameter = new ObjectParameter("GroupSize", typeof(global::System.String));
-            }
-    
-            ObjectParameter durationParameter;
-            if (duration != null)
-            {
-                durationParameter = new ObjectParameter("Duration", duration);
-            }
-            else
-            {
-                durationParameter = new ObjectParameter("Duration", typeof(global::System.String));
-            }
-    
-            ObjectParameter languageParameter;
-            if (language != null)
-            {
-                languageParameter = new ObjectParameter("language", language);
-            }
-            else
-            {
-                languageParameter = new ObjectParameter("language", typeof(global::System.String));
-            }
-    
-            ObjectParameter fundingCodeParameter;
-            if (fundingCode != null)
-            {
-                fundingCodeParameter = new ObjectParameter("FundingCode", fundingCode);
-            }
-            else
-            {
-                fundingCodeParameter = new ObjectParameter("FundingCode", typeof(global::System.String));
-            }
-    
-            ObjectParameter startDateParameter;
-            if (startDate != null)
-            {
-                startDateParameter = new ObjectParameter("StartDate", startDate);
-            }
-            else
-            {
-                startDateParameter = new ObjectParameter("StartDate", typeof(global::System.String));
-            }
-    
-            ObjectParameter endDateParameter;
-            if (endDate != null)
-            {
-                endDateParameter = new ObjectParameter("EndDate", endDate);
-            }
-            else
-            {
-                endDateParameter = new ObjectParameter("EndDate", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction("AddStaging", fiscalParameter, nPIParameter, nYCIDParameter, lastNameParameter, firstNameParameter, frequencyParameter, groupSizeParameter, durationParameter, languageParameter, fundingCodeParameter, startDateParameter, endDateParameter);
         }
     
         /// <summary>
@@ -2039,36 +1899,6 @@ namespace CSNY_timelog.Models
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        /// <param name="nPI">No Metadata Documentation available.</param>
-        /// <param name="fisacl">No Metadata Documentation available.</param>
-        public ObjectResult<SP_FindStudent_ByNPI_Result1> SP_FindStudent_ByNPI(global::System.String nPI, global::System.String fisacl)
-        {
-            ObjectParameter nPIParameter;
-            if (nPI != null)
-            {
-                nPIParameter = new ObjectParameter("NPI", nPI);
-            }
-            else
-            {
-                nPIParameter = new ObjectParameter("NPI", typeof(global::System.String));
-            }
-    
-            ObjectParameter fisaclParameter;
-            if (fisacl != null)
-            {
-                fisaclParameter = new ObjectParameter("Fisacl", fisacl);
-            }
-            else
-            {
-                fisaclParameter = new ObjectParameter("Fisacl", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<SP_FindStudent_ByNPI_Result1>("SP_FindStudent_ByNPI", nPIParameter, fisaclParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         /// <param name="sID">No Metadata Documentation available.</param>
         /// <param name="tID">No Metadata Documentation available.</param>
         /// <param name="month">No Metadata Documentation available.</param>
@@ -2884,69 +2714,6 @@ namespace CSNY_timelog.Models
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        /// <param name="fundingCode">No Metadata Documentation available.</param>
-        /// <param name="fiscalYear">No Metadata Documentation available.</param>
-        /// <param name="month">No Metadata Documentation available.</param>
-        /// <param name="nPI">No Metadata Documentation available.</param>
-        /// <param name="attCode">No Metadata Documentation available.</param>
-        public ObjectResult<Nullable<global::System.Int32>> SP_GetSessionCount(global::System.String fundingCode, global::System.String fiscalYear, global::System.String month, global::System.String nPI, global::System.String attCode)
-        {
-            ObjectParameter fundingCodeParameter;
-            if (fundingCode != null)
-            {
-                fundingCodeParameter = new ObjectParameter("FundingCode", fundingCode);
-            }
-            else
-            {
-                fundingCodeParameter = new ObjectParameter("FundingCode", typeof(global::System.String));
-            }
-    
-            ObjectParameter fiscalYearParameter;
-            if (fiscalYear != null)
-            {
-                fiscalYearParameter = new ObjectParameter("FiscalYear", fiscalYear);
-            }
-            else
-            {
-                fiscalYearParameter = new ObjectParameter("FiscalYear", typeof(global::System.String));
-            }
-    
-            ObjectParameter monthParameter;
-            if (month != null)
-            {
-                monthParameter = new ObjectParameter("Month", month);
-            }
-            else
-            {
-                monthParameter = new ObjectParameter("Month", typeof(global::System.String));
-            }
-    
-            ObjectParameter nPIParameter;
-            if (nPI != null)
-            {
-                nPIParameter = new ObjectParameter("NPI", nPI);
-            }
-            else
-            {
-                nPIParameter = new ObjectParameter("NPI", typeof(global::System.String));
-            }
-    
-            ObjectParameter attCodeParameter;
-            if (attCode != null)
-            {
-                attCodeParameter = new ObjectParameter("AttCode", attCode);
-            }
-            else
-            {
-                attCodeParameter = new ObjectParameter("AttCode", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<Nullable<global::System.Int32>>("SP_GetSessionCount", fundingCodeParameter, fiscalYearParameter, monthParameter, nPIParameter, attCodeParameter);
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         /// <param name="firstName">No Metadata Documentation available.</param>
         /// <param name="lastName">No Metadata Documentation available.</param>
         /// <param name="address1">No Metadata Documentation available.</param>
@@ -3641,7 +3408,8 @@ namespace CSNY_timelog.Models
         /// </summary>
         /// <param name="sid">No Metadata Documentation available.</param>
         /// <param name="fundingCode">No Metadata Documentation available.</param>
-        public ObjectResult<GetStudentInformation_Pdf_Result> GetStudentInformation_Pdf(Nullable<global::System.Int32> sid, global::System.String fundingCode)
+        /// <param name="nPI">No Metadata Documentation available.</param>
+        public ObjectResult<GetStudentInformation_Pdf_Result> GetStudentInformation_Pdf(Nullable<global::System.Int32> sid, global::System.String fundingCode, global::System.String nPI)
         {
             ObjectParameter sidParameter;
             if (sid.HasValue)
@@ -3663,7 +3431,17 @@ namespace CSNY_timelog.Models
                 fundingCodeParameter = new ObjectParameter("FundingCode", typeof(global::System.String));
             }
     
-            return base.ExecuteFunction<GetStudentInformation_Pdf_Result>("GetStudentInformation_Pdf", sidParameter, fundingCodeParameter);
+            ObjectParameter nPIParameter;
+            if (nPI != null)
+            {
+                nPIParameter = new ObjectParameter("NPI", nPI);
+            }
+            else
+            {
+                nPIParameter = new ObjectParameter("NPI", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<GetStudentInformation_Pdf_Result>("GetStudentInformation_Pdf", sidParameter, fundingCodeParameter, nPIParameter);
         }
     
         /// <summary>
@@ -3699,21 +3477,63 @@ namespace CSNY_timelog.Models
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        /// <param name="nPI">No Metadata Documentation available.</param>
-        /// <param name="fundingCode">No Metadata Documentation available.</param>
         /// <param name="sID">No Metadata Documentation available.</param>
-        /// <param name="year">No Metadata Documentation available.</param>
-        /// <param name="month">No Metadata Documentation available.</param>
-        public ObjectResult<Sp_GetStudentSessionDetail_Pdf_Result> Sp_GetStudentSessionDetail_Pdf(global::System.String nPI, global::System.String fundingCode, Nullable<global::System.Int32> sID, Nullable<global::System.Int32> year, Nullable<global::System.Int32> month)
+        /// <param name="fiscal">No Metadata Documentation available.</param>
+        /// <param name="startDay">No Metadata Documentation available.</param>
+        /// <param name="endDay">No Metadata Documentation available.</param>
+        /// <param name="tID">No Metadata Documentation available.</param>
+        /// <param name="fundingCode">No Metadata Documentation available.</param>
+        /// <param name="nPI">No Metadata Documentation available.</param>
+        public ObjectResult<Sp_GetStudentSessionDetail_Pdf_Result> Sp_GetStudentSessionDetail_Pdf(Nullable<global::System.Int32> sID, global::System.String fiscal, global::System.String startDay, global::System.String endDay, global::System.String tID, global::System.String fundingCode, global::System.String nPI)
         {
-            ObjectParameter nPIParameter;
-            if (nPI != null)
+            ObjectParameter sIDParameter;
+            if (sID.HasValue)
             {
-                nPIParameter = new ObjectParameter("NPI", nPI);
+                sIDParameter = new ObjectParameter("SID", sID);
             }
             else
             {
-                nPIParameter = new ObjectParameter("NPI", typeof(global::System.String));
+                sIDParameter = new ObjectParameter("SID", typeof(global::System.Int32));
+            }
+    
+            ObjectParameter fiscalParameter;
+            if (fiscal != null)
+            {
+                fiscalParameter = new ObjectParameter("fiscal", fiscal);
+            }
+            else
+            {
+                fiscalParameter = new ObjectParameter("fiscal", typeof(global::System.String));
+            }
+    
+            ObjectParameter startDayParameter;
+            if (startDay != null)
+            {
+                startDayParameter = new ObjectParameter("StartDay", startDay);
+            }
+            else
+            {
+                startDayParameter = new ObjectParameter("StartDay", typeof(global::System.String));
+            }
+    
+            ObjectParameter endDayParameter;
+            if (endDay != null)
+            {
+                endDayParameter = new ObjectParameter("EndDay", endDay);
+            }
+            else
+            {
+                endDayParameter = new ObjectParameter("EndDay", typeof(global::System.String));
+            }
+    
+            ObjectParameter tIDParameter;
+            if (tID != null)
+            {
+                tIDParameter = new ObjectParameter("TID", tID);
+            }
+            else
+            {
+                tIDParameter = new ObjectParameter("TID", typeof(global::System.String));
             }
     
             ObjectParameter fundingCodeParameter;
@@ -3726,37 +3546,17 @@ namespace CSNY_timelog.Models
                 fundingCodeParameter = new ObjectParameter("FundingCode", typeof(global::System.String));
             }
     
-            ObjectParameter sIDParameter;
-            if (sID.HasValue)
+            ObjectParameter nPIParameter;
+            if (nPI != null)
             {
-                sIDParameter = new ObjectParameter("SID", sID);
+                nPIParameter = new ObjectParameter("NPI", nPI);
             }
             else
             {
-                sIDParameter = new ObjectParameter("SID", typeof(global::System.Int32));
+                nPIParameter = new ObjectParameter("NPI", typeof(global::System.String));
             }
     
-            ObjectParameter yearParameter;
-            if (year.HasValue)
-            {
-                yearParameter = new ObjectParameter("year", year);
-            }
-            else
-            {
-                yearParameter = new ObjectParameter("year", typeof(global::System.Int32));
-            }
-    
-            ObjectParameter monthParameter;
-            if (month.HasValue)
-            {
-                monthParameter = new ObjectParameter("month", month);
-            }
-            else
-            {
-                monthParameter = new ObjectParameter("month", typeof(global::System.Int32));
-            }
-    
-            return base.ExecuteFunction<Sp_GetStudentSessionDetail_Pdf_Result>("Sp_GetStudentSessionDetail_Pdf", nPIParameter, fundingCodeParameter, sIDParameter, yearParameter, monthParameter);
+            return base.ExecuteFunction<Sp_GetStudentSessionDetail_Pdf_Result>("Sp_GetStudentSessionDetail_Pdf", sIDParameter, fiscalParameter, startDayParameter, endDayParameter, tIDParameter, fundingCodeParameter, nPIParameter);
         }
     
         /// <summary>
@@ -3765,36 +3565,6 @@ namespace CSNY_timelog.Models
         public ObjectResult<SP_TherapistList_Result> SP_TherapistList()
         {
             return base.ExecuteFunction<SP_TherapistList_Result>("SP_TherapistList");
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        /// <param name="month">No Metadata Documentation available.</param>
-        /// <param name="year">No Metadata Documentation available.</param>
-        public ObjectResult<SP_TherapistListByMonthFiscal_Result> SP_TherapistListByMonthFiscal(global::System.String month, global::System.String year)
-        {
-            ObjectParameter monthParameter;
-            if (month != null)
-            {
-                monthParameter = new ObjectParameter("Month", month);
-            }
-            else
-            {
-                monthParameter = new ObjectParameter("Month", typeof(global::System.String));
-            }
-    
-            ObjectParameter yearParameter;
-            if (year != null)
-            {
-                yearParameter = new ObjectParameter("year", year);
-            }
-            else
-            {
-                yearParameter = new ObjectParameter("year", typeof(global::System.String));
-            }
-    
-            return base.ExecuteFunction<SP_TherapistListByMonthFiscal_Result>("SP_TherapistListByMonthFiscal", monthParameter, yearParameter);
         }
     
         /// <summary>
@@ -4085,6 +3855,332 @@ namespace CSNY_timelog.Models
             }
     
             return base.ExecuteFunction("UpdateInvocie", iDParameter, invoiceNoParameter, noteParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="nPI">No Metadata Documentation available.</param>
+        /// <param name="fisacl">No Metadata Documentation available.</param>
+        public ObjectResult<SP_FindStudent_ByNPI_Result2> SP_FindStudent_ByNPI(global::System.String nPI, global::System.String fisacl)
+        {
+            ObjectParameter nPIParameter;
+            if (nPI != null)
+            {
+                nPIParameter = new ObjectParameter("NPI", nPI);
+            }
+            else
+            {
+                nPIParameter = new ObjectParameter("NPI", typeof(global::System.String));
+            }
+    
+            ObjectParameter fisaclParameter;
+            if (fisacl != null)
+            {
+                fisaclParameter = new ObjectParameter("Fisacl", fisacl);
+            }
+            else
+            {
+                fisaclParameter = new ObjectParameter("Fisacl", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<SP_FindStudent_ByNPI_Result2>("SP_FindStudent_ByNPI", nPIParameter, fisaclParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="month">No Metadata Documentation available.</param>
+        /// <param name="year">No Metadata Documentation available.</param>
+        /// <param name="currentDate">No Metadata Documentation available.</param>
+        public ObjectResult<SP_TherapistListByMonthFiscal_Result> SP_TherapistListByMonthFiscal(global::System.String month, global::System.String year, global::System.String currentDate)
+        {
+            ObjectParameter monthParameter;
+            if (month != null)
+            {
+                monthParameter = new ObjectParameter("Month", month);
+            }
+            else
+            {
+                monthParameter = new ObjectParameter("Month", typeof(global::System.String));
+            }
+    
+            ObjectParameter yearParameter;
+            if (year != null)
+            {
+                yearParameter = new ObjectParameter("year", year);
+            }
+            else
+            {
+                yearParameter = new ObjectParameter("year", typeof(global::System.String));
+            }
+    
+            ObjectParameter currentDateParameter;
+            if (currentDate != null)
+            {
+                currentDateParameter = new ObjectParameter("CurrentDate", currentDate);
+            }
+            else
+            {
+                currentDateParameter = new ObjectParameter("CurrentDate", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<SP_TherapistListByMonthFiscal_Result>("SP_TherapistListByMonthFiscal", monthParameter, yearParameter, currentDateParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="nPI">No Metadata Documentation available.</param>
+        /// <param name="sID">No Metadata Documentation available.</param>
+        /// <param name="sdate">No Metadata Documentation available.</param>
+        public ObjectResult<SP_GetStudentMandate_Result> SP_GetStudentMandate(global::System.String nPI, global::System.String sID, Nullable<global::System.DateTime> sdate)
+        {
+            ObjectParameter nPIParameter;
+            if (nPI != null)
+            {
+                nPIParameter = new ObjectParameter("NPI", nPI);
+            }
+            else
+            {
+                nPIParameter = new ObjectParameter("NPI", typeof(global::System.String));
+            }
+    
+            ObjectParameter sIDParameter;
+            if (sID != null)
+            {
+                sIDParameter = new ObjectParameter("SID", sID);
+            }
+            else
+            {
+                sIDParameter = new ObjectParameter("SID", typeof(global::System.String));
+            }
+    
+            ObjectParameter sdateParameter;
+            if (sdate.HasValue)
+            {
+                sdateParameter = new ObjectParameter("Sdate", sdate);
+            }
+            else
+            {
+                sdateParameter = new ObjectParameter("Sdate", typeof(global::System.DateTime));
+            }
+    
+            return base.ExecuteFunction<SP_GetStudentMandate_Result>("SP_GetStudentMandate", nPIParameter, sIDParameter, sdateParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="fiscal">No Metadata Documentation available.</param>
+        /// <param name="nPI">No Metadata Documentation available.</param>
+        /// <param name="nYCID">No Metadata Documentation available.</param>
+        /// <param name="lastName">No Metadata Documentation available.</param>
+        /// <param name="firstName">No Metadata Documentation available.</param>
+        /// <param name="frequency">No Metadata Documentation available.</param>
+        /// <param name="groupSize">No Metadata Documentation available.</param>
+        /// <param name="duration">No Metadata Documentation available.</param>
+        /// <param name="language">No Metadata Documentation available.</param>
+        /// <param name="fundingCode">No Metadata Documentation available.</param>
+        /// <param name="startDate">No Metadata Documentation available.</param>
+        /// <param name="endDate">No Metadata Documentation available.</param>
+        /// <param name="dOB">No Metadata Documentation available.</param>
+        public int AddStaging(global::System.String fiscal, global::System.String nPI, global::System.String nYCID, global::System.String lastName, global::System.String firstName, global::System.String frequency, global::System.String groupSize, global::System.String duration, global::System.String language, global::System.String fundingCode, global::System.String startDate, global::System.String endDate, global::System.String dOB)
+        {
+            ObjectParameter fiscalParameter;
+            if (fiscal != null)
+            {
+                fiscalParameter = new ObjectParameter("Fiscal", fiscal);
+            }
+            else
+            {
+                fiscalParameter = new ObjectParameter("Fiscal", typeof(global::System.String));
+            }
+    
+            ObjectParameter nPIParameter;
+            if (nPI != null)
+            {
+                nPIParameter = new ObjectParameter("NPI", nPI);
+            }
+            else
+            {
+                nPIParameter = new ObjectParameter("NPI", typeof(global::System.String));
+            }
+    
+            ObjectParameter nYCIDParameter;
+            if (nYCID != null)
+            {
+                nYCIDParameter = new ObjectParameter("NYCID", nYCID);
+            }
+            else
+            {
+                nYCIDParameter = new ObjectParameter("NYCID", typeof(global::System.String));
+            }
+    
+            ObjectParameter lastNameParameter;
+            if (lastName != null)
+            {
+                lastNameParameter = new ObjectParameter("LastName", lastName);
+            }
+            else
+            {
+                lastNameParameter = new ObjectParameter("LastName", typeof(global::System.String));
+            }
+    
+            ObjectParameter firstNameParameter;
+            if (firstName != null)
+            {
+                firstNameParameter = new ObjectParameter("FirstName", firstName);
+            }
+            else
+            {
+                firstNameParameter = new ObjectParameter("FirstName", typeof(global::System.String));
+            }
+    
+            ObjectParameter frequencyParameter;
+            if (frequency != null)
+            {
+                frequencyParameter = new ObjectParameter("Frequency", frequency);
+            }
+            else
+            {
+                frequencyParameter = new ObjectParameter("Frequency", typeof(global::System.String));
+            }
+    
+            ObjectParameter groupSizeParameter;
+            if (groupSize != null)
+            {
+                groupSizeParameter = new ObjectParameter("GroupSize", groupSize);
+            }
+            else
+            {
+                groupSizeParameter = new ObjectParameter("GroupSize", typeof(global::System.String));
+            }
+    
+            ObjectParameter durationParameter;
+            if (duration != null)
+            {
+                durationParameter = new ObjectParameter("Duration", duration);
+            }
+            else
+            {
+                durationParameter = new ObjectParameter("Duration", typeof(global::System.String));
+            }
+    
+            ObjectParameter languageParameter;
+            if (language != null)
+            {
+                languageParameter = new ObjectParameter("language", language);
+            }
+            else
+            {
+                languageParameter = new ObjectParameter("language", typeof(global::System.String));
+            }
+    
+            ObjectParameter fundingCodeParameter;
+            if (fundingCode != null)
+            {
+                fundingCodeParameter = new ObjectParameter("FundingCode", fundingCode);
+            }
+            else
+            {
+                fundingCodeParameter = new ObjectParameter("FundingCode", typeof(global::System.String));
+            }
+    
+            ObjectParameter startDateParameter;
+            if (startDate != null)
+            {
+                startDateParameter = new ObjectParameter("StartDate", startDate);
+            }
+            else
+            {
+                startDateParameter = new ObjectParameter("StartDate", typeof(global::System.String));
+            }
+    
+            ObjectParameter endDateParameter;
+            if (endDate != null)
+            {
+                endDateParameter = new ObjectParameter("EndDate", endDate);
+            }
+            else
+            {
+                endDateParameter = new ObjectParameter("EndDate", typeof(global::System.String));
+            }
+    
+            ObjectParameter dOBParameter;
+            if (dOB != null)
+            {
+                dOBParameter = new ObjectParameter("DOB", dOB);
+            }
+            else
+            {
+                dOBParameter = new ObjectParameter("DOB", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction("AddStaging", fiscalParameter, nPIParameter, nYCIDParameter, lastNameParameter, firstNameParameter, frequencyParameter, groupSizeParameter, durationParameter, languageParameter, fundingCodeParameter, startDateParameter, endDateParameter, dOBParameter);
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        /// <param name="fundingCode">No Metadata Documentation available.</param>
+        /// <param name="fiscalYear">No Metadata Documentation available.</param>
+        /// <param name="month">No Metadata Documentation available.</param>
+        /// <param name="nPI">No Metadata Documentation available.</param>
+        /// <param name="attCode">No Metadata Documentation available.</param>
+        public ObjectResult<Nullable<global::System.Int32>> SP_GetSessionCount(global::System.String fundingCode, global::System.String fiscalYear, global::System.String month, global::System.String nPI, global::System.String attCode)
+        {
+            ObjectParameter fundingCodeParameter;
+            if (fundingCode != null)
+            {
+                fundingCodeParameter = new ObjectParameter("FundingCode", fundingCode);
+            }
+            else
+            {
+                fundingCodeParameter = new ObjectParameter("FundingCode", typeof(global::System.String));
+            }
+    
+            ObjectParameter fiscalYearParameter;
+            if (fiscalYear != null)
+            {
+                fiscalYearParameter = new ObjectParameter("FiscalYear", fiscalYear);
+            }
+            else
+            {
+                fiscalYearParameter = new ObjectParameter("FiscalYear", typeof(global::System.String));
+            }
+    
+            ObjectParameter monthParameter;
+            if (month != null)
+            {
+                monthParameter = new ObjectParameter("Month", month);
+            }
+            else
+            {
+                monthParameter = new ObjectParameter("Month", typeof(global::System.String));
+            }
+    
+            ObjectParameter nPIParameter;
+            if (nPI != null)
+            {
+                nPIParameter = new ObjectParameter("NPI", nPI);
+            }
+            else
+            {
+                nPIParameter = new ObjectParameter("NPI", typeof(global::System.String));
+            }
+    
+            ObjectParameter attCodeParameter;
+            if (attCode != null)
+            {
+                attCodeParameter = new ObjectParameter("AttCode", attCode);
+            }
+            else
+            {
+                attCodeParameter = new ObjectParameter("AttCode", typeof(global::System.String));
+            }
+    
+            return base.ExecuteFunction<Nullable<global::System.Int32>>("SP_GetSessionCount", fundingCodeParameter, fiscalYearParameter, monthParameter, nPIParameter, attCodeParameter);
         }
 
         #endregion
@@ -5758,7 +5854,7 @@ namespace CSNY_timelog.Models
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.String NYCI
         {
@@ -5768,14 +5864,11 @@ namespace CSNY_timelog.Models
             }
             set
             {
-                if (_NYCI != value)
-                {
-                    OnNYCIChanging(value);
-                    ReportPropertyChanging("NYCI");
-                    _NYCI = StructuralObject.SetValidValue(value, false, "NYCI");
-                    ReportPropertyChanged("NYCI");
-                    OnNYCIChanged();
-                }
+                OnNYCIChanging(value);
+                ReportPropertyChanging("NYCI");
+                _NYCI = StructuralObject.SetValidValue(value, false, "NYCI");
+                ReportPropertyChanged("NYCI");
+                OnNYCIChanged();
             }
         }
         private global::System.String _NYCI;
@@ -5859,30 +5952,6 @@ namespace CSNY_timelog.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String Duration
-        {
-            get
-            {
-                return _Duration;
-            }
-            set
-            {
-                OnDurationChanging(value);
-                ReportPropertyChanging("Duration");
-                _Duration = StructuralObject.SetValidValue(value, true, "Duration");
-                ReportPropertyChanged("Duration");
-                OnDurationChanged();
-            }
-        }
-        private global::System.String _Duration;
-        partial void OnDurationChanging(global::System.String value);
-        partial void OnDurationChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
         public global::System.String GroupSize
         {
             get
@@ -5901,6 +5970,30 @@ namespace CSNY_timelog.Models
         private global::System.String _GroupSize;
         partial void OnGroupSizeChanging(global::System.String value);
         partial void OnGroupSizeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Duration
+        {
+            get
+            {
+                return _Duration;
+            }
+            set
+            {
+                OnDurationChanging(value);
+                ReportPropertyChanging("Duration");
+                _Duration = StructuralObject.SetValidValue(value, true, "Duration");
+                ReportPropertyChanged("Duration");
+                OnDurationChanged();
+            }
+        }
+        private global::System.String _Duration;
+        partial void OnDurationChanging(global::System.String value);
+        partial void OnDurationChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -5997,6 +6090,30 @@ namespace CSNY_timelog.Models
         private global::System.String _FundingCode;
         partial void OnFundingCodeChanging(global::System.String value);
         partial void OnFundingCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String DOB
+        {
+            get
+            {
+                return _DOB;
+            }
+            set
+            {
+                OnDOBChanging(value);
+                ReportPropertyChanging("DOB");
+                _DOB = StructuralObject.SetValidValue(value, true, "DOB");
+                ReportPropertyChanged("DOB");
+                OnDOBChanged();
+            }
+        }
+        private global::System.String _DOB;
+        partial void OnDOBChanging(global::System.String value);
+        partial void OnDOBChanged();
 
         #endregion
 
@@ -11436,6 +11553,227 @@ namespace CSNY_timelog.Models
         private global::System.String _FundingCode;
         partial void OnFundingCodeChanging(global::System.String value);
         partial void OnFundingCodeChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="CSNYModel", Name="SP_FindStudent_ByNPI_Result2")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SP_FindStudent_ByNPI_Result2 : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SP_FindStudent_ByNPI_Result2 object.
+        /// </summary>
+        /// <param name="nYCI">Initial value of the NYCI property.</param>
+        public static SP_FindStudent_ByNPI_Result2 CreateSP_FindStudent_ByNPI_Result2(global::System.String nYCI)
+        {
+            SP_FindStudent_ByNPI_Result2 sP_FindStudent_ByNPI_Result2 = new SP_FindStudent_ByNPI_Result2();
+            sP_FindStudent_ByNPI_Result2.NYCI = nYCI;
+            return sP_FindStudent_ByNPI_Result2;
+        }
+
+        #endregion
+
+        #region Simple Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SID
+        {
+            get
+            {
+                return _SID;
+            }
+            set
+            {
+                OnSIDChanging(value);
+                ReportPropertyChanging("SID");
+                _SID = StructuralObject.SetValidValue(value, true, "SID");
+                ReportPropertyChanged("SID");
+                OnSIDChanged();
+            }
+        }
+        private global::System.String _SID;
+        partial void OnSIDChanging(global::System.String value);
+        partial void OnSIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String StudentFirstName
+        {
+            get
+            {
+                return _StudentFirstName;
+            }
+            set
+            {
+                OnStudentFirstNameChanging(value);
+                ReportPropertyChanging("StudentFirstName");
+                _StudentFirstName = StructuralObject.SetValidValue(value, true, "StudentFirstName");
+                ReportPropertyChanged("StudentFirstName");
+                OnStudentFirstNameChanged();
+            }
+        }
+        private global::System.String _StudentFirstName;
+        partial void OnStudentFirstNameChanging(global::System.String value);
+        partial void OnStudentFirstNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String StudentLastName
+        {
+            get
+            {
+                return _StudentLastName;
+            }
+            set
+            {
+                OnStudentLastNameChanging(value);
+                ReportPropertyChanging("StudentLastName");
+                _StudentLastName = StructuralObject.SetValidValue(value, true, "StudentLastName");
+                ReportPropertyChanged("StudentLastName");
+                OnStudentLastNameChanged();
+            }
+        }
+        private global::System.String _StudentLastName;
+        partial void OnStudentLastNameChanging(global::System.String value);
+        partial void OnStudentLastNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String NYCI
+        {
+            get
+            {
+                return _NYCI;
+            }
+            set
+            {
+                OnNYCIChanging(value);
+                ReportPropertyChanging("NYCI");
+                _NYCI = StructuralObject.SetValidValue(value, false, "NYCI");
+                ReportPropertyChanged("NYCI");
+                OnNYCIChanged();
+            }
+        }
+        private global::System.String _NYCI;
+        partial void OnNYCIChanging(global::System.String value);
+        partial void OnNYCIChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String FundingCode
+        {
+            get
+            {
+                return _FundingCode;
+            }
+            set
+            {
+                OnFundingCodeChanging(value);
+                ReportPropertyChanging("FundingCode");
+                _FundingCode = StructuralObject.SetValidValue(value, true, "FundingCode");
+                ReportPropertyChanged("FundingCode");
+                OnFundingCodeChanged();
+            }
+        }
+        private global::System.String _FundingCode;
+        partial void OnFundingCodeChanging(global::System.String value);
+        partial void OnFundingCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Frequency
+        {
+            get
+            {
+                return _Frequency;
+            }
+            set
+            {
+                OnFrequencyChanging(value);
+                ReportPropertyChanging("Frequency");
+                _Frequency = StructuralObject.SetValidValue(value, true, "Frequency");
+                ReportPropertyChanged("Frequency");
+                OnFrequencyChanged();
+            }
+        }
+        private global::System.String _Frequency;
+        partial void OnFrequencyChanging(global::System.String value);
+        partial void OnFrequencyChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String GroupSize
+        {
+            get
+            {
+                return _GroupSize;
+            }
+            set
+            {
+                OnGroupSizeChanging(value);
+                ReportPropertyChanging("GroupSize");
+                _GroupSize = StructuralObject.SetValidValue(value, true, "GroupSize");
+                ReportPropertyChanged("GroupSize");
+                OnGroupSizeChanged();
+            }
+        }
+        private global::System.String _GroupSize;
+        partial void OnGroupSizeChanging(global::System.String value);
+        partial void OnGroupSizeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Duration
+        {
+            get
+            {
+                return _Duration;
+            }
+            set
+            {
+                OnDurationChanging(value);
+                ReportPropertyChanging("Duration");
+                _Duration = StructuralObject.SetValidValue(value, true, "Duration");
+                ReportPropertyChanged("Duration");
+                OnDurationChanged();
+            }
+        }
+        private global::System.String _Duration;
+        partial void OnDurationChanging(global::System.String value);
+        partial void OnDurationChanged();
 
         #endregion
 
@@ -42064,6 +42402,421 @@ namespace CSNY_timelog.Models
         private global::System.String _StudentName;
         partial void OnStudentNameChanging(global::System.String value);
         partial void OnStudentNameChanged();
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmComplexTypeAttribute(NamespaceName="CSNYModel", Name="SP_GetStudentMandate_Result")]
+    [DataContractAttribute(IsReference=true)]
+    [Serializable()]
+    public partial class SP_GetStudentMandate_Result : ComplexObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new SP_GetStudentMandate_Result object.
+        /// </summary>
+        /// <param name="sID">Initial value of the SID property.</param>
+        /// <param name="nPI">Initial value of the NPI property.</param>
+        public static SP_GetStudentMandate_Result CreateSP_GetStudentMandate_Result(global::System.String sID, global::System.String nPI)
+        {
+            SP_GetStudentMandate_Result sP_GetStudentMandate_Result = new SP_GetStudentMandate_Result();
+            sP_GetStudentMandate_Result.SID = sID;
+            sP_GetStudentMandate_Result.NPI = nPI;
+            return sP_GetStudentMandate_Result;
+        }
+
+        #endregion
+
+        #region Simple Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String StudentFirstName
+        {
+            get
+            {
+                return _StudentFirstName;
+            }
+            set
+            {
+                OnStudentFirstNameChanging(value);
+                ReportPropertyChanging("StudentFirstName");
+                _StudentFirstName = StructuralObject.SetValidValue(value, true, "StudentFirstName");
+                ReportPropertyChanged("StudentFirstName");
+                OnStudentFirstNameChanged();
+            }
+        }
+        private global::System.String _StudentFirstName;
+        partial void OnStudentFirstNameChanging(global::System.String value);
+        partial void OnStudentFirstNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String StudentLastName
+        {
+            get
+            {
+                return _StudentLastName;
+            }
+            set
+            {
+                OnStudentLastNameChanging(value);
+                ReportPropertyChanging("StudentLastName");
+                _StudentLastName = StructuralObject.SetValidValue(value, true, "StudentLastName");
+                ReportPropertyChanged("StudentLastName");
+                OnStudentLastNameChanged();
+            }
+        }
+        private global::System.String _StudentLastName;
+        partial void OnStudentLastNameChanging(global::System.String value);
+        partial void OnStudentLastNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String SID
+        {
+            get
+            {
+                return _SID;
+            }
+            set
+            {
+                OnSIDChanging(value);
+                ReportPropertyChanging("SID");
+                _SID = StructuralObject.SetValidValue(value, false, "SID");
+                ReportPropertyChanged("SID");
+                OnSIDChanged();
+            }
+        }
+        private global::System.String _SID;
+        partial void OnSIDChanging(global::System.String value);
+        partial void OnSIDChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String FundingCode
+        {
+            get
+            {
+                return _FundingCode;
+            }
+            set
+            {
+                OnFundingCodeChanging(value);
+                ReportPropertyChanging("FundingCode");
+                _FundingCode = StructuralObject.SetValidValue(value, true, "FundingCode");
+                ReportPropertyChanged("FundingCode");
+                OnFundingCodeChanged();
+            }
+        }
+        private global::System.String _FundingCode;
+        partial void OnFundingCodeChanging(global::System.String value);
+        partial void OnFundingCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String BoroughCode
+        {
+            get
+            {
+                return _BoroughCode;
+            }
+            set
+            {
+                OnBoroughCodeChanging(value);
+                ReportPropertyChanging("BoroughCode");
+                _BoroughCode = StructuralObject.SetValidValue(value, true, "BoroughCode");
+                ReportPropertyChanged("BoroughCode");
+                OnBoroughCodeChanged();
+            }
+        }
+        private global::System.String _BoroughCode;
+        partial void OnBoroughCodeChanging(global::System.String value);
+        partial void OnBoroughCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SchoolLocationCode
+        {
+            get
+            {
+                return _SchoolLocationCode;
+            }
+            set
+            {
+                OnSchoolLocationCodeChanging(value);
+                ReportPropertyChanging("SchoolLocationCode");
+                _SchoolLocationCode = StructuralObject.SetValidValue(value, true, "SchoolLocationCode");
+                ReportPropertyChanged("SchoolLocationCode");
+                OnSchoolLocationCodeChanged();
+            }
+        }
+        private global::System.String _SchoolLocationCode;
+        partial void OnSchoolLocationCodeChanging(global::System.String value);
+        partial void OnSchoolLocationCodeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String HomeDistrict
+        {
+            get
+            {
+                return _HomeDistrict;
+            }
+            set
+            {
+                OnHomeDistrictChanging(value);
+                ReportPropertyChanging("HomeDistrict");
+                _HomeDistrict = StructuralObject.SetValidValue(value, true, "HomeDistrict");
+                ReportPropertyChanged("HomeDistrict");
+                OnHomeDistrictChanged();
+            }
+        }
+        private global::System.String _HomeDistrict;
+        partial void OnHomeDistrictChanging(global::System.String value);
+        partial void OnHomeDistrictChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> ServiceStart
+        {
+            get
+            {
+                return _ServiceStart;
+            }
+            set
+            {
+                OnServiceStartChanging(value);
+                ReportPropertyChanging("ServiceStart");
+                _ServiceStart = StructuralObject.SetValidValue(value, "ServiceStart");
+                ReportPropertyChanged("ServiceStart");
+                OnServiceStartChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _ServiceStart;
+        partial void OnServiceStartChanging(Nullable<global::System.DateTime> value);
+        partial void OnServiceStartChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> ServiceEnd
+        {
+            get
+            {
+                return _ServiceEnd;
+            }
+            set
+            {
+                OnServiceEndChanging(value);
+                ReportPropertyChanging("ServiceEnd");
+                _ServiceEnd = StructuralObject.SetValidValue(value, "ServiceEnd");
+                ReportPropertyChanged("ServiceEnd");
+                OnServiceEndChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _ServiceEnd;
+        partial void OnServiceEndChanging(Nullable<global::System.DateTime> value);
+        partial void OnServiceEndChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Frequency
+        {
+            get
+            {
+                return _Frequency;
+            }
+            set
+            {
+                OnFrequencyChanging(value);
+                ReportPropertyChanging("Frequency");
+                _Frequency = StructuralObject.SetValidValue(value, true, "Frequency");
+                ReportPropertyChanged("Frequency");
+                OnFrequencyChanged();
+            }
+        }
+        private global::System.String _Frequency;
+        partial void OnFrequencyChanging(global::System.String value);
+        partial void OnFrequencyChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String GroupSize
+        {
+            get
+            {
+                return _GroupSize;
+            }
+            set
+            {
+                OnGroupSizeChanging(value);
+                ReportPropertyChanging("GroupSize");
+                _GroupSize = StructuralObject.SetValidValue(value, true, "GroupSize");
+                ReportPropertyChanged("GroupSize");
+                OnGroupSizeChanged();
+            }
+        }
+        private global::System.String _GroupSize;
+        partial void OnGroupSizeChanging(global::System.String value);
+        partial void OnGroupSizeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Duration
+        {
+            get
+            {
+                return _Duration;
+            }
+            set
+            {
+                OnDurationChanging(value);
+                ReportPropertyChanging("Duration");
+                _Duration = StructuralObject.SetValidValue(value, true, "Duration");
+                ReportPropertyChanged("Duration");
+                OnDurationChanged();
+            }
+        }
+        private global::System.String _Duration;
+        partial void OnDurationChanging(global::System.String value);
+        partial void OnDurationChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Language
+        {
+            get
+            {
+                return _Language;
+            }
+            set
+            {
+                OnLanguageChanging(value);
+                ReportPropertyChanging("Language");
+                _Language = StructuralObject.SetValidValue(value, true, "Language");
+                ReportPropertyChanged("Language");
+                OnLanguageChanged();
+            }
+        }
+        private global::System.String _Language;
+        partial void OnLanguageChanging(global::System.String value);
+        partial void OnLanguageChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int64> RowNum
+        {
+            get
+            {
+                return _RowNum;
+            }
+            set
+            {
+                OnRowNumChanging(value);
+                ReportPropertyChanging("RowNum");
+                _RowNum = StructuralObject.SetValidValue(value, "RowNum");
+                ReportPropertyChanged("RowNum");
+                OnRowNumChanged();
+            }
+        }
+        private Nullable<global::System.Int64> _RowNum;
+        partial void OnRowNumChanging(Nullable<global::System.Int64> value);
+        partial void OnRowNumChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String NPI
+        {
+            get
+            {
+                return _NPI;
+            }
+            set
+            {
+                OnNPIChanging(value);
+                ReportPropertyChanging("NPI");
+                _NPI = StructuralObject.SetValidValue(value, false, "NPI");
+                ReportPropertyChanged("NPI");
+                OnNPIChanged();
+            }
+        }
+        private global::System.String _NPI;
+        partial void OnNPIChanging(global::System.String value);
+        partial void OnNPIChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String FiscalYear
+        {
+            get
+            {
+                return _FiscalYear;
+            }
+            set
+            {
+                OnFiscalYearChanging(value);
+                ReportPropertyChanging("FiscalYear");
+                _FiscalYear = StructuralObject.SetValidValue(value, true, "FiscalYear");
+                ReportPropertyChanged("FiscalYear");
+                OnFiscalYearChanged();
+            }
+        }
+        private global::System.String _FiscalYear;
+        partial void OnFiscalYearChanging(global::System.String value);
+        partial void OnFiscalYearChanged();
 
         #endregion
 

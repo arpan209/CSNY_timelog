@@ -20,7 +20,7 @@
 
         var go = "";
         var checkterms = "";
-        var Name = document.getElementById('Checkterms').checked;
+        //var Name = document.getElementById('Checkterms').checked;
 
         if (document.getElementById('FirstName').value == "") {
             error += "Please enter first name.\r\n<br/> ";
@@ -32,27 +32,29 @@
             error += "Please enter address 1.\r\n<br/> ";
         }
 
-        if (document.getElementById('ConfirmEmail').value == "") {
-            error += "Please enter confirm email.\r\n<br/> ";
-        }
+       
         if (document.getElementById('Phone').value == "") {
             error += "Please enter phone number.\r\n<br/> ";
         }
 
 
-        if (document.getElementById('ConfirmPassword').value == "") {
-            error += "Please enter confirm password.\r\n<br/> ";
-        }
-        //        if (document.getElementById('EnterValidationCode').value == "") {
-        //            go = "1";
-        //        }
+        var a = document.getElementById("StateName");
+        var StateName = a.options[a.selectedIndex].text;
 
-        if (document.getElementById('StateName').value == "" || document.getElementById('StateName').value == "--Select State--") {
+
+        if (StateName == "" || StateName == "--Select State--") {
             error += "Please select a state.\r\n<br/>";
         }
 
+
+        var e = document.getElementById("City");
+        var City = e.options[e.selectedIndex].text;
+
+        if ( City == "" || City == null) {
+            error += "Please select a City.\r\n<br/>";
+        }
         var EMail = document.getElementById('Email').value.trim();
-        var EMail1 = document.getElementById('ConfirmEmail').value.trim();
+      //  var EMail1 = document.getElementById('ConfirmEmail').value.trim();
         if (EMail == "") {
             error += "Please Enter Email Address.\n <br>";
         }
@@ -88,7 +90,7 @@
                 {
                     FirstName: $('#FirstName').val(), LastName: $('#LastName').val(),
                     Address1: $('#Address1').val(), Address2: $('#Address2').val(),
-                    StateName: $('#Statename').val(), City: $('#City').val(), Phone: $('#Phone').val(),
+                    StateName: StateName, City: City, Phone: $('#Phone').val(),
                     Email: $('#Email').val(), SSN: $('#SSN').val(), IsActive: $('#IsActive').val()
                 };
 
@@ -103,13 +105,11 @@
                 dataType: "json",
                 success: function (data) {
 
-                    if (data == "admin") {
-                        alert("Profile Updated succesfully");
+                    if (data == "success") {
+                       // alert("Profile Updated succesfully");
+                        return false;
                     }
-                    else {
-                            alert(data);
-                        }
-                        // window.location = "http://localhost:2522/admin/index";
+                  
                     },
                 error: function (data) {
                     //  alert(data);
@@ -270,7 +270,7 @@
 </script>*@
 
 
-@{ Html.EnableClientValidation(true); }
+
 
 @using (Html.BeginForm())
 {
@@ -417,28 +417,7 @@
            <div id="errormsg" style="color:red;font-size:12px;"></div>
            
            
-           @* <span style="color:red;">  @Html.ValidationSummary(true)</span>    *@
-           
-           
-          @*  <p >   @Html.ValidationMessageFor(m => m.CompanyName)</p>*@
-          
-            <p>  @Html.ValidationMessageFor(m => m.FirstName)</p>
-            <p>  @Html.ValidationMessageFor(m => m.LastName) </p>
-            <p>  @Html.ValidationMessageFor(m => m.Address1) </p>
-            <p>  @Html.ValidationMessageFor(m => m.StateName) </p> 
-            <p>   @Html.ValidationMessageFor(m => m.City)</p>
-          @* <p>    @Html.ValidationMessageFor(m => m.ZipCode)</p>*@
-           <p>   @Html.ValidationMessageFor(m => m.Email) </p>
-           <p>   @Html.ValidationMessageFor(m => m.ConfirmEmail) </p>
-           <p>  @Html.ValidationMessageFor(m => m.Phone) </p>
-          <p>   @Html.ValidationMessageFor(m => m.UserName) </p>
-          <p>   @Html.ValidationMessageFor(m => m.Password) </p>
-          <p>   @Html.ValidationMessageFor(m => m.ConfirmPassword) </p>
-          <p>   @Html.ValidationMessageFor(m => m.EnterValidationCode1)</p>
-          @*<p>    @Html.ValidationMessageFor(m => m.EnterValidationCode) </p>*@
-          <p>    @Html.ValidationMessageFor(m => m.Checkterms) </p>
-          
-         
+      
 
 
            </div>     
@@ -447,65 +426,5 @@
     </div>
 }
 
-<script type="text/javascript" language="javascript">
 
 
-    //    function validation() {
-    //        var str1 = document.getElementById('EnterValidationCode1').value;
-    //        var str2 = document.getElementById('EnterValidationCode').value;
-    //        if (str2 != '') {
-    //            if (str1 != str2) {
-
-    //                document.getElementById("invalidcap").innerHTML = 'Invalid captcha code';
-
-    //                return false;
-    //            } else {
-
-    //                document.getElementById("invalidcap").innerHTML = '';
-    //            }
-    //        }
-    //    }
-
-
-    //Generates the captcha function    
-    var code = randomstring(5);
-    document.getElementById("EnterValidationCode1").value = code;
-    document.getElementById("txtCaptchaDiv").innerHTML = code;
-
-    function randomstring(L) {
-        var s = '';
-        var randomchar = function () {
-            var n = Math.floor(Math.random() * 62);
-            if (n < 10) return n; //1-10
-            if (n < 36) return String.fromCharCode(n + 55); //A-Z
-            return String.fromCharCode(n + 61); //a-z
-        }
-        while (s.length < L) s += randomchar();
-        return s;
-    }
-
-</script>
-
-
-<script type="text/javascript">
-    $(document).ready(function () {
-
-        var myPlugin = $("input[id='Password']").password_strength();
-
-        $("[id='btnSubmit']").click(function () {
-            var $form = $('form');
-            if ($form.valid()) {
-                return myPlugin.metReq(); //return true or false
-            }
-        });
-
-        $("[id='passwordPolicy']").click(function (event) {
-            var width = 350, height = 300, left = (screen.width / 2) - (width / 2),
-            top = (screen.height / 2) - (height / 2);
-            window.open('@Url.Content("~/xml/PasswordPolicy.xml")', 'Password_poplicy',
-	       'width=' + width + ',height=' + height + ',left=' + left + ',top=' + top);
-            event.preventDefault();
-            return false;
-        });
-    });
-</script>

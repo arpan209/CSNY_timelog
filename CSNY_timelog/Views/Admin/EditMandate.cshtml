@@ -136,181 +136,183 @@
 </script>
 <script type="text/javascript">
     function validation() {
-        var error = "";
-        var error1 = "";
-        var MID = '@Model.MID';
-        var SID = '@Model.SID';
-        var Fiscal = $('#Fiscal').val();
+        var a = confirm("Please note an email will be sent to the therapist notifying them of the mandate changes. Please confirm.");
+        if (a == true) {
 
-        if (Fiscal == null || Fiscal == "") {
-            error += "Please Enter Fiscal year.\n";
-        }
-        var FundingCode = $('input[name=Fundingcode]:checked').val();
-        if (FundingCode == "") {
-            error += "Please Select FundingCode \n";
-        }
+            var error = "";
+            var error1 = "";
+            var MID = '@Model.MID';
+            var SID = '@Model.SID';
+            var Fiscal = $('#Fiscal').val();
 
-
-        var StartDate = $('#StartDate').val();
-
-        if (StartDate == null || StartDate == "") {
-            error += "Please Select Service Start Date.\n";
-        }
-
-        var EndDate = $('#EndDate').val();
-
-        if (EndDate == null || EndDate == "") {
-            error += "Please Select Service End Date.\n";
-        }
-
-        var Start = new Date(StartDate);
-        var End = new Date(EndDate);
-
-        if (Start > End)
-        {
-            error += "Service End Date can not be before Service Start Date."
-        }
-
-        var Frequency = "0";
-        var Duration = "00";
-        var GroupSize = "0";
-        //Client side validation
-        var CheckS1 = document.getElementById("CheckS1").checked;
-        if (CheckS1 == true) {
-            //var Frequency = document.getElementById("Frequency").value;
-             Frequency = $('#Frequency').val();
-            if (Frequency == "0") {
-                error += "Select the Frequency for S1.\n";
+            if (Fiscal == null || Fiscal == "") {
+                error += "Please Enter Fiscal year.\n";
             }
-
-             Duration = document.getElementById("Duration").value;
-            if (Duration == "00") {
-                error += "Select the Duration for S1.\n";
+            var FundingCode = $('input[name=Fundingcode]:checked').val();
+            if (FundingCode == "") {
+                error += "Please Select FundingCode \n";
             }
 
 
-             GroupSize = document.getElementById("GroupSize").value;
-            if (GroupSize == "0") {
-                error += "Select the Group Size for S1.\n";
+            var StartDate = $('#StartDate').val();
+
+            if (StartDate == null || StartDate == "") {
+                error += "Please Select Service Start Date.\n";
             }
 
-        }
-     
-        var addFreq = "";
-        var addGroup = "";
-        var AddDuration = "";
-        var Frequency1 = "0";
-        var Duration1 = "00";
-        var GroupSize1 = "0";
+            var EndDate = $('#EndDate').val();
 
-        var CheckSP = document.getElementById("CheckSP").checked;
-        if (CheckSP == true) {
-             Frequency1 = $('#Frequency1').val();
-            //var Frequency1 = document.getElementById("Frequency1").value;
-            if (Frequency1 == "0") {
-                error += "Select the Frequency for SP.\n";
+            if (EndDate == null || EndDate == "") {
+                error += "Please Select Service End Date.\n";
             }
-            
-             Duration1 = document.getElementById("Duration1").value;
-            if (Duration1 == "00") {
-                error += "Select the Duration for SP.\n";
+
+            var Start = new Date(StartDate);
+            var End = new Date(EndDate);
+
+            if (Start > End) {
+                error += "Service End Date can not be before Service Start Date."
             }
-           
 
-             GroupSize1 = document.getElementById("GroupSize1").value;
-            if (GroupSize1 == "0") {
-                error += "Select the Group Size for SP.\n";
+            var Frequency = "0";
+            var Duration = "00";
+            var GroupSize = "0";
+            //Client side validation
+            var CheckS1 = document.getElementById("CheckS1").checked;
+            if (CheckS1 == true) {
+                //var Frequency = document.getElementById("Frequency").value;
+                Frequency = $('#Frequency').val();
+                if (Frequency == "0") {
+                    error += "Select the Frequency for S1.\n";
+                }
+
+                Duration = document.getElementById("Duration").value;
+                if (Duration == "00") {
+                    error += "Select the Duration for S1.\n";
+                }
+
+
+                GroupSize = document.getElementById("GroupSize").value;
+                if (GroupSize == "0") {
+                    error += "Select the Group Size for S1.\n";
+                }
+
             }
-           
-        }
-       
-        addFreq = Frequency + "," + Frequency1;
-        AddDuration = Duration + "," + Duration1;
-        addGroup = GroupSize + "," + GroupSize1;
 
-        //var LangValues = "";
-        //var Language = document.getElementsByName('Language');
-        //for (var x = 0; x < Language.length; x++) {
-        //    if (Language[x].checked) {
-        //        LangValues += Language[x].value;
+            var addFreq = "";
+            var addGroup = "";
+            var AddDuration = "";
+            var Frequency1 = "0";
+            var Duration1 = "00";
+            var GroupSize1 = "0";
 
-        //    }
-        //}
-        //if (Language == "") {
-        //    error += "Select the language.\n";
-        //}
-        var Language = $('input[name=Language]:checked').val();
-        if (Language == "") {
-            error += "Please Select Language \n";
-        }
-        var TherapistList = "";
-        var TherapistListText = "";
-        var x = document.getElementById("TherepistList");
+            var CheckSP = document.getElementById("CheckSP").checked;
+            if (CheckSP == true) {
+                Frequency1 = $('#Frequency1').val();
+                //var Frequency1 = document.getElementById("Frequency1").value;
+                if (Frequency1 == "0") {
+                    error += "Select the Frequency for SP.\n";
+                }
 
-        if (x != "") {
-            for (var i = 0; i < x.options.length; i++) {
-                if (x.options[i].selected == true) {
-                    TherapistList += x.options[i].value + ",";
-                    TherapistListText += x.options[i].text + ",";
+                Duration1 = document.getElementById("Duration1").value;
+                if (Duration1 == "00") {
+                    error += "Select the Duration for SP.\n";
+                }
 
-                    GroupSize += 1;
+
+                GroupSize1 = document.getElementById("GroupSize1").value;
+                if (GroupSize1 == "0") {
+                    error += "Select the Group Size for SP.\n";
+                }
+
+            }
+
+            addFreq = Frequency + "," + Frequency1;
+            AddDuration = Duration + "," + Duration1;
+            addGroup = GroupSize + "," + GroupSize1;
+
+            //var LangValues = "";
+            //var Language = document.getElementsByName('Language');
+            //for (var x = 0; x < Language.length; x++) {
+            //    if (Language[x].checked) {
+            //        LangValues += Language[x].value;
+
+            //    }
+            //}
+            //if (Language == "") {
+            //    error += "Select the language.\n";
+            //}
+            var Language = $('input[name=Language]:checked').val();
+            if (Language == "") {
+                error += "Please Select Language \n";
+            }
+            var TherapistList = "";
+            var TherapistListText = "";
+            var x = document.getElementById("TherepistList");
+
+            if (x != "") {
+                for (var i = 0; i < x.options.length; i++) {
+                    if (x.options[i].selected == true) {
+                        TherapistList += x.options[i].value + ",";
+                        TherapistListText += x.options[i].text + ",";
+
+                        GroupSize += 1;
+                    }
                 }
             }
-        }
-        if (TherapistList == "") {
-            error += "Select Fellow Name.\n";
-        }
+            if (TherapistList == "") {
+                error += "Select Fellow Name.\n";
+            }
 
-        if (error != "") {
-            alert(error);
-            return false;
-        }
-        else {
+            if (error != "") {
+                alert(error);
+                return false;
+            }
+            else {
 
 
-            var OrderViewModel =
-                {
+                var OrderViewModel =
+                    {
 
-                    //Parent details
-                    SID: $('#SID').val(), MID: MID,TID:TherapistList,  
-                    
-                    //Child/DOE detials
-                    Fiscal: $('#Fiscal').val(), StartDate: $('#StartDate').val(), EndDate: $('#EndDate').val(),
-                   FundingCode: FundingCode, SchoolName: $('#SchoolName').val(), SchoolCode: $('#SchoolCode').val(),
-                   Districtcode: $('#Districtcode').val(), BoroughCode: $('#BoroughCode').val(), SchoolCode: $('#SchoolCode').val(),
-                    Frequency: addFreq, Duration: AddDuration, GroupSize: addGroup,
-                    language: Language
+                        //Parent details
+                        SID: $('#SID').val(), MID: MID, TID: TherapistList,
 
-                };
+                        //Child/DOE detials
+                        Fiscal: $('#Fiscal').val(), StartDate: $('#StartDate').val(), EndDate: $('#EndDate').val(),
+                        FundingCode: FundingCode, SchoolName: $('#SchoolName').val(), SchoolCode: $('#SchoolCode').val(),
+                        Districtcode: $('#Districtcode').val(), BoroughCode: $('#BoroughCode').val(), SchoolCode: $('#SchoolCode').val(),
+                        Frequency: addFreq, Duration: AddDuration, GroupSize: addGroup,
+                        language: Language
 
-            $.ajax({
-                type: "POST",
+                    };
 
-                url: '@Url.Content("~/Admin/EditMandate")',
-                // url: "/admin/show_find_user_detail",
-                async: false,
-                data: JSON.stringify(OrderViewModel),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (data) {
+                $.ajax({
+                    type: "POST",
 
-                    if (data != "") {
-                        alert("Mandate Updated Sucessfully.");
-                       // location.href = '@Url.Content("~/admin/view-find-user-bids-detail?UserId=")' 
-                        window.location = '@Url.Content("~/admin/AddStudent/")' + data;
-                    } else {
-                        alert(data);
+                    url: '@Url.Content("~/Admin/EditMandate")',
+                    // url: "/admin/show_find_user_detail",
+                    async: false,
+                    data: JSON.stringify(OrderViewModel),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+
+                        if (data != "") {
+                            alert("Mandate Updated Sucessfully.");
+                            // location.href = '@Url.Content("~/admin/view-find-user-bids-detail?UserId=")' 
+                            window.location = '@Url.Content("~/admin/AddStudent/")' + data;
+                        } else {
+                            alert(data);
+                        }
+
+                    },
+                    error: function (data) {
+                        //  alert(data);
                     }
 
-                },
-                error: function (data) {
-                    //  alert(data);
-                }
+                });
+            }
 
-            });
         }
-
-
     }
 </script>
 

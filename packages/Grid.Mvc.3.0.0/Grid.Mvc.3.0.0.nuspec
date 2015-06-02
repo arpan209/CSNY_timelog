@@ -11,6 +11,9 @@
     <iconUrl>http://www.codeplex.com/Download?ProjectName=gridmvc&amp;DownloadId=386651</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Package provides functionality to build GridView based on your model items collection. Grid.Mvc support sorting, filtering and paging your data.</description>
+    <releaseNotes />
+    <copyright />
+    <language />
     <tags>ASP.NET MVC Control GridView Grid Generic</tags>
   </metadata>
 </package>

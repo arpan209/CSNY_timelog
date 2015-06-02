@@ -28,26 +28,11 @@
     <FunctionImport Name="sp_get_StudentInfo" ReturnType="Collection(CSNYModel.sp_get_StudentInfo_Result5)">
       <Parameter Name="NYCI" Mode="In" Type="String" />
     </FunctionImport>
-    <FunctionImport Name="AddStaging">
-      <Parameter Name="Fiscal" Mode="In" Type="String" />
-      <Parameter Name="NPI" Mode="In" Type="String" />
-      <Parameter Name="NYCID" Mode="In" Type="String" />
-      <Parameter Name="LastName" Mode="In" Type="String" />
-      <Parameter Name="FirstName" Mode="In" Type="String" />
-      <Parameter Name="Frequency" Mode="In" Type="String" />
-      <Parameter Name="GroupSize" Mode="In" Type="String" />
-      <Parameter Name="Duration" Mode="In" Type="String" />
-      <Parameter Name="language" Mode="In" Type="String" />
-      <Parameter Name="FundingCode" Mode="In" Type="String" />
-      <Parameter Name="StartDate" Mode="In" Type="String" />
-      <Parameter Name="EndDate" Mode="In" Type="String" />
-    </FunctionImport>
     <FunctionImport Name="sp_get_MandateInfo" ReturnType="Collection(CSNYModel.sp_get_MandateInfo_Result4)">
       <Parameter Name="SID" Mode="In" Type="String" />
       <Parameter Name="NPI" Mode="In" Type="String" />
       <Parameter Name="Sdate" Mode="In" Type="DateTime" />
     </FunctionImport>
-    <EntitySet Name="StagingTables" EntityType="CSNYModel.StagingTable" />
     <FunctionImport Name="Sp_GetStudentList" ReturnType="Collection(CSNYModel.Sp_GetStudentList_Result1)">
       <Parameter Name="NPI" Mode="In" Type="String" />
     </FunctionImport>
@@ -201,10 +186,6 @@
       <Parameter Name="GroupType" Mode="In" Type="String" />
       <Parameter Name="TID" Mode="In" Type="String" />
     </FunctionImport>
-    <FunctionImport Name="SP_FindStudent_ByNPI" ReturnType="Collection(CSNYModel.SP_FindStudent_ByNPI_Result1)">
-      <Parameter Name="NPI" Mode="In" Type="String" />
-      <Parameter Name="Fisacl" Mode="In" Type="String" />
-    </FunctionImport>
     <FunctionImport Name="SP_GetSessionListBySID" ReturnType="Collection(CSNYModel.SP_GetSessionListBySID_Result2)">
       <Parameter Name="SID" Mode="In" Type="String" />
       <Parameter Name="TID" Mode="In" Type="String" />
@@ -303,13 +284,6 @@
       <Parameter Name="FiscalYear" Mode="In" Type="String" />
       <Parameter Name="Month" Mode="In" Type="String" />
     </FunctionImport>
-    <FunctionImport Name="SP_GetSessionCount" ReturnType="Collection(Int32)">
-      <Parameter Name="FundingCode" Mode="In" Type="String" />
-      <Parameter Name="FiscalYear" Mode="In" Type="String" />
-      <Parameter Name="Month" Mode="In" Type="String" />
-      <Parameter Name="NPI" Mode="In" Type="String" />
-      <Parameter Name="AttCode" Mode="In" Type="String" />
-    </FunctionImport>
     <FunctionImport Name="AddTherapist">
       <Parameter Name="FirstName" Mode="In" Type="String" />
       <Parameter Name="LastName" Mode="In" Type="String" />
@@ -395,23 +369,22 @@
     <FunctionImport Name="GetStudentInformation_Pdf" ReturnType="Collection(CSNYModel.GetStudentInformation_Pdf_Result)">
       <Parameter Name="sid" Mode="In" Type="Int32" />
       <Parameter Name="FundingCode" Mode="In" Type="String" />
+      <Parameter Name="NPI" Mode="In" Type="String" />
     </FunctionImport>
     <FunctionImport Name="Sp_GetStudentListBasedOnFundingCode_Pdf" ReturnType="Collection(CSNYModel.Sp_GetStudentListBasedOnFundingCode_Pdf_Result)">
       <Parameter Name="NPI" Mode="In" Type="String" />
       <Parameter Name="FundingCode" Mode="In" Type="String" />
     </FunctionImport>
     <FunctionImport Name="Sp_GetStudentSessionDetail_Pdf" ReturnType="Collection(CSNYModel.Sp_GetStudentSessionDetail_Pdf_Result)">
-      <Parameter Name="NPI" Mode="In" Type="String" />
-      <Parameter Name="FundingCode" Mode="In" Type="String" />
       <Parameter Name="SID" Mode="In" Type="Int32" />
-      <Parameter Name="year" Mode="In" Type="Int32" />
-      <Parameter Name="month" Mode="In" Type="Int32" />
+      <Parameter Name="fiscal" Mode="In" Type="String" />
+      <Parameter Name="StartDay" Mode="In" Type="String" />
+      <Parameter Name="EndDay" Mode="In" Type="String" />
+      <Parameter Name="TID" Mode="In" Type="String" />
+      <Parameter Name="FundingCode" Mode="In" Type="String" />
+      <Parameter Name="NPI" Mode="In" Type="String" />
     </FunctionImport>
     <FunctionImport Name="SP_TherapistList" ReturnType="Collection(CSNYModel.SP_TherapistList_Result)" />
-    <FunctionImport Name="SP_TherapistListByMonthFiscal" ReturnType="Collection(CSNYModel.SP_TherapistListByMonthFiscal_Result)">
-      <Parameter Name="Month" Mode="In" Type="String" />
-      <Parameter Name="year" Mode="In" Type="String" />
-    </FunctionImport>
     <FunctionImport Name="ResetTherapistLock" ReturnType="Collection(CSNYModel.ResetTherapistLock_Result)">
       <Parameter Name="TID" Mode="In" Type="String" />
     </FunctionImport>
@@ -447,6 +420,43 @@
       <Parameter Name="Note" Mode="In" Type="String" />
     </FunctionImport>
     <EntitySet Name="InvoiceDetails" EntityType="CSNYModel.InvoiceDetail" />
+    <FunctionImport Name="SP_FindStudent_ByNPI" ReturnType="Collection(CSNYModel.SP_FindStudent_ByNPI_Result2)">
+      <Parameter Name="NPI" Mode="In" Type="String" />
+      <Parameter Name="Fisacl" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="SP_TherapistListByMonthFiscal" ReturnType="Collection(CSNYModel.SP_TherapistListByMonthFiscal_Result)">
+      <Parameter Name="Month" Mode="In" Type="String" />
+      <Parameter Name="year" Mode="In" Type="String" />
+      <Parameter Name="CurrentDate" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="SP_GetStudentMandate" ReturnType="Collection(CSNYModel.SP_GetStudentMandate_Result)">
+      <Parameter Name="NPI" Mode="In" Type="String" />
+      <Parameter Name="SID" Mode="In" Type="String" />
+      <Parameter Name="Sdate" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <EntitySet Name="StagingTables" EntityType="CSNYModel.StagingTable" />
+    <FunctionImport Name="AddStaging">
+      <Parameter Name="Fiscal" Mode="In" Type="String" />
+      <Parameter Name="NPI" Mode="In" Type="String" />
+      <Parameter Name="NYCID" Mode="In" Type="String" />
+      <Parameter Name="LastName" Mode="In" Type="String" />
+      <Parameter Name="FirstName" Mode="In" Type="String" />
+      <Parameter Name="Frequency" Mode="In" Type="String" />
+      <Parameter Name="GroupSize" Mode="In" Type="String" />
+      <Parameter Name="Duration" Mode="In" Type="String" />
+      <Parameter Name="language" Mode="In" Type="String" />
+      <Parameter Name="FundingCode" Mode="In" Type="String" />
+      <Parameter Name="StartDate" Mode="In" Type="String" />
+      <Parameter Name="EndDate" Mode="In" Type="String" />
+      <Parameter Name="DOB" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="SP_GetSessionCount" ReturnType="Collection(Int32)">
+      <Parameter Name="FundingCode" Mode="In" Type="String" />
+      <Parameter Name="FiscalYear" Mode="In" Type="String" />
+      <Parameter Name="Month" Mode="In" Type="String" />
+      <Parameter Name="NPI" Mode="In" Type="String" />
+      <Parameter Name="AttCode" Mode="In" Type="String" />
+    </FunctionImport>
   </EntityContainer>
   <EntityType Name="AgencyMaster">
     <Key>
@@ -740,25 +750,6 @@
     <Property Type="DateTime" Name="ServiceStart" Nullable="true" Precision="23" />
     <Property Type="DateTime" Name="ServiceEnd" Nullable="true" Precision="23" />
   </ComplexType>
-  <EntityType Name="StagingTable">
-    <Key>
-      <PropertyRef Name="SID" />
-      <PropertyRef Name="NYCI" />
-    </Key>
-    <Property Type="Int32" Name="SID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Type="String" Name="FiscalYear" MaxLength="10" FixedLength="false" Unicode="true" />
-    <Property Type="String" Name="NPI" MaxLength="50" FixedLength="true" Unicode="true" />
-    <Property Type="String" Name="NYCI" Nullable="false" MaxLength="50" FixedLength="true" Unicode="true" />
-    <Property Type="String" Name="StudentLastName" MaxLength="50" FixedLength="true" Unicode="true" />
-    <Property Type="String" Name="StudentFirstName" MaxLength="50" FixedLength="true" Unicode="true" />
-    <Property Type="String" Name="Frequency" MaxLength="10" FixedLength="true" Unicode="true" />
-    <Property Type="String" Name="Duration" MaxLength="10" FixedLength="true" Unicode="true" />
-    <Property Type="String" Name="GroupSize" MaxLength="10" FixedLength="true" Unicode="true" />
-    <Property Type="String" Name="Language" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Type="String" Name="ServiceStartDate" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Type="String" Name="ServiceEndDate" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Type="String" Name="FundingCode" MaxLength="50" FixedLength="false" Unicode="true" />
-  </EntityType>
   <ComplexType Name="Sp_GetStudentList_Result1">
     <Property Type="Int32" Name="SID" Nullable="false" />
     <Property Type="String" Name="StudentFirstName" Nullable="true" />
@@ -2267,28 +2258,6 @@
     <Property Type="String" Name="UserType" Nullable="true" MaxLength="50" />
     <Property Type="String" Name="Lock" Nullable="true" MaxLength="50" />
   </ComplexType>
-  <ComplexType Name="SP_TherapistListByMonthFiscal_Result">
-    <Property Type="Int32" Name="TID" Nullable="false" />
-    <Property Type="String" Name="FirstName" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="LastName" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="Address1" Nullable="true" />
-    <Property Type="String" Name="address2" Nullable="true" />
-    <Property Type="String" Name="State" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="City" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="Email" Nullable="false" MaxLength="100" />
-    <Property Type="String" Name="Phone" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="NPI" Nullable="true" MaxLength="15" />
-    <Property Type="String" Name="UserName" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="Password" Nullable="true" />
-    <Property Type="String" Name="ServiceType" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="PayScale" Nullable="true" MaxLength="10" />
-    <Property Type="DateTime" Name="DateOfRegistratio" Nullable="true" />
-    <Property Type="DateTime" Name="LastLogin" Nullable="true" Precision="23" />
-    <Property Type="Boolean" Name="IsActive" Nullable="true" />
-    <Property Type="DateTime" Name="EndService" Nullable="true" />
-    <Property Type="String" Name="UserType" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="Lock" Nullable="true" MaxLength="50" />
-  </ComplexType>
   <ComplexType Name="ResetTherapistLock_Result">
     <Property Type="Int32" Name="TID" Nullable="false" />
     <Property Type="String" Name="FirstName" Nullable="true" MaxLength="50" />
@@ -2372,5 +2341,74 @@
     <Property Type="String" Name="month" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
     <Property Type="String" Name="InvoiceNo" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Type="String" Name="Note" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <ComplexType Name="SP_FindStudent_ByNPI_Result2">
+    <Property Type="String" Name="SID" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="StudentFirstName" Nullable="true" />
+    <Property Type="String" Name="StudentLastName" Nullable="true" />
+    <Property Type="String" Name="NYCI" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="FundingCode" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="Frequency" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="GroupSize" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="Duration" Nullable="true" MaxLength="10" />
+  </ComplexType>
+  <ComplexType Name="SP_TherapistListByMonthFiscal_Result">
+    <Property Type="Int32" Name="TID" Nullable="false" />
+    <Property Type="String" Name="FirstName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="LastName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Address1" Nullable="true" />
+    <Property Type="String" Name="address2" Nullable="true" />
+    <Property Type="String" Name="State" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="City" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Email" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="Phone" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="NPI" Nullable="true" MaxLength="15" />
+    <Property Type="String" Name="UserName" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Password" Nullable="true" />
+    <Property Type="String" Name="ServiceType" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="PayScale" Nullable="true" MaxLength="10" />
+    <Property Type="DateTime" Name="DateOfRegistratio" Nullable="true" />
+    <Property Type="DateTime" Name="LastLogin" Nullable="true" Precision="23" />
+    <Property Type="Boolean" Name="IsActive" Nullable="true" />
+    <Property Type="DateTime" Name="EndService" Nullable="true" />
+    <Property Type="String" Name="UserType" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Lock" Nullable="true" MaxLength="50" />
+  </ComplexType>
+  <ComplexType Name="SP_GetStudentMandate_Result">
+    <Property Type="String" Name="StudentFirstName" Nullable="true" />
+    <Property Type="String" Name="StudentLastName" Nullable="true" />
+    <Property Type="String" Name="SID" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="FundingCode" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="BoroughCode" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="SchoolLocationCode" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="HomeDistrict" Nullable="true" MaxLength="10" />
+    <Property Type="DateTime" Name="ServiceStart" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="ServiceEnd" Nullable="true" Precision="23" />
+    <Property Type="String" Name="Frequency" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="GroupSize" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="Duration" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="Language" Nullable="true" MaxLength="50" />
+    <Property Type="Int64" Name="RowNum" Nullable="true" />
+    <Property Type="String" Name="NPI" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="FiscalYear" Nullable="true" MaxLength="10" />
+  </ComplexType>
+  <EntityType Name="StagingTable">
+    <Key>
+      <PropertyRef Name="SID" />
+    </Key>
+    <Property Type="Int32" Name="SID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Type="String" Name="FiscalYear" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="NPI" MaxLength="50" FixedLength="true" Unicode="true" />
+    <Property Type="String" Name="NYCI" Nullable="false" MaxLength="50" FixedLength="true" Unicode="true" />
+    <Property Type="String" Name="StudentLastName" MaxLength="50" FixedLength="true" Unicode="true" />
+    <Property Type="String" Name="StudentFirstName" MaxLength="50" FixedLength="true" Unicode="true" />
+    <Property Type="String" Name="Frequency" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Type="String" Name="GroupSize" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Type="String" Name="Duration" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Type="String" Name="Language" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="ServiceStartDate" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="ServiceEndDate" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="FundingCode" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Type="String" Name="DOB" MaxLength="50" FixedLength="false" Unicode="true" />
   </EntityType>
 </Schema>

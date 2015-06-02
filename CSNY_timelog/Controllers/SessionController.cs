@@ -936,5 +936,58 @@ namespace CSNY_timelog.Controllers
 
        }
 
+
+       [HttpPost]
+       public ActionResult ShowMandate(AddSessionViewModel objviewmodel)
+       {
+
+           
+           DateTime SDate = DateTime.Parse(objviewmodel.SessionDate);
+           var studList = objviewmodel.StudentList.Split(',');
+           var TID = Session["UserID"].ToString();
+           var Group = "";
+           var Duration = "";
+           var LangCode = "";
+           var Freq = "";
+           string Body = "";
+           var NPI = db.Sp_getTherpist_NPI(TID).SingleOrDefault();
+
+           for (var i = 0; i < studList.Length - 1; i++)
+           {
+
+               //GetMandate(studList[i].ToString(), TID, SDate, out  Group, out Duration, out LangCode, out Freq); // Get mandate information
+
+               var result = db.SP_GetStudentMandate(NPI.TrimEnd(), studList[i].ToString(), SDate).SingleOrDefault();
+               if (result != null)
+               {
+                   var OldFreqVal = result.Frequency.Split(',');
+                   var OldDuraVal = result.Duration.Split(',');
+                   var OldGroupVal = result.GroupSize.Split(',');
+
+                   Body +=
+                         " <br/> Student Name : " + result.StudentFirstName.TrimEnd() + " "+ result.StudentLastName.TrimEnd() +
+                         " <br/> Service Start : " + result.ServiceStart.Value.ToShortDateString() +
+                         " <br/> Service End : " + result.ServiceEnd.Value.ToShortDateString() +
+                         " <br/> S1 : " + OldFreqVal[0] + " X " + OldDuraVal[0] + ":" + OldGroupVal[0] +
+                         " <br/> SP : " + OldFreqVal[1] + " X " + OldDuraVal[1] + ":" + OldGroupVal[1] +
+                         " <br/> Language : " + result.Language +
+
+                         "<br/>";
+
+               }
+               else {
+                   var names = db.Sp_GetStudentDetail(studList[i].ToString()).SingleOrDefault();
+                   Body +=
+                       " <br/> Student Name : " + names.StudentFirstName.TrimEnd() + " " + names.StudentLastName.TrimEnd() +
+                       " <br/> No Mandate/ Mandate Outside" + "<br/>";
+               }
+           }
+           
+
+           return Json(Body);
+
+
+       }
+
     }
 }

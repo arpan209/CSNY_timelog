@@ -50,8 +50,10 @@
         var UserType = $('#UserType').val();
 
         var State = $('#StateName').val();
-        var City = document.getElementById('City');
+        //var City = document.getElementById('City');
 
+        var e = document.getElementById("City");
+        var City = e.options[e.selectedIndex].text;
         
         var x = document.getElementsByName("Services");
         var Servicesvalue = "";
@@ -109,7 +111,7 @@
                 {
                     TID: $('#TID').val(), FirstName: $('#FirstName').val(), LastName: $('#LastName').val(),
                     Address1: $('#Address1').val(), Address2: $('#Address2').val(),
-                    StateName: $('#StateName').val(), City: $('#City').val(), Phone: $('#Phone').val(),
+                    StateName: $('#StateName').val(), City: City, Phone: $('#Phone').val(),
                     Email: $('#Email').val(), ServiceType: Servicesvalue, SSN: $('#SSN').val(), UserType: UserType,
                     IsActive: $('#IsActive').val(), EndService: $('#EndService').val()
                 };
@@ -402,7 +404,7 @@
 
              <div class="editor-label">
                
-             <strong>@Html.LabelFor(m => m.City):</strong>
+             <strong>City:</strong>
              
              </div>
            <div class="editor-field">

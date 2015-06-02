@@ -33,15 +33,18 @@
        @Html.Grid(Model.StudentList).Columns(columns =>
   {
       //columns.Add(c => c.Child).Titled("Student ID").RenderValueAs(c => @<span class = "@((!String.IsNullOrEmpty(c.Child)) ? "ColorRed" : "Normal")">@c.Child</span>);
-      columns.Add(c => c.SID).SetWidth(25).Titled("Student ID")
+      columns.Add(c => c.SID).SetWidth(15).Titled("ID")
            .Sanitized(false)
           .Encoded(false)
           .RenderValueAs(o => Html.ActionLink(o.SID, "StudentInfo", "therapist", new { Id = o.SID + "," + o.Fiscal  }, null).ToHtmlString());
 
-      columns.Add(c => c.LastName).Titled("Last Name").SetWidth(50);
-      columns.Add(c => c.FirstName).Titled("First Name").SetWidth(250);
+      columns.Add(c => c.FirstName).Titled("Name").SetWidth(20);
+     // columns.Add(c => c.FirstName).Titled("First Name").SetWidth(40);
       columns.Add(c => c.OSIS).Titled("OSIS").SetWidth(30);
-      columns.Add(c => c.FundingCode).Titled("Funding Code").SetWidth(30);
+
+      columns.Add(c => c.FundingCode).Titled("Funding<br/> Code").SetWidth(15);
+      columns.Add(c => c.S1).Titled("S1").SetWidth(40);
+      columns.Add(c => c.SP).Titled("SP").SetWidth(40);
       
   }).WithPaging(100).Sortable(false)
 

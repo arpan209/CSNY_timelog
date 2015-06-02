@@ -88,10 +88,12 @@ namespace GenerateReport.Controllers
                                 PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileStream(newFile, FileMode.Create));
 
                                 AcroFields pdfFormFields = pdfStamper.AcroFields;
+                                var pdfContentByte = pdfStamper.GetOverContent(1);
+
+                              
 
 
-
-
+                                pdfFormFields.SetField("Month", dtDate.ToString("MMMM"));
                                 pdfFormFields.SetField("Month", dtDate.ToString("MMMM"));
                                 pdfFormFields.SetField("Year", model.FiscalYear.ToString());
 
@@ -182,7 +184,14 @@ namespace GenerateReport.Controllers
                                 if (groupWiseStudentSessionDetailList.Count > 0)
                                     pdfFormFields.SetField("Total_Sessions", groupWiseStudentSessionDetailList.Count.ToString());
 
+                                var path = Path.Combine(Server.MapPath("~/signatures/"), "Arpan Shah" + ".bmp");
 
+                                iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance(path);
+                                
+                                image.SetAbsolutePosition(320, 55);
+                                pdfContentByte.AddImage(image);
+
+                               
 
                                 // flatten the form to remove editting options, set it to false
                                 // to leave the form open to subsequent manual edits

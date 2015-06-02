@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Collections;
 using System.ComponentModel;
 
+
 namespace CSNY_timelog.ViewModel
 {
     public class BillingViewModel

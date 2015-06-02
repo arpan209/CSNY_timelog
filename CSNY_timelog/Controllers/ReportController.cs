@@ -197,9 +197,14 @@ namespace CSNY_timelog.Controllers
 
             List<SelectListItem> TherapistListItems = new List<SelectListItem>();
 
-         
+            var days = DateTime.DaysInMonth(Convert.ToInt32(Fiscal), Convert.ToInt32(Month));
 
-            var TherapistList = db.SP_TherapistListByMonthFiscal(Month,Fiscal);
+            var endDay = Month + "/1/" + Fiscal;
+
+
+          //  var TherapistList = db.SP_TherapistListByMonthFiscal(Month,Fiscal);
+
+            var TherapistList = db.SP_TherapistListByMonthFiscal(Month,Fiscal,endDay);
 
 
 
@@ -798,25 +803,30 @@ namespace CSNY_timelog.Controllers
                         //var Sdate = day + "/" + month + "/2014";
 
                         //DateTime Tdate = Convert.ToDateTime(item.Date);
-                        //  if (osis == 220351076)
-                        //{
-                        //int k = 0;
+                        if (osis == 236655444)
+                        {
+                            int k = 0;
+                        }
 
-                        //}
                         string selectString = "";
                         if (objviewmodel.AgeGroup == "CSE")
                         {
                             // CSE SQL
-                            selectString = "Select * from ["+ SheetName +"$] where SRAP_ACT_PROVIDER='" + npi.ToString("D9") + "' AND SRAP_OSIS_ID='" + osis.ToString("D9") + "' AND SCIN_INVOICE_DAYS=" + SessDate +
-                                " AND SRAP_SERV_SUBTYPE='" + item.MandGroupType.Trim() + "'";
+                            //selectString = "Select * from [" + SheetName + "$] where SRAP_ACT_PROVIDER='" + npi.ToString("D9") + "' AND SRAP_OSIS_ID='" + osis.ToString("D9") + "' AND SCIN_INVOICE_DAYS=" + SessDate +
+                            //    " AND SRAP_SERV_SUBTYPE='" + item.MandGroupType.Trim() + "'";
+                            selectString = "Select * from [" + SheetName + "$] where SRAP_ACT_PROVIDER='" + npi.ToString("D9") + "' AND SRAP_OSIS_ID='" + osis.ToString("D9") + "' AND SCIN_INVOICE_DAYS=" + SessDate +
+                              " AND SRAP_SERV_SUBTYPE='" + item.MandGroupType.Trim() + "' ORDER BY SRAP_START_DT DESC";
                         }
                         else
                         {
                             //CPSE SQL
                             selectString = "Select * from [" + SheetName + "$] where RSAP_ACT_PROVIDER='" + npi.ToString("D9") + "' AND RSAP_OSIS_ID='" + osis.ToString("D9") + "' AND SCIN_INVOICE_DAYS=" + SessDate +
-                               " AND RSAP_SERV_SUBTYPE='" + item.MandGroupType.Trim() + "'";
+                               " AND RSAP_SERV_SUBTYPE='" + item.MandGroupType.Trim() + "' ORDER BY RSAP_START_DT DESC";
 
                         }
+
+                        //}
+                 
                         con = new OleDbConnection(connectionString);
                         ocmd = new OleDbCommand(selectString, con);
 
@@ -899,7 +909,7 @@ namespace CSNY_timelog.Controllers
                                   //}
 
 
-                                  if (Convert.ToInt32(CorrectFreq) == Frequency && Convert.ToInt32(CorrectDura) == Duration && Convert.ToInt32(CorrectGrop) == GroupSize && CorrectLang == lang)
+                                  if (Convert.ToInt32(CorrectFreq) == Frequency && Convert.ToInt32(CorrectDura) == Duration && Convert.ToInt32(CorrectGrop) >= GroupSize && CorrectLang == lang)
                                   {
                                       //SRAP_START_DT
                                       string UpdateString = "";
@@ -990,11 +1000,11 @@ namespace CSNY_timelog.Controllers
                               //var Sdate = day + "/" + month + "/2014";
 
                               //DateTime Tdate = Convert.ToDateTime(item.Date);
-                              //  if (osis == 220351076)
-                              //{
-                              //int k = 0;
+                              if (osis == 23495640)
+                              {
+                                  int z = 0;
 
-                              //}
+                              }
 
 
                               var freq = item.MandFrequency.Split(',');
@@ -1023,13 +1033,13 @@ namespace CSNY_timelog.Controllers
                                   //selectString = "Select * from [" + SheetName + "$] where SRAP_ACT_PROVIDER='" + npi.ToString("D9") + "' AND SRAP_OSIS_ID='" + osis.ToString("D9") + "' AND SCIN_INVOICE_DAYS=" + SessDate +
                                   //    " AND SRAP_SERV_SUBTYPE='" + item.MandGroupType.Trim() + "'";
                                   selectString = "Select * from [" + SheetName + "$] where SRAP_ACT_PROVIDER='" + npi.ToString("D9") + "' AND SRAP_OSIS_ID='" + osis.ToString("D9") + "' AND SCIN_INVOICE_DAYS=" + SessDate +
-                                    " AND SRAP_SERV_SUBTYPE='" + item.MandGroupType.Trim() + "'";
+                                    " AND SRAP_SERV_SUBTYPE='" + item.MandGroupType.Trim() + "' ORDER BY SRAP_START_DT DESC";
                               }
                               else
                               {
                                   //CPSE SQL
                                   selectString = "Select * from [" + SheetName + "$] where RSAP_ACT_PROVIDER='" + npi.ToString("D9") + "' AND RSAP_OSIS_ID='" + osis.ToString("D9") + "' AND SCIN_INVOICE_DAYS=" + SessDate +
-                                     " AND RSAP_SERV_SUBTYPE='" + item.MandGroupType.Trim() + "'";
+                                     " AND RSAP_SERV_SUBTYPE='" + item.MandGroupType.Trim() + "' ORDER BY RSAP_START_DT DESC";
 
                               }
                               con.Close();
@@ -1064,7 +1074,8 @@ namespace CSNY_timelog.Controllers
                                   i += 1;
                               }
                                var CorrectStartDate = "";
-                               var CorrectFreq = "";
+                               var CorrectEndDate = ""; 
+                              var CorrectFreq = "";
                                var CorrectDura = "";
                                var CorrectGrop = "";
                                var CorrectLang = "";
@@ -1075,6 +1086,7 @@ namespace CSNY_timelog.Controllers
                                   if (i == 1)
                                   {
                                       CorrectStartDate = DateTime.Parse(ServiceStart[j]).ToOADate().ToString();
+                                      CorrectEndDate = DateTime.Parse(ServiceEnd[j]).ToOADate().ToString();
                                       CorrectFreq =  Mandfreq[j].ToString();
                                       CorrectDura = Manddura[j].ToString();
                                       CorrectGrop =  Mandgrop[j].ToString();
@@ -1088,7 +1100,7 @@ namespace CSNY_timelog.Controllers
                                       {
 
 
-                                          if (DateTime.Parse(ServiceStart[j]).ToOADate() <= SessDate && DateTime.Parse(ServiceStart[j + 1]).ToOADate() > SessDate)
+                                          if (DateTime.Parse(ServiceStart[j]).ToOADate() <= SessDate && DateTime.Parse(ServiceEnd[j]).ToOADate() >= SessDate)
                                           {
                                               CorrectStartDate = DateTime.Parse(ServiceStart[j]).ToOADate().ToString();
                                               CorrectFreq = Mandfreq[j].ToString();
@@ -1115,7 +1127,7 @@ namespace CSNY_timelog.Controllers
                                   //}
 
 
-                                  if (Convert.ToInt32(CorrectFreq) == Frequency && Convert.ToInt32(CorrectDura) == Duration && Convert.ToInt32(CorrectGrop) == GroupSize && CorrectLang == lang)
+                                  if (Convert.ToInt32(CorrectFreq) == Frequency && Convert.ToInt32(CorrectDura) == Duration && Convert.ToInt32(CorrectGrop) >= GroupSize && CorrectLang == lang)
                                   { 
                                   //SRAP_START_DT
                                   string UpdateString = "";
@@ -1550,6 +1562,16 @@ namespace CSNY_timelog.Controllers
                 return Convert.ToString(0);
         }
 
+        public ActionResult MasterCheckForm()
+        {
+
+            if (CheckUserLoginStatus() <= 0)
+                return AccessDeniedView();
+
+        return View();
+
+        }
+
         public ActionResult MasterCheck(string id)
         {
             if (CheckUserLoginStatus() <= 0)
@@ -1563,7 +1585,8 @@ namespace CSNY_timelog.Controllers
 
                 var Year = dataVal[0];
                 var month = dataVal[1];
-               
+                objview.Fiscal = Year;
+                objview.Month = month;
                 var days = DateTime.DaysInMonth(Convert.ToInt32(Year), Convert.ToInt32(month));
                 var startDay = month + "/" + 1 + "/" + Year;
                 var endDay = month + "/" + days + "/" + Year;
@@ -1655,7 +1678,11 @@ namespace CSNY_timelog.Controllers
                 var Year = dataVal[0];
                 var month = dataVal[1];
                 var FCode = dataVal[2];
-               
+
+                objview.Fiscal = Year;
+                objview.Month = month;
+                objview.AgeGroup = FCode;
+
                 var days = DateTime.DaysInMonth(Convert.ToInt32(Year), Convert.ToInt32(month));
                 var startDay = month + "-" + 1 + "-" + Year;
                 var endDay = month + "-" + days + "-" + Year;

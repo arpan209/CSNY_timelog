@@ -49,23 +49,7 @@
       [SessionNotPDetail].[GroupType] AS [GroupType]
       FROM [dbo].[SessionNotPDetail] AS [SessionNotPDetail]</DefiningQuery>
     </EntitySet>
-    <EntitySet Name="StagingTable" EntityType="CSNYModel.Store.StagingTable" store:Type="Tables" store:Schema="dbo" store:Name="StagingTable">
-      <DefiningQuery>SELECT 
-      [StagingTable].[SID] AS [SID], 
-      [StagingTable].[FiscalYear] AS [FiscalYear], 
-      [StagingTable].[NPI] AS [NPI], 
-      [StagingTable].[NYCI] AS [NYCI], 
-      [StagingTable].[StudentLastName] AS [StudentLastName], 
-      [StagingTable].[StudentFirstName] AS [StudentFirstName], 
-      [StagingTable].[Frequency] AS [Frequency], 
-      [StagingTable].[GroupSize] AS [GroupSize], 
-      [StagingTable].[Duration] AS [Duration], 
-      [StagingTable].[Language] AS [Language], 
-      [StagingTable].[ServiceStartDate] AS [ServiceStartDate], 
-      [StagingTable].[ServiceEndDate] AS [ServiceEndDate], 
-      [StagingTable].[FundingCode] AS [FundingCode]
-      FROM [dbo].[StagingTable] AS [StagingTable]</DefiningQuery>
-    </EntitySet>
+    <EntitySet Name="StagingTable" EntityType="CSNYModel.Store.StagingTable" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="StudentMaster" EntityType="CSNYModel.Store.StudentMaster" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="sysdiagrams" EntityType="CSNYModel.Store.sysdiagrams" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="TherapistMaster" EntityType="CSNYModel.Store.TherapistMaster" store:Type="Tables" Schema="dbo" />
@@ -205,13 +189,9 @@
     <Property Name="ServiceType" Type="nvarchar(max)" />
     <Property Name="GroupType" Type="nchar" MaxLength="10" />
   </EntityType>
-  <!--Errors Found During Generation:
-      warning 6002: The table/view 'CSNY_New.dbo.StagingTable' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
-      -->
   <EntityType Name="StagingTable">
     <Key>
       <PropertyRef Name="SID" />
-      <PropertyRef Name="NYCI" />
     </Key>
     <Property Name="SID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="FiscalYear" Type="nvarchar" MaxLength="10" />
@@ -226,6 +206,7 @@
     <Property Name="ServiceStartDate" Type="nvarchar" MaxLength="50" />
     <Property Name="ServiceEndDate" Type="nvarchar" MaxLength="50" />
     <Property Name="FundingCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="DOB" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="StudentMaster">
     <Key>
@@ -366,6 +347,7 @@
     <Parameter Name="FundingCode" Type="varchar" Mode="In" />
     <Parameter Name="StartDate" Type="varchar" Mode="In" />
     <Parameter Name="EndDate" Type="varchar" Mode="In" />
+    <Parameter Name="DOB" Type="varchar" Mode="In" />
   </Function>
   <Function Name="AddStudent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="PayType" Type="varchar" Mode="In" />
@@ -422,6 +404,7 @@
   <Function Name="GetStudentInformation_Pdf" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="sid" Type="int" Mode="In" />
     <Parameter Name="FundingCode" Type="nvarchar" Mode="In" />
+    <Parameter Name="NPI" Type="nvarchar" Mode="In" />
   </Function>
   <Function Name="ResetTherapistLock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="TID" Type="varchar(max)" Mode="In" />
@@ -597,12 +580,19 @@
     <Parameter Name="NPI" Type="nvarchar" Mode="In" />
     <Parameter Name="FundingCode" Type="nvarchar" Mode="In" />
   </Function>
-  <Function Name="Sp_GetStudentSessionDetail_Pdf" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+  <Function Name="SP_GetStudentMandate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="NPI" Type="nvarchar" Mode="In" />
-    <Parameter Name="FundingCode" Type="nvarchar" Mode="In" />
+    <Parameter Name="SID" Type="nvarchar" Mode="In" />
+    <Parameter Name="Sdate" Type="datetime" Mode="In" />
+  </Function>
+  <Function Name="Sp_GetStudentSessionDetail_Pdf" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="SID" Type="int" Mode="In" />
-    <Parameter Name="year" Type="int" Mode="In" />
-    <Parameter Name="month" Type="int" Mode="In" />
+    <Parameter Name="fiscal" Type="nvarchar" Mode="In" />
+    <Parameter Name="StartDay" Type="nvarchar" Mode="In" />
+    <Parameter Name="EndDay" Type="nvarchar" Mode="In" />
+    <Parameter Name="TID" Type="nvarchar" Mode="In" />
+    <Parameter Name="FundingCode" Type="nvarchar" Mode="In" />
+    <Parameter Name="NPI" Type="nvarchar" Mode="In" />
   </Function>
   <Function Name="SP_GetTherapistInfoByNPI" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="NPI" Type="nvarchar" Mode="In" />
@@ -677,6 +667,7 @@
   <Function Name="SP_TherapistListByMonthFiscal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="Month" Type="nvarchar" Mode="In" />
     <Parameter Name="year" Type="nvarchar" Mode="In" />
+    <Parameter Name="CurrentDate" Type="nvarchar" Mode="In" />
   </Function>
   <Function Name="SP_Unlock" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="TID" Type="nvarchar" Mode="In" />

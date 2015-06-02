@@ -110,7 +110,6 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="AddStaging" FunctionName="CSNYModel.Store.AddStaging" />
     <FunctionImportMapping FunctionImportName="sp_get_MandateInfo" FunctionName="CSNYModel.Store.sp_get_MandateInfo">
       <ResultMapping>
         <ComplexTypeMapping TypeName="CSNYModel.sp_get_MandateInfo_Result4">
@@ -123,25 +122,6 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
-    <EntitySetMapping Name="StagingTables">
-      <EntityTypeMapping TypeName="CSNYModel.StagingTable">
-        <MappingFragment StoreEntitySet="StagingTable">
-          <ScalarProperty Name="FundingCode" ColumnName="FundingCode" />
-          <ScalarProperty Name="ServiceEndDate" ColumnName="ServiceEndDate" />
-          <ScalarProperty Name="ServiceStartDate" ColumnName="ServiceStartDate" />
-          <ScalarProperty Name="Language" ColumnName="Language" />
-          <ScalarProperty Name="GroupSize" ColumnName="GroupSize" />
-          <ScalarProperty Name="Duration" ColumnName="Duration" />
-          <ScalarProperty Name="Frequency" ColumnName="Frequency" />
-          <ScalarProperty Name="StudentFirstName" ColumnName="StudentFirstName" />
-          <ScalarProperty Name="StudentLastName" ColumnName="StudentLastName" />
-          <ScalarProperty Name="NYCI" ColumnName="NYCI" />
-          <ScalarProperty Name="NPI" ColumnName="NPI" />
-          <ScalarProperty Name="FiscalYear" ColumnName="FiscalYear" />
-          <ScalarProperty Name="SID" ColumnName="SID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <FunctionImportMapping FunctionImportName="Sp_GetStudentList" FunctionName="CSNYModel.Store.Sp_GetStudentList">
       <ResultMapping>
         <ComplexTypeMapping TypeName="CSNYModel.Sp_GetStudentList_Result1">
@@ -536,17 +516,6 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="SP_FindStudent_ByNPI" FunctionName="CSNYModel.Store.SP_FindStudent_ByNPI">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="CSNYModel.SP_FindStudent_ByNPI_Result1">
-          <ScalarProperty Name="SID" ColumnName="SID" />
-          <ScalarProperty Name="StudentFirstName" ColumnName="StudentFirstName" />
-          <ScalarProperty Name="StudentLastName" ColumnName="StudentLastName" />
-          <ScalarProperty Name="NYCI" ColumnName="NYCI" />
-          <ScalarProperty Name="FundingCode" ColumnName="FundingCode" />
-        </ComplexTypeMapping>
-      </ResultMapping>
-    </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="SP_GetSessionListBySID" FunctionName="CSNYModel.Store.SP_GetSessionListBySID">
       <ResultMapping>
         <ComplexTypeMapping TypeName="CSNYModel.SP_GetSessionListBySID_Result2">
@@ -742,7 +711,6 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="SP_GetSessionCount" FunctionName="CSNYModel.Store.SP_GetSessionCount" />
     <FunctionImportMapping FunctionImportName="AddTherapist" FunctionName="CSNYModel.Store.AddTherapist" />
     <FunctionImportMapping FunctionImportName="AdminList" FunctionName="CSNYModel.Store.AdminList">
       <ResultMapping>
@@ -1106,32 +1074,6 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="SP_TherapistListByMonthFiscal" FunctionName="CSNYModel.Store.SP_TherapistListByMonthFiscal">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="CSNYModel.SP_TherapistListByMonthFiscal_Result">
-          <ScalarProperty Name="TID" ColumnName="TID" />
-          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-          <ScalarProperty Name="LastName" ColumnName="LastName" />
-          <ScalarProperty Name="Address1" ColumnName="Address1" />
-          <ScalarProperty Name="address2" ColumnName="address2" />
-          <ScalarProperty Name="State" ColumnName="State" />
-          <ScalarProperty Name="City" ColumnName="City" />
-          <ScalarProperty Name="Email" ColumnName="Email" />
-          <ScalarProperty Name="Phone" ColumnName="Phone" />
-          <ScalarProperty Name="NPI" ColumnName="NPI" />
-          <ScalarProperty Name="UserName" ColumnName="UserName" />
-          <ScalarProperty Name="Password" ColumnName="Password" />
-          <ScalarProperty Name="ServiceType" ColumnName="ServiceType" />
-          <ScalarProperty Name="PayScale" ColumnName="PayScale" />
-          <ScalarProperty Name="DateOfRegistratio" ColumnName="DateOfRegistratio" />
-          <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
-          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-          <ScalarProperty Name="EndService" ColumnName="EndService" />
-          <ScalarProperty Name="UserType" ColumnName="UserType" />
-          <ScalarProperty Name="Lock" ColumnName="Lock" />
-        </ComplexTypeMapping>
-      </ResultMapping>
-    </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="ResetTherapistLock" FunctionName="CSNYModel.Store.ResetTherapistLock">
       <ResultMapping>
         <ComplexTypeMapping TypeName="CSNYModel.ResetTherapistLock_Result">
@@ -1219,5 +1161,89 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="SP_FindStudent_ByNPI" FunctionName="CSNYModel.Store.SP_FindStudent_ByNPI">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CSNYModel.SP_FindStudent_ByNPI_Result2">
+          <ScalarProperty Name="SID" ColumnName="SID" />
+          <ScalarProperty Name="StudentFirstName" ColumnName="StudentFirstName" />
+          <ScalarProperty Name="StudentLastName" ColumnName="StudentLastName" />
+          <ScalarProperty Name="NYCI" ColumnName="NYCI" />
+          <ScalarProperty Name="FundingCode" ColumnName="FundingCode" />
+          <ScalarProperty Name="Frequency" ColumnName="Frequency" />
+          <ScalarProperty Name="GroupSize" ColumnName="GroupSize" />
+          <ScalarProperty Name="Duration" ColumnName="Duration" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="SP_TherapistListByMonthFiscal" FunctionName="CSNYModel.Store.SP_TherapistListByMonthFiscal">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CSNYModel.SP_TherapistListByMonthFiscal_Result">
+          <ScalarProperty Name="TID" ColumnName="TID" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="Address1" ColumnName="Address1" />
+          <ScalarProperty Name="address2" ColumnName="address2" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="NPI" ColumnName="NPI" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="ServiceType" ColumnName="ServiceType" />
+          <ScalarProperty Name="PayScale" ColumnName="PayScale" />
+          <ScalarProperty Name="DateOfRegistratio" ColumnName="DateOfRegistratio" />
+          <ScalarProperty Name="LastLogin" ColumnName="LastLogin" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="EndService" ColumnName="EndService" />
+          <ScalarProperty Name="UserType" ColumnName="UserType" />
+          <ScalarProperty Name="Lock" ColumnName="Lock" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="SP_GetStudentMandate" FunctionName="CSNYModel.Store.SP_GetStudentMandate">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="CSNYModel.SP_GetStudentMandate_Result">
+          <ScalarProperty Name="StudentFirstName" ColumnName="StudentFirstName" />
+          <ScalarProperty Name="StudentLastName" ColumnName="StudentLastName" />
+          <ScalarProperty Name="SID" ColumnName="SID" />
+          <ScalarProperty Name="FundingCode" ColumnName="FundingCode" />
+          <ScalarProperty Name="BoroughCode" ColumnName="BoroughCode" />
+          <ScalarProperty Name="SchoolLocationCode" ColumnName="SchoolLocationCode" />
+          <ScalarProperty Name="HomeDistrict" ColumnName="HomeDistrict" />
+          <ScalarProperty Name="ServiceStart" ColumnName="ServiceStart" />
+          <ScalarProperty Name="ServiceEnd" ColumnName="ServiceEnd" />
+          <ScalarProperty Name="Frequency" ColumnName="Frequency" />
+          <ScalarProperty Name="GroupSize" ColumnName="GroupSize" />
+          <ScalarProperty Name="Duration" ColumnName="Duration" />
+          <ScalarProperty Name="Language" ColumnName="Language" />
+          <ScalarProperty Name="RowNum" ColumnName="RowNum" />
+          <ScalarProperty Name="NPI" ColumnName="NPI" />
+          <ScalarProperty Name="FiscalYear" ColumnName="FiscalYear" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="StagingTables">
+      <EntityTypeMapping TypeName="CSNYModel.StagingTable">
+        <MappingFragment StoreEntitySet="StagingTable">
+          <ScalarProperty Name="DOB" ColumnName="DOB" />
+          <ScalarProperty Name="FundingCode" ColumnName="FundingCode" />
+          <ScalarProperty Name="ServiceEndDate" ColumnName="ServiceEndDate" />
+          <ScalarProperty Name="ServiceStartDate" ColumnName="ServiceStartDate" />
+          <ScalarProperty Name="Language" ColumnName="Language" />
+          <ScalarProperty Name="Duration" ColumnName="Duration" />
+          <ScalarProperty Name="GroupSize" ColumnName="GroupSize" />
+          <ScalarProperty Name="Frequency" ColumnName="Frequency" />
+          <ScalarProperty Name="StudentFirstName" ColumnName="StudentFirstName" />
+          <ScalarProperty Name="StudentLastName" ColumnName="StudentLastName" />
+          <ScalarProperty Name="NYCI" ColumnName="NYCI" />
+          <ScalarProperty Name="NPI" ColumnName="NPI" />
+          <ScalarProperty Name="FiscalYear" ColumnName="FiscalYear" />
+          <ScalarProperty Name="SID" ColumnName="SID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="AddStaging" FunctionName="CSNYModel.Store.AddStaging" />
+    <FunctionImportMapping FunctionImportName="SP_GetSessionCount" FunctionName="CSNYModel.Store.SP_GetSessionCount" />
   </EntityContainerMapping>
 </Mapping>

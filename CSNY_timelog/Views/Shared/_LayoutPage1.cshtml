@@ -198,6 +198,9 @@
                  <li>
                             <a href="@Url.Action("InvoiceFiles", "Report",new {area="" })">Invoice Files</a>
                             </li>
+                   <li>
+                            <a href="@Url.Action("MasterCheckForm", "Report",new {area="" })">Master Check</a>
+                            </li>
                   
                 </ul></li>
        
@@ -280,12 +283,27 @@ else
                       Click Here To View        </a>
           
               </div>
-            }
-           <div class="side-menubar">
+                
+                
              
-             </div>
+            }
+           
+             
+      
            <div class="side-img">
-			
+              
+               
+      @if (Session["Fullname"] != null)
+      {
+
+          if (Session["UserType"].ToString() != "1")
+          {
+
+			   <div class="side-menubar" id="mandate" style="color:black;">
+             
+              </div>
+      }
+      }
 			<!-- Start Left position ad -->
 		@*	<div style="font-size:10px;line-height:14px;color:#999999;background-color:#EEE;text-align:center;padding:5px;margin-bottom:10px;display:block;"> ----- Advertising -----<br />
 			<script language=JavaScript>OAS_AD('Left');</script>

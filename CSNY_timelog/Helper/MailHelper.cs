@@ -256,5 +256,160 @@ namespace CSNY_timelog.Helper
             }
         }
 
+        public static void AddMandateEmail(string TID, string SID, string NewFreq, string NewGroup, string NewDuar, string Newlang, string NewStart, string NewEnd, string Fname, string Lname, string Email, string StudFname, string StudLname)
+        {
+            try
+            {
+                MailMessage mail = new MailMessage();
+
+                if (Convert.ToBoolean(ConfigurationManager.AppSettings["developement"]))
+                {
+                    mail.To.Add(Email.ToString());
+                    mail.Bcc.Add(new MailAddress(ConfigurationManager.AppSettings["Bcc"].ToString()));
+
+                }
+                else
+                {
+                    mail.To.Add("csny.csg@gmail.com");
+                }
+
+
+                mail.ReplyToList.Add(new MailAddress(ConfigurationManager.AppSettings["ReplyTo"].ToString(), "reply-to"));
+                mail.From = new MailAddress(ConfigurationManager.AppSettings["MailFrom"].ToString(), ConfigurationManager.AppSettings["BehalfOf"].ToString());
+                mail.Subject = "CSNY - New Mandate added for " + StudFname.TrimEnd() + " " + StudLname.TrimEnd();
+
+                var NewFreqVal = NewFreq.Split(',');
+                var NewDuraVal = NewDuar.Split(',');
+                var NewGroupVal = NewGroup.Split(',');
+
+            
+                string Body = "<br/> Hi " + Fname.Trim() + " " + Lname.Trim() + "," +
+
+
+                    "<br/><br/> A CSNY administrator has added a new mandate for " + StudFname.TrimEnd() + " " + StudLname.TrimEnd() + "." +
+
+                
+                    " <br/><br/> <span style=color:red;><b> New Mandate :</b></span>" +
+                    " <br/> Service Start : " + NewStart +
+                    " <br/> Service End : " + NewEnd +
+                    " <br/> S1 : " + NewFreqVal[0] + " X " + NewDuraVal[0] + ":" + NewGroupVal[0] +
+                    " <br/> SP : " + NewFreqVal[1] + " X " + NewDuraVal[1] + ":" + NewGroupVal[1] +
+                  " <br/> Language : " + Newlang +
+
+
+                    "<br/><br/><br/>" +
+                     " Please contact us with any questions.<br/><br/>"
+                              + " Regards,<br/>"
+                              + " The CSNY Team <br/>"
+                              + " 212-604-9360 <br/>"
+                              + " <a href='" + ConfigurationManager.AppSettings["SiteUrl"].ToString() + "'>" + ConfigurationManager.AppSettings["SiteUrl"].ToString() + " </a>" +
+                    "<br/><br/><br/><span style=color:gray;>(Please note: You received this email because you have registered on the City Sounds of NY portal. If you are not the intended recipient, please notify us immediately by return e-mail (including the original message in your reply)" +
+                     " and then delete and discard all copies of the e-mail. ref: c3)";
+
+                mail.Body = Body;
+
+                mail.IsBodyHtml = true;
+                SmtpClient smtp = new SmtpClient(ConfigurationManager.AppSettings["mailserver"].ToString(),
+                        Convert.ToInt32(ConfigurationManager.AppSettings["port"]));
+
+                smtp.Credentials = new NetworkCredential(ConfigurationManager.AppSettings["username"].ToString(),
+                    ConfigurationManager.AppSettings["password"].ToString());
+
+                smtp.EnableSsl = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableSsl"]);
+                smtp.Send(mail);
+            }
+            catch (Exception ex)
+            {
+                //// ILogger _logger = new DefaultLogger();
+                // _logger.Error(ex.Message, ex);// return ex.Message.ToString();
+            }
+        }
+
+
+        public static void UpdateMandateEmail(string TID, string SID, string OldFreq, string OldGroup, string OldDuar,string OldLang,string OldStart, string OldEnd, 
+            string NewFreq, string NewGroup,string NewDuar,string Newlang,string NewStart, string NewEnd, string Fname, string Lname, string Email, string StudFname, string StudLname)
+        {
+            try
+            {
+                MailMessage mail = new MailMessage();
+                
+                if (Convert.ToBoolean(ConfigurationManager.AppSettings["developement"]))
+                {
+                    mail.To.Add(Email.ToString());
+                    mail.Bcc.Add(new MailAddress(ConfigurationManager.AppSettings["Bcc"].ToString()));
+                   
+                }
+                else
+                {
+                    mail.To.Add("csny.csg@gmail.com");
+                }
+
+
+                mail.ReplyToList.Add(new MailAddress(ConfigurationManager.AppSettings["ReplyTo"].ToString(), "reply-to"));
+                mail.From = new MailAddress(ConfigurationManager.AppSettings["MailFrom"].ToString(), ConfigurationManager.AppSettings["BehalfOf"].ToString());
+                mail.Subject = "CSNY - Mandate changed for " + StudFname.TrimEnd() + " "+ StudLname.TrimEnd();
+
+                 var NewFreqVal = NewFreq.Split(',');
+                 var NewDuraVal = NewDuar.Split(',');
+                 var NewGroupVal = NewGroup.Split(',');
+
+                 var OldFreqVal = OldFreq.Split(',');
+                 var OldDuraVal = OldDuar.Split(',');
+                 var OldGroupVal = OldGroup.Split(',');
+
+                string Body = "<br/> Hi " + Fname.Trim() + " " + Lname.Trim() + "," + 
+
+                
+                    "<br/><br/> A CSNY administrator has changed mandate for " + StudFname.TrimEnd() + " " + StudLname.TrimEnd() + "." +
+              
+                    "<br/> Changed mandate is as per below." +
+
+                    " <br/><br/> <span style=color:red;><b> Old Mandate :</b></span>" +
+                    " <br/> Service Start : " + OldStart +
+                    " <br/> Service End : " + OldEnd +
+                    " <br/> S1 : " + OldFreqVal[0] + " X " + OldDuraVal[0] +":" + OldGroupVal[0] +
+                    " <br/> SP : " + OldFreqVal[1] + " X " + OldDuraVal[1] + ":" + OldGroupVal[1] +
+                    " <br/> Language : " + OldLang  +
+
+
+                    " <br/><br/> <span style=color:red;><b> New Mandate :</b></span>" +
+                    " <br/> Service Start : " + NewStart +
+                    " <br/> Service End : " + NewEnd +
+                    " <br/> S1 : " + NewFreqVal[0] + " X " + NewDuraVal[0] + ":" + NewGroupVal[0] +
+                    " <br/> SP : " + NewFreqVal[1] + " X " + NewDuraVal[1] + ":" + NewGroupVal[1] +
+                  " <br/> Language : " + Newlang +
+
+
+                    "<br/><br/><br/>" +
+                     " Please contact us with any questions.<br/><br/>"
+                              + " Regards,<br/>"
+                              + " The CSNY Team <br/>"
+                              + " 212-604-9360 <br/>"
+                              + " <a href='" + ConfigurationManager.AppSettings["SiteUrl"].ToString() + "'>" + ConfigurationManager.AppSettings["SiteUrl"].ToString() + " </a>" +
+                    "<br/><br/><br/><span style=color:gray;>(Please note: You received this email because you have registered on the City Sounds of NY portal. If you are not the intended recipient, please notify us immediately by return e-mail (including the original message in your reply)" +
+                     " and then delete and discard all copies of the e-mail. ref: c3)";
+
+                mail.Body = Body;
+
+                mail.IsBodyHtml = true;
+                SmtpClient smtp = new SmtpClient(ConfigurationManager.AppSettings["mailserver"].ToString(),
+                        Convert.ToInt32(ConfigurationManager.AppSettings["port"]));
+
+                smtp.Credentials = new NetworkCredential(ConfigurationManager.AppSettings["username"].ToString(),
+                    ConfigurationManager.AppSettings["password"].ToString());
+
+                smtp.EnableSsl = Convert.ToBoolean(ConfigurationManager.AppSettings["EnableSsl"]);
+                smtp.Send(mail);
+            }
+            catch (Exception ex)
+            {
+                //// ILogger _logger = new DefaultLogger();
+                // _logger.Error(ex.Message, ex);// return ex.Message.ToString();
+            }
+        }
+
+
+
+
     }
 }

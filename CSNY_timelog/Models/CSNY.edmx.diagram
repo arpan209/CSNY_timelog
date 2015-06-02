@@ -9,7 +9,6 @@
         <EntityTypeShape EntityType="CSNYModel.FundingCodeMaster" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="CSNYModel.ZipCode" Width="1.5" PointX="0.75" PointY="3.5" IsExpanded="true" />
         <EntityTypeShape EntityType="CSNYModel.MandateMaster" Width="1.5" PointX="4.625" PointY="0.75" />
-        <EntityTypeShape EntityType="CSNYModel.StagingTable" Width="1.5" PointX="0.75" PointY="7.875" />
         <EntityTypeShape EntityType="CSNYModel.StudentMaster" Width="1.5" PointX="2.75" PointY="2.375" />
         <EntityTypeShape EntityType="CSNYModel.vw_CurrentTherapists" Width="1.5" PointX="5.0172624909399373" PointY="25.682199102678428" />
         <EntityTypeShape EntityType="CSNYModel.SessionNotPDetail" Width="1.5" PointX="3.6305302212156967" PointY="27.075981137843794" />
@@ -17,6 +16,7 @@
         <EntityTypeShape EntityType="CSNYModel.sysdiagram" Width="1.5" PointX="5.8252055206453459" PointY="29.427423103445872" />
         <EntityTypeShape EntityType="CSNYModel.TherapistMaster" Width="1.5" PointX="6.625" PointY="0.75" />
         <EntityTypeShape EntityType="CSNYModel.InvoiceDetail" Width="1.5" PointX="5.971140439608666" PointY="17.032225765768544" />
+        <EntityTypeShape EntityType="CSNYModel.StagingTable" Width="1.5" PointX="10.887675884593127" PointY="1.2345919316795617" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

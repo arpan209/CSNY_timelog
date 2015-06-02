@@ -110,77 +110,149 @@ namespace CSNY_timelog.Controllers
                 return AccessDeniedView();
 
             // Do the merging of staging table with existing table.
-            
+            AddStudentViewModel objview = new AddStudentViewModel();
+
+
+            List<MandateAddListViewModel> MandateList = new List<MandateAddListViewModel>();
+            List<MandateAddListViewModel> MandateErrorList = new List<MandateAddListViewModel>();
+
+           try {
+
             foreach (StagingTable Student in db.StagingTables)
             {
+
                 if (Student.FundingCode == "CPSE" || Student.FundingCode == "CSE" || Student.FundingCode == "PP" || Student.FundingCode == "PI" || Student.FundingCode == "EI")
                 {
-                var OSIS = db.sp_get_StudentInfo(Student.NYCI.Trim()).SingleOrDefault();
-                if (OSIS == null) {
-                    // add the new kid in StudentMaster
-                 db.AddStudent("", "", "", "", "",
-             "", "","", "", "", "", "",Student.NYCI.Trim(),"",Student.StudentFirstName,Student.StudentLastName,"", "", "","","");
-                   }
-
-
-                var result = db.sp_get_StudentInfo(Student.NYCI.Trim()).SingleOrDefault();
-                if (result != null)
-                {
-                    var GroupSize = Student.GroupSize;
-                   var result1 = (from n in db.StagingTables
-                               where n.GroupSize != GroupSize.Trim() && n.NYCI == result.NYCI.Trim()
-                               select n).SingleOrDefault();
-                   var addFreq = "";
-                   var addGroup = "";
-                   var AddDuration = "";
-
-                   if (result1 != null)
-                   {
-                       if (Student.GroupSize.Trim() == "1")
-                       {
-                           addFreq = Student.Frequency.Trim() + "," + result1.Frequency.Trim();
-                           addGroup = Student.GroupSize.Trim() + "," + result1.GroupSize.Trim();
-                           AddDuration = Student.Duration.Trim() + "," + result1.Duration.Trim();
-                       }
-                       else
-                       {
-
-                           addFreq = result1.Frequency.Trim() + "," + Student.Frequency.Trim();
-                           addGroup = result1.GroupSize.Trim() + "," + Student.GroupSize.Trim();
-                           AddDuration = result1.Duration.Trim() + "," + Student.Duration.Trim();
-
-                       }
-
-                   }
-                   else {
-
-                       if (Student.GroupSize.Trim() == "1")
-                       {
-                           addFreq = Student.Frequency.Trim() + ",0";
-                           addGroup = Student.GroupSize.Trim() + ",0";
-                           AddDuration = Student.Duration.Trim() + ",00";
-                       }
-                       else
-                       {
-
-                           addFreq = "0," + Student.Frequency.Trim();
-                           addGroup = "0," + Student.GroupSize.Trim();
-                           AddDuration = "00," + Student.Duration.Trim();
-
-                       }
-                   
-                   }
-                     
-                    db.Sp_AddMandate(result.SID.ToString(), Student.NPI.Trim(), Student.FiscalYear,DateTime.Parse(Student.ServiceStartDate),DateTime.Parse(Student.ServiceEndDate),
-                        addFreq,addGroup, AddDuration, Student.Language, Student.FundingCode,"","","");
+                    var OSIS = db.sp_get_StudentInfo(Student.NYCI.Trim()).SingleOrDefault();
+                    if (OSIS == null)
+                    {
+                        // add the new kid in StudentMaster
+                        db.AddStudent("", "", "", "", "",
+                    "", "", "", "", "", "", "", Student.NYCI.Trim(), "", Student.StudentFirstName, Student.StudentLastName, Student.DOB, "", "", "", "");
                     }
+
+
+                    var result = db.sp_get_StudentInfo(Student.NYCI.Trim()).SingleOrDefault();
+                    if (result != null)
+                    {
+                        var GroupSize = Student.GroupSize;
+                        var result1 = (from n in db.StagingTables
+                                       where n.GroupSize != GroupSize.Trim() && n.NYCI == result.NYCI.Trim()
+                                       select n).SingleOrDefault();
+                        var addFreq = "";
+                        var addGroup = "";
+                        var AddDuration = "";
+
+                        if (result1 != null)
+                        {
+                            if (Student.GroupSize.Trim() == "1")
+                            {
+                                addFreq = Student.Frequency.Trim() + "," + result1.Frequency.Trim();
+                                addGroup = Student.GroupSize.Trim() + "," + result1.GroupSize.Trim();
+                                AddDuration = Student.Duration.Trim() + "," + result1.Duration.Trim();
+                            }
+                            else
+                            {
+
+                                addFreq = result1.Frequency.Trim() + "," + Student.Frequency.Trim();
+                                addGroup = result1.GroupSize.Trim() + "," + Student.GroupSize.Trim();
+                                AddDuration = result1.Duration.Trim() + "," + Student.Duration.Trim();
+
+                            }
+
+
+
+                        }
+                        else
+                        {
+
+                            if (Student.GroupSize.Trim() == "1")
+                            {
+                                addFreq = Student.Frequency.Trim() + ",0";
+                                addGroup = Student.GroupSize.Trim() + ",0";
+                                AddDuration = Student.Duration.Trim() + ",00";
+                            }
+                            else
+                            {
+
+                                addFreq = "0," + Student.Frequency.Trim();
+                                addGroup = "0," + Student.GroupSize.Trim();
+                                AddDuration = "00," + Student.Duration.Trim();
+
+                            }
+
+                        }
+
+
+
+                        /// Add Mandatte in the List
+                        MandateList.Add(new MandateAddListViewModel
+                        {
+                            SID = result.SID.ToString(),
+                            NPI = Student.NPI.Trim(),
+                            Fiscal = Student.FiscalYear,
+                            StartDate = Student.ServiceStartDate,
+                            EndDate = Student.ServiceEndDate,
+                            Frequency = addFreq,
+                            Duration = AddDuration,
+                            GroupSize = addGroup,
+                            Language = Student.Language,
+                            FundingCode = Student.FundingCode,
+                            BoroCode = "",
+                            SchoolCode = "",
+                            HomeDistrict = ""
+
+
+                        });
+
+
+                    }
+                }
+                else {
+
+                    MandateErrorList.Add(new MandateAddListViewModel
+                    {
+                        SID = Student.NYCI.Trim().ToString(),
+                        NPI = Student.NPI.Trim(),
+                        Fiscal = Student.FiscalYear,
+                        StartDate = Student.ServiceStartDate,
+                        EndDate = Student.ServiceEndDate,
+                        Frequency = Student.Frequency,
+                        Duration = Student.Duration,
+                        GroupSize = Student.GroupSize,
+                        Language = Student.Language,
+                        FundingCode = Student.FundingCode,
+                        BoroCode = "",
+                        SchoolCode = "",
+                        HomeDistrict = ""
+
+
+                    });
+                
+                }
             }
-            
+
+
+            var list = MandateList.GroupBy(x => x.SID).Select(x => x.First()).ToList();
+         //   var temp = list.Distinct();
+            foreach(var val in list)
+            {
+
+                db.Sp_AddMandate(val.SID.ToString(), val.NPI.Trim(), val.Fiscal, DateTime.Parse(val.StartDate), DateTime.Parse(val.EndDate),
+                            val.Frequency, val.GroupSize, val.Duration, val.Language, val.FundingCode, "", "", "");
+
+
             }
 
+               }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex);
 
+            }
 
-            return View();
+           objview.MandateErrorList = MandateErrorList;
+            return View(objview);
         }
 
         [HttpPost]
@@ -431,6 +503,7 @@ namespace CSNY_timelog.Controllers
                       string Duration = "";
                       string GroupSize = "";
                       string Language = "";
+                      string DOB = "";
                       int i = 0;
                       while (odr.Read())
                       {
@@ -447,12 +520,13 @@ namespace CSNY_timelog.Controllers
                           StartDate = valid(odr, 10);
                           EndDate = valid(odr, 11);
                           FundingCode = valid(odr, 12);
+                          DOB = valid(odr, 13);
 
                          
 
                           //Here using this method we are inserting the data into the database
                           db.AddStaging(fiscal, SSN, NYCID, lname, fname, Freq,
-                               GroupSize, Duration, Language, FundingCode, StartDate, EndDate);
+                               GroupSize, Duration, Language, FundingCode, StartDate, EndDate,DOB);
                           
                           i = i + 1;
                          // insertdataintosql(fname, lname, mobnum, city, state, zip);
@@ -1164,30 +1238,79 @@ namespace CSNY_timelog.Controllers
           {
               var sid = objviewmodel.SID;
               var id = objviewmodel.MID;
+              var TID = "";
+              var FName = "";
+              var LName = "";
+              var EMail = "";
+              var StudFname = "";
+              var StudLname = "";
               var NPI = "0";
               var message = "";
               objviewmodel.BoroughCode = (!string.IsNullOrEmpty((string)(objviewmodel.BoroughCode))) ? (string)objviewmodel.BoroughCode.Trim() : null;
               objviewmodel.SchoolCode = (!string.IsNullOrEmpty((string)(objviewmodel.SchoolCode))) ? (string)objviewmodel.SchoolCode.Trim() : null;
               objviewmodel.Districtcode = (!string.IsNullOrEmpty((string)(objviewmodel.Districtcode))) ? (string)objviewmodel.Districtcode.Trim() : null;
              
-              var result = db.Sp_getTherpist_NPI(objviewmodel.TID.Substring(0,objviewmodel.TID.Length-1)).SingleOrDefault();
-              if (result != null) { NPI = result; }
-             
+              var result = db.Sp_get_Therpist_Info(objviewmodel.TID.Substring(0,objviewmodel.TID.Length-1)).SingleOrDefault();
+              if (result != null) { 
+                  NPI = result.NPI;
+                  FName = result.FirstName;
+                  LName = result.LastName;
+                
+                  TID = result.TID.ToString();
+                  EMail = result.Email;
+              
+              }
+              var result1 = db.Sp_GetStudentDetail(sid).SingleOrDefault();
+              StudFname = result1.StudentFirstName.TrimEnd();
+              StudLname = result1.StudentLastName.TrimEnd();
+
+              
+
               try
               {
+                  var NewFreq = objviewmodel.Frequency;
+                  var NewDura = objviewmodel.Duration;
+                  var NewGroup = objviewmodel.GroupSize;
+                  var Newlang = objviewmodel.language;
+                  var NewStart = objviewmodel.StartDate;
+                  var NewEnd = objviewmodel.EndDate;
+
+
                   if (id == "0") {
                       db.Sp_AddMandate(sid, NPI, objviewmodel.Fiscal, DateTime.Parse(objviewmodel.StartDate), DateTime.Parse(objviewmodel.EndDate),
                           objviewmodel.Frequency, objviewmodel.GroupSize, objviewmodel.Duration, objviewmodel.language, objviewmodel.FundingCode,
                           objviewmodel.BoroughCode, objviewmodel.SchoolCode, objviewmodel.Districtcode);
-                          
-                  
+
+
+                      Helper.MailSendHelper.AddMandateEmail(TID, sid, NewFreq, NewGroup,
+                          NewDura, Newlang, NewStart, NewEnd, FName, LName, EMail, StudFname, StudLname);
+
+
                   }
                   else
                   {
+                      /// Fetch old mandate value to send email for change in mandate.
+                      int IdVal = Convert.ToInt32(id);
+                      var mandate = (from n in db.MandateMasters where n.ID.Equals(IdVal) select n).SingleOrDefault();
+                      var OldFreq = mandate.Frequency;
+                      var OldDura = mandate.Duration;
+                      var OldGroup = mandate.GroupSize;
+                      var OldLang = mandate.Language;
+                      var OldStart = mandate.ServiceStart.Value.ToShortDateString();
+                      var OldEnd = mandate.ServiceEnd.Value.ToShortDateString();
+                   
+
                       db.SP_Update_MandateByID(sid, id, NPI, objviewmodel.Fiscal, DateTime.Parse(objviewmodel.StartDate), DateTime.Parse(objviewmodel.EndDate),
                           objviewmodel.Frequency, objviewmodel.GroupSize, objviewmodel.Duration, objviewmodel.language, objviewmodel.FundingCode,
                           objviewmodel.BoroughCode, objviewmodel.SchoolCode, objviewmodel.Districtcode);
 
+                    
+
+                         
+                          Helper.MailSendHelper.UpdateMandateEmail(TID, sid, OldFreq, OldGroup, OldDura,OldLang,OldStart,OldEnd, NewFreq, NewGroup,
+                              NewDura, Newlang, NewStart,NewEnd,FName, LName, EMail, StudFname, StudLname);
+                     
+                     
                      
                   }
 

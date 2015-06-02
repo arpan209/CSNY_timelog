@@ -191,6 +191,7 @@ namespace CSNY_timelog.ViewModel
 
             public IEnumerable<SelectListItem> TherapistList { get; set; }
             public List<MandateListViewModel> MandateList { get; set; }
+            public List<MandateAddListViewModel> MandateErrorList { get; set; }
     }
 
     public class MandateListViewModel
@@ -205,4 +206,26 @@ namespace CSNY_timelog.ViewModel
 
 
     }
+
+    public class MandateAddListViewModel
+    {
+
+        public string SID { get; set; }
+        public string NPI { get; set; }
+        public string Fiscal { get; set; }
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
+        public string Frequency { get; set; }
+        public string GroupSize { get; set; }
+        public string Duration { get; set; }
+        public string Language { get; set; }
+        public string FundingCode { get; set; }
+        public string BoroCode { get; set; }
+        public string SchoolCode { get; set; }
+        public string HomeDistrict { get; set; }
+        
+
+
+    }
+
 }

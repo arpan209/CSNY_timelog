@@ -19,61 +19,64 @@
         //Client side validation
 
         var go = "";
+        
         var checkterms = "";
-        var Name = document.getElementById('Checkterms').checked;
+        //var Name = document.getElementById('Checkterms').checked;
 
         if (document.getElementById('FirstName').value == "") {
-            error += "Please enter first name.\r\n<br/> ";
+            error += "Please enter first name.\r\n";
         }
         if (document.getElementById('LastName').value == "") {
-            error += "Please enter last name.\r\n<br/> ";
+            error += "Please enter last name.\r\n";
         }
         if (document.getElementById('Address1').value == "") {
-            error += "Please enter address 1.\r\n<br/> ";
+            error += "Please enter address 1.\r\n ";
         }
 
         if (document.getElementById('ConfirmEmail').value == "") {
-            error += "Please enter confirm email.\r\n<br/> ";
+            error += "Please enter confirm email.\r\n";
         }
         if (document.getElementById('Phone').value == "") {
-            error += "Please enter phone number.\r\n<br/> ";
+            error += "Please enter phone number.\r\n";
         }
 
 
         if (document.getElementById('ConfirmPassword').value == "") {
-            error += "Please enter confirm password.\r\n<br/> ";
+            error += "Please enter confirm password.\r\n";
         }
         //        if (document.getElementById('EnterValidationCode').value == "") {
         //            go = "1";
         //        }
 
         if (document.getElementById('StateName').value == "" || document.getElementById('StateName').value == "--Select State--") {
-            error += "Please select a state.\r\n<br/>";
+            error += "Please select a state.\r\n";
         }
+
+        
 
         var EMail = document.getElementById('Email').value.trim();
         var EMail1 = document.getElementById('ConfirmEmail').value.trim();
         if (EMail == "") {
-            error += "Please Enter Email Address.\n <br>";
+            error += "Please Enter Email Address.\n ";
         }
         else {
             var atpos = EMail.indexOf("@@");
             var dotpos = EMail.lastIndexOf(".");
 
             if (atpos < 1 || dotpos < atpos + 2 || dotpos + 2 >= EMail.length) {
-                error += "Invalid email address.\n <br>";
+                error += "Invalid email address.\n";
             }
             else {
                 var namevalidtext = document.getElementById('msg').innerHTML;
                 if (namevalidtext == "*Already Used") {
-                    error += "Please Enter Another Email Address.\n<br>";
+                    error += "Please Enter Another Email Address.\n";
                 }
             }
         }
 
         if (EMail != EMail1) {
 
-            error += "Email and confirm email do not match. \n<bt>";
+            error += "Email and confirm email do not match. \n";
         }
         var Name = document.getElementById('UserName').value.trim();
         if (Name == "") {
@@ -82,7 +85,7 @@
         else {
             var namevalidtext = document.getElementById('msg1').innerHTML;
             if (namevalidtext == "*Already Used") {
-                error += "Please Enter Another UserName.\n<br/>";
+                error += "Please Enter Another UserName.\n";
             }
         }
 
@@ -113,19 +116,19 @@
 
             }
             else {
-                error += "Invalid password.\r\n<br/>";
+                error += "Invalid password.\r\n";
             }
         }
 
         if (password != password1) {
 
-            error += "Password and confirm password do not match. \n<bt>";
+            error += "Password and confirm password do not match. \n";
         }
 
         
         if (Name == false) {
           
-            error += "Please Accept Terms & Conditions.\r\n<br/>";
+            error += "Please Accept Terms & Conditions.\r\n";
            
         }
         if (error != "") {
@@ -558,7 +561,7 @@
           <p>   @Html.ValidationMessageFor(m => m.ConfirmPassword) </p>
           <p>   @Html.ValidationMessageFor(m => m.EnterValidationCode1)</p>
           @*<p>    @Html.ValidationMessageFor(m => m.EnterValidationCode) </p>*@
-          <p>    @Html.ValidationMessageFor(m => m.Checkterms) </p>
+          @*<p>    @Html.ValidationMessageFor(m => m.Checkterms) </p>*@
           
          
 

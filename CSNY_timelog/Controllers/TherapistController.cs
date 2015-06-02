@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.IO;
 using CSNY_timelog.Models;
 using CSNY_timelog.ViewModel;
 using System.Globalization;
+using CSNY_timelog.Helper;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 
 
 namespace CSNY_timelog.Controllers
@@ -66,6 +70,61 @@ namespace CSNY_timelog.Controllers
             return View();
         }
 
+        public ActionResult sign()
+        {
+
+            //if (CheckUserLoginStatus() <= 0)
+            //    return AccessDeniedView();
+            //var TID = Session["UserID"].ToString();
+            //int TIDVal = Convert.ToInt32(TID);
+            //var TherResult = db.Sp_get_Therpist_Info(TID).SingleOrDefault();
+            //Session["NPI"] = TherResult.NPI.Trim();
+
+
+            return View();
+        }
+
+        //[HttpPost]
+        //public ActionResult GetSign(SignViewModel objviewmodel)
+        //{
+        //    ViewBag.Message = Request["output"].ToString();
+        //    var name = objviewmodel.name;
+        //    var output = objviewmodel.output;
+
+        //    return View();
+        //}
+
+        public ActionResult Signature(string name, string output) {
+
+            ViewBag.Message = Request["output"].ToString();
+            var signtoImage = new ConsumedByCode.SignatureToImage.SignatureToImage();
+
+            var signatureImage = signtoImage.SigJsonToImage(output);
+           // Bitmap resized = new Bitmap(signatureImage, new Size(signatureImage.Width / 2, signatureImage.Height / 2));
+
+            Bitmap newImage = new Bitmap(signatureImage.Width, signatureImage.Height);
+         
+            using (Graphics gr = Graphics.FromImage(newImage))
+            {
+                gr.CompositingQuality = CompositingQuality.HighQuality;
+                gr.SmoothingMode = SmoothingMode.HighQuality;
+                gr.SmoothingMode = SmoothingMode.AntiAlias;
+                gr.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                gr.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                gr.DrawImage(signatureImage, new Rectangle(0, 0, signatureImage.Width, signatureImage.Height));
+            }
+
+
+            var path = Path.Combine(Server.MapPath("~/signatures/"), name + ".bmp");
+            newImage.MakeTransparent();
+            newImage.Save(path);
+            //signatureImage.Save(path);
+
+            return View();
+        
+        
+        }
+
         public ActionResult StudentListInfo(string id)
         {
 
@@ -81,21 +140,28 @@ namespace CSNY_timelog.Controllers
 
 
                 var Value = Session["UserID"].ToString();
-
+               
                 //    var result = db.SP_FindUser_ByUserID(Value).ToList();
                 var npi = db.Sp_getTherpist_NPI(Value).SingleOrDefault();
-
+               
                 var result = db.SP_FindStudent_ByNPI(npi,fiscal).ToList();
                 foreach (var item in result)
                 {
+                    var Freq = item.Frequency.Split(',');
+                    var Duration = item.Duration.Split(',');
+                var group = item.GroupSize.Split(',');
+               
+
                     StudentList.Add(new StudentListViewModel
                     {
                         SID = item.SID.ToString(),
-                        FirstName = item.StudentFirstName,
-                        LastName = item.StudentLastName,
+                        FirstName = item.StudentLastName.Trim() + ","+ item.StudentFirstName.Trim(),
+                        
                         OSIS = item.NYCI,
                         FundingCode =  item.FundingCode, //(item.FundingCode == "CSE") ? "1" : "2", // if its CSE then 1 or 2 for CPSE
-                        Fiscal = fiscal
+                        Fiscal = fiscal,
+                        S1 = Freq[0] + "X" + Duration[0] + ":" + group[0],
+                        SP = Freq[1] + "X" + Duration[1] + ":" + group[1]
                     });
 
                 }
