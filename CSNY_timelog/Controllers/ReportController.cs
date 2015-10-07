@@ -803,7 +803,7 @@ namespace CSNY_timelog.Controllers
                         //var Sdate = day + "/" + month + "/2014";
 
                         //DateTime Tdate = Convert.ToDateTime(item.Date);
-                        if (osis == 236655444)
+                        if (osis == 233931526)
                         {
                             int k = 0;
                         }
@@ -1095,9 +1095,11 @@ namespace CSNY_timelog.Controllers
                                   }
                                   else
                                   {
-
-                                      for (j = 0; j < i - 1; j++)
-                                      {
+                                      /// removed this block because if there are three block of SP or S1 mandate in DOE file then its 
+                                      /// iterate one extra loop cycle which end up taking the j=1 mandate instaed of  j=0 ,which will be an incorrect mandate.
+                                      /// This will work fine if we have two block of mandate in DOE file.
+                                      //for (j = 0; j < i - 1; j++)
+                                      //{
 
 
                                           if (DateTime.Parse(ServiceStart[j]).ToOADate() <= SessDate && DateTime.Parse(ServiceEnd[j]).ToOADate() >= SessDate)
@@ -1118,7 +1120,7 @@ namespace CSNY_timelog.Controllers
                                               CorrectLang = Mandlang[j].ToString();
                                           }
 
-                                      }
+                                      //}
                                   }
 
                                   //if (osis == 224624791 || osis == 224508259 || osis == 220723365)
@@ -1854,12 +1856,14 @@ namespace CSNY_timelog.Controllers
                 int SPCount = 0;
                 int RUCount = 0;
                 int POCount = 0;
+                int CNCount = 0;
                 int totalCount = 0;
                 var total = new TimeSpan();
                 var ENTotal = new TimeSpan();
                 var SPTotal = new TimeSpan();
                 var RUTotal = new TimeSpan();
                 var POTotal = new TimeSpan();
+                var CNTotal = new TimeSpan();
                 int groupsize = 0;
                 TimeSpan Duration1 = new TimeSpan();
                 TimeSpan Duration2 = new TimeSpan();
@@ -1906,13 +1910,22 @@ namespace CSNY_timelog.Controllers
                                  Duration1 = new TimeSpan(Duration1.Ticks / groupsize);
                                  RUTotal = RUTotal.Add(Duration1);
                              }
-                             else { 
-                                 //POCount += 1; POTotal = POTotal.Add(DateTime.Parse(list.EndTime.ToString()).Subtract(DateTime.Parse(list.StartTime.ToString()))); 
+                             else if (list.Language == "PO")
+                             {
+                                 // RUCount += 1; RUTotal = RUTotal.Add(DateTime.Parse(list.EndTime.ToString()).Subtract(DateTime.Parse(list.StartTime.ToString())));
                                  POCount += 1;
-                                // groupsize = Int16.Parse(list.GroupSize);
+                                 // groupsize = Int16.Parse(list.GroupSize);
                                  Duration1 = DateTime.Parse(list.EndTime.ToString()).Subtract(DateTime.Parse(list.StartTime.ToString()));
                                  Duration1 = new TimeSpan(Duration1.Ticks / groupsize);
                                  POTotal = POTotal.Add(Duration1);
+                             }
+                             else { 
+                                 //POCount += 1; POTotal = POTotal.Add(DateTime.Parse(list.EndTime.ToString()).Subtract(DateTime.Parse(list.StartTime.ToString()))); 
+                                 CNCount += 1;
+                                // groupsize = Int16.Parse(list.GroupSize);
+                                 Duration1 = DateTime.Parse(list.EndTime.ToString()).Subtract(DateTime.Parse(list.StartTime.ToString()));
+                                 Duration1 = new TimeSpan(Duration1.Ticks / groupsize);
+                                 CNTotal = CNTotal.Add(Duration1);
                              }
                          }
                          totalCount += 1;
@@ -1941,7 +1954,7 @@ namespace CSNY_timelog.Controllers
                      {
                          if (FCode != "SAS" || FCode != "CS" || !FCode.Contains("Other"))
                          {
-                             string[] language = { "EN", "SP", "RU", "PO" };
+                             string[] language = { "EN", "SP", "RU", "PO", "CN" };
                              int k = 0;
                              foreach (var lang in language)
                              {
@@ -1977,6 +1990,14 @@ namespace CSNY_timelog.Controllers
                                      val1 = POTotal.TotalHours.ToString().Split('.');
                                      TotHours = (val1[0].ToString() + ":" + Convert.ToInt32(POTotal.Minutes)).ToString();
                                      TotCount = POCount;
+
+                                 }
+                                 if (lang == "CN")
+                                 {
+                                     //value = POTotal;
+                                     val1 = CNTotal.TotalHours.ToString().Split('.');
+                                     TotHours = (val1[0].ToString() + ":" + Convert.ToInt32(CNTotal.Minutes)).ToString();
+                                     TotCount = CNCount;
 
                                  }
 
